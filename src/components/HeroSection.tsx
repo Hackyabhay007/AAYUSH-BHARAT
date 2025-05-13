@@ -25,14 +25,14 @@ export default function HeroSection() {
         className="brightness-50 absolute top-0 left-0 w-full h-full object-cover z-0"
       />
       <div
-        className={`relative z-10 flex flex-col items-center justify-center h-full text-center text-primary transition-all duration-1000 ${
+        className={` relative z-10 flex flex-col items-center justify-center h-full text-center text-primary transition-all duration-1000 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >
         <h1 className="font-begum text-3xl sm:text-5xl font-semibold tracking-wider mb-6">
           RECLAIM YOUR NATURAL BALANCE
         </h1>
-        <p className="text-sm font-notosans tracking-wide text-primary mb-4">
+        <p className="text-base font-notosans tracking-wide bg-beige text-dark px-4 rounded-xl mb-4">
           Ayurvedic Ritual Kits crafted from Granthas to restore your inner
           harmony.
         </p>
