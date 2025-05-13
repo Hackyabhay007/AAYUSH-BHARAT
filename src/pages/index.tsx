@@ -1,5 +1,4 @@
 import Categories from "@/components/Categories";
-import FeatureSection from "@/components/FeatureCards";
 import HeroSection from "@/components/HeroSection"
 import Navbar from "@/components/Navbar"
 import RitualKits from "@/components/RitualKits";
