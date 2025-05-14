@@ -31,12 +31,12 @@ const ingredients: Ingredient[] = [
 
 export default function NatureIngredients() {
   return (
-    <div className="py-12 px-4 md:px-16 text-center">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-10">
+    <div className="flex flex-col justify-center items-center py-12 px-4 md:px-16 text-center">
+      <h2 className="text-4xl tracking-wider upper font-medium text-dark-green mb-10">
         Sourced from Nature, Purified for Potency
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 max-w-6xl gap-8">
         {ingredients.map((item, index) => (
           <div
             key={index}
@@ -49,9 +49,9 @@ export default function NatureIngredients() {
               height={160}
               className="mb-4"
             />
-            <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-            <p className="text-sm text-gray-700 mb-4">{item.description}</p>
-            <button className="bg-green-900 hover:bg-green-800 text-white py-2 px-4 rounded-md text-sm">
+            <h3 className="text-2xl text-dark-green font-medium mb-2">{item.name}</h3>
+            <p className="text-sm text-dark font-light mb-4">{item.description}</p>
+            <button className="bg-dark-green hover:bg-green-800 text-white py-2 px-16 rounded text-lg">
               Learn more
             </button>
           </div>

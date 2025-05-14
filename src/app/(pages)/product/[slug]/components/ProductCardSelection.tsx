@@ -11,7 +11,7 @@ const products = [
     discountedPrice: 499,
     discount: 13,
     save: 76,
-    image: "/products/ashwagandha.png",
+    image: "https://www.zeroharm.in/cdn/shop/files/CollagenBuilderFi-02.jpg?v=1744282615&width=360",
   },
   {
     name: "Holistic Calcium Tablets With Vitamin D3 & K2-7",
@@ -21,7 +21,7 @@ const products = [
     discountedPrice: 673,
     discount: 66,
     save: 1307,
-    image: "/products/calcium.png",
+    image: "https://www.zeroharm.in/cdn/shop/files/L-GlithathioneFinal-07-01.jpg?v=1744431541&width=360",
   },
   {
     name: "Probiotic Multivitamin All in One Capsules",
@@ -31,7 +31,7 @@ const products = [
     discountedPrice: 748,
     discount: 25,
     save: 251,
-    image: "/products/multivitamin.png",
+    image: "https://www.zeroharm.in/cdn/shop/files/skin_radiance-5-01.jpg?v=1719925767&width=360",
   },
   {
     name: "Holistic Curcumin Tablets With 95% Curcuminoids...",
@@ -41,7 +41,7 @@ const products = [
     discountedPrice: 769,
     discount: 47,
     save: 681,
-    image: "/products/curcumin.png",
+    image: "https://www.zeroharm.in/cdn/shop/files/skin_radiance-5-01.jpg?v=1719925767&width=360",
   },
 ];
 
@@ -62,8 +62,8 @@ function renderStars(rating: number) {
 
 export default function ProductCardSection() {
   return (
-    <section className="py-12 px-4 md:px-16 bg-white">
-      <h2 className="text-2xl md:text-3xl font-semibold text-center text-gray-800 mb-8">
+    <section className="py-16 px-4 md:px-16 bg-white">
+      <h2 className="text-4xl  font-medium uppercase  text-center text-dark-green tracking-wider mb-8">
         Faster results with
       </h2>
 
@@ -77,18 +77,21 @@ export default function ProductCardSection() {
               <span className="absolute top-2 left-2 bg-green-700 text-white text-xs px-2 py-1 rounded">
                 -{product.discount}%
               </span>
-              <Image
+              <img
                 src={product.image}
                 alt={product.name}
-                width={400}
-                height={400}
-                className="w-full h-60 object-contain"
+                width={600}
+                height={600}
+                className="w-full h-96 object-contain"
               />
             </div>
-            <div className="p-4 text-center">
+            <div className="p-4 flex flex-col text-center">
+                <div className="flex justify-center items-center gap-2">
+
               {renderStars(product.rating)}
-              <p className="text-sm text-gray-600 mb-2">({product.reviews})</p>
-              <p className="font-semibold text-gray-800 mb-1">{product.name}</p>
+              <p className="text-sm text-gray-600">({product.reviews})</p>
+                </div>
+              <p className="font-medium  text-dark-green mb-1">{product.name}</p>
               <div className="text-sm mb-3">
                 <span className="line-through text-gray-500 mr-1">
                   ₹{product.originalPrice}

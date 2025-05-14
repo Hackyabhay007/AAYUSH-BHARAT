@@ -22,26 +22,27 @@ function HeroSection() {
 
   return (
     <>
-      <div className="text-center bg-beige pt-18 pb-2">
+      <div className="text-center  bg-beige pt-18 pb-2">
         <h1>Hair and Nail Strength, Boosted by Nano Tech</h1>
       </div>
-
-      <div className="flex p-2" ref={containerRef}>
+<div className='flex justify-center items-center'>
+   <div className="flex max-w-8xl gap-8 p-2" ref={containerRef}>
         {/* Left Image Slider */}
         <div className="w-1/2 pr-4">
           <div
             className="sticky top-20"
             style={{ maxHeight: `${containerHeight}px`, overflow: 'auto' }}
-          >
+            >
             <ProductImageSlider />
           </div>
         </div>
 
         {/* Right Product Info */}
-        <div className="w-1/2">
+        <div className="w-1/2 ">
           <ProductDetails />
         </div>
       </div>
+              </div>
     </>
   );
 }
