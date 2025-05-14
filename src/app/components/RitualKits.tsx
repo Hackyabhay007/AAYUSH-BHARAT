@@ -1,9 +1,10 @@
+"use client";
 import React from 'react';
 
 const RitualKits = () => {
   return (
-    <section className="justify-center bg-beige py-12 my-6 flex flex-col gap-6 px-4">
-      <h1 className='font-semibold uppercase tracking-wider text-4xl text-center'>Our Ayurvedic Ritual Kits</h1>
+    <section className="justify-center bg-light py-12 my-6 flex flex-col gap-6 px-4">
+      <h1 className='font-semibold uppercase tracking-wider text-dark-green text-4xl text-center'>Our Ayurvedic Ritual Kits</h1>
 
       {/* Grid for the kit boxes */}
       <div className="flex-1/2 max-w-5xl mt-6  mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-4"> {/* Adjusted md:grid-cols-2 for better layout if only 4 items */}
