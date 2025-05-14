@@ -1,12 +1,25 @@
-// components/Banner.tsx
 export default function Banner() {
   return (
-    <section className="relative h-[70vh] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('https://images.pexels.com/photos/1739845/pexels-photo-1739845.jpeg?auto=compress&cs=tinysrgb&w=1600')" }}>
-        <div className=" bg-opacity-50 w-full h-full absolute inset-0" />
-        <h1 className="relative text-white text-4xl md:text-6xl font-bold text-center px-4 z-10">
-          Built from Granthas. <br className="hidden md:block" />Designed for Her.
+    <section
+      className="relative h-[85vh] bg-cover bg-center brightness-75 flex items-center justify-center"
+      style={{
+        backgroundImage:
+          "url('https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1600')",
+      }}
+    >
+      {/* Dark overlay for text focus */}
+      <div className="absolute inset-0 bg-opacity-50" />
+
+      {/* Main Heading */}
+      <div className="relative z-10 text-center px-6">
+        <h1 className="text-white text-4xl md:text-6xl font-extrabold leading-tight tracking-wide drop-shadow-lg">
+          Ayurveda Reimagined.<br />
+          Rooted in Tradition, Designed for Today.
         </h1>
-      </section>
+        <p className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-medium">
+          Discover wellness crafted from age-old granthas and pure nature. Embrace a better you.
+        </p>
+      </div>
+    </section>
   );
 }
