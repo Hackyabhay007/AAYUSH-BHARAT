@@ -1,41 +1,52 @@
-// PromiseSection.tsx
-import { ShieldCheck, Leaf, HandHeart } from 'lucide-react';
+import {
+  Rabbit,
+  Leaf,
+  CreditCard,
+  ShieldCheck,
+  HandHeart,
+} from "lucide-react";
 
 const promises = [
   {
-    icon: <ShieldCheck className="w-24 h-24 border rounded-full p-2 bg-dark-green border-none text-beige" />,
+    icon: <ShieldCheck size={32} className="text-white" />,
     title: "Authentic Formulas",
-    desc: "100% Classical Ayurvedic recipes from Charaka, Sushruta, and Bhaishajya Granthas.",
+    description:
+      "100% Classical Ayurvedic recipes from Charaka, Sushruta, and Bhaishajya Granthas.",
   },
   {
-    icon: <Leaf className="w-24 h-24 border rounded-full p-2 bg-dark-green border-none text-beige" />,
+    icon: <Leaf size={32} className="text-white" />,
     title: "No Synthetics",
-    desc: "Absolutely no shortcuts, no chemicals, and no dilution of Ayurvedic wisdom.",
+    description:
+      "Absolutely no shortcuts, no chemicals, and no dilution of Ayurvedic wisdom.",
   },
   {
-    icon: <HandHeart className="w-24 h-24 border rounded-full p-2 bg-dark-green border-none text-beige" />,
+    icon: <HandHeart size={32} className="text-white" />,
     title: "Physician-Trusted",
-    desc: "Time-tested, doctor-approved rituals with real healing value.",
+    description:
+      "Time-tested, doctor-approved rituals with real healing value.",
   },
 ];
-
-export default function PromiseSection() {
+export default function Promise() {
   return (
-    <section className="py-20 px-6 md:px-24 bg-dark-green text-light">
-      <h2 className="text-4xl uppercase tracking-wider font-medium text-center mb-12">
-        Our Promise to You
-      </h2>
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {promises.map((item, idx) => (
-          <div
-            key={idx}
-            className="bg-white/70 h-72 flex justify-center flex-col backdrop-blur-md border border-gray-100 rounded-2xl p-8 text-center shadow hover:shadow-xl transition-all duration-300"
-          >
-            <div className="flex justify-center mb-4">{item.icon}</div>
-            <h3 className="text-2xl tracking-wide font-medium text-dark-green mb-2">{item.title}</h3>
-            <p className="text-dark text-sm">{item.desc}</p>
-          </div>
-        ))}
+    <section className="bg-white flex justify-center items-center flex-col gap-16 py-24 px-6 md:px-16 border-t border-gray-200">
+        <h2 className="text-3xl md:text-4xl font-serif font-semibold text-dark-green tracking-wide">
+          OUR PROMISE TO YOU
+        </h2>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 text-center gap-y-12 gap-x-10">
+          {promises.map((promise, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className="bg-black rounded-full p-4 mb-6">
+                {promise.icon}
+              </div>
+              <h3 className="text-lg uppercase font-medium tracking-wider">
+                {promise.title}
+              </h3>
+              <p className="opacity-70 text-sm font-light max-w-64">{promise.description}</p>
+             
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

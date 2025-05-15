@@ -115,17 +115,17 @@ const plans = [
       </div>
 
       {/* Consumption Instructions */}
-      <div className="flex justify-center items-center gap-28 text-center gap-4 text-xs text-gray-700">
+      <div className="flex justify-center items-center gap-18 text-center gap-4 text-xs text-gray-700">
         <div>
-          <img src="https://www.zeroharm.in/cdn/shop/files/TWICE_A_DAY-01_07dfc5bd-82ea-4eee-8304-136e82a79cb0_300x.png?v=1705991459" alt="Twice a Day" className="mx-auto h-16" />
+          <img src="https://www.zeroharm.in/cdn/shop/files/TWICE_A_DAY-01_07dfc5bd-82ea-4eee-8304-136e82a79cb0_300x.png?v=1705991459" alt="Twice a Day" className="mx-auto h-12" />
           <p className="mt-1">Twice a Day</p>
         </div>
         <div>
-          <img src="https://www.zeroharm.in/cdn/shop/files/before-meal_-01_300x.png?v=1702906666" alt="30 min Before/After" className="mx-auto h-16" />
+          <img src="https://www.zeroharm.in/cdn/shop/files/before-meal_-01_300x.png?v=1702906666" alt="30 min Before/After" className="mx-auto h-12" />
           <p className="mt-1">30 min Before/After<br />Breakfast & Dinner</p>
         </div>
         <div>
-          <img src="https://www.zeroharm.in/cdn/shop/files/consume_icons-01_1_300x.png?v=1705992080" alt="3 Months" className="mx-auto h-16" />
+          <img src="https://www.zeroharm.in/cdn/shop/files/consume_icons-01_1_300x.png?v=1705992080" alt="3 Months" className="mx-auto h-12" />
           <p className="mt-1">3 Months For Better<br />Results</p>
         </div>
       </div>
@@ -184,16 +184,16 @@ const plans = [
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <button className="w-full border border-green-700 text-green-700 py-3 rounded-full font-semibold">
+        <button className="w-full border border-dark-green text-dark-green py-3 rounded font-medium text-xl">
           Add To Cart
         </button>
-        <button className="w-full bg-green-800 text-white py-3 rounded-full font-semibold">
+        <button className="w-full border bg-dark-green text-light py-3 rounded font-medium text-xl">
           Buy It Now
         </button>
       </div>
 
       {/* Trust Icons */}
-      <div className="flex justify-between text-center text-xs text-gray-700 mt-4">
+      <div className="flex justify-center gap-12 text-center text-xs text-dark-green mt-4">
         {[
           { label: "Customer Support", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/1_0a0cef1f-1c8e-4a1d-a736-92af3849ef04.png", sub: "10am–7pm" },
           { label: "90 Day Satisfaction", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/3_4fd354de-ab52-43b3-8735-ae1954a03e5d.png?v=1742891730", sub: "Guarantee" },
@@ -201,7 +201,7 @@ const plans = [
         ].map((item, i) => (
           <div key={i} className="flex flex-col gap-3 items-center">
             <img src={item.icon} alt={item.label} className="h-16 mb-1" />
-            <p>{item.label}</p>
+            {/* <p>{item.label}</p> */}
             <span>{item.sub}</span>
           </div>
         ))}

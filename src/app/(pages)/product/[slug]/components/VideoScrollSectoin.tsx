@@ -52,7 +52,7 @@ const VideoScrollSection = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="mt-6 grid grid-cols-5 gap-4 px-6 text-center bg-dark-green py-4 text-white">
+      <div className="mt-16  grid grid-cols-5 gap-4 px-6 text-center bg-dark-green py-4 text-white">
       
           <div className='flex justify-center items-center gap-2'>
 <div className="text-xl">🎬</div>

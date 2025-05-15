@@ -31,8 +31,8 @@ const ingredients: Ingredient[] = [
 
 export default function NatureIngredients() {
   return (
-    <div className="flex flex-col justify-center items-center py-12 px-4 md:px-16 text-center">
-      <h2 className="text-4xl tracking-wider upper font-medium text-dark-green mb-10">
+    <div className="flex flex-col justify-center items-center pt-12 pb-18 px-4 md:px-16 text-center">
+      <h2 className="text-4xl tracking-wider uppercase font-medium text-dark-green mb-10">
         Sourced from Nature, Purified for Potency
       </h2>
 

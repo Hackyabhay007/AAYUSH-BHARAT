@@ -11,7 +11,7 @@ const FixedBottomCart: React.FC = () => {
           className="w-12 h-12 object-cover rounded"
         />
         <div>
-          <h2 className="font-light text-lg">Zeroharm Back to Teens Tablets</h2>
+          <h2 className="font-light text-lg">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
           <div className="flex flex-row gap-2 items-center">
 
           <div className="text-sm text-gray-500 line-through">INR 3,597</div>

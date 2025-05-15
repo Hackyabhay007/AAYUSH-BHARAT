@@ -4,7 +4,7 @@ export default function Banner() {
       className="relative h-[85vh] bg-cover bg-center brightness-75 flex items-center justify-center"
       style={{
         backgroundImage:
-          "url('https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1600')",
+          "url('https://images.pexels.com/photos/248159/pexels-photo-248159.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
       }}
     >
       {/* Dark overlay for text focus */}
