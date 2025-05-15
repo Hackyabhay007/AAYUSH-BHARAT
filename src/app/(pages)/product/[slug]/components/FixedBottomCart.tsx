@@ -10,10 +10,10 @@ const FixedBottomCart: React.FC = () => {
         width={500} height={500}
           src="https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990" // Replace with actual image path
           alt="Zeroharm Back to Teens Tablets"
-          className="w-12 h-12 object-cover rounded"
+          className="w-12 h-12 object-cover rounded lg:block hidden" 
         />
-        <div>
-          <h2 className="font-light text-sm lg:text-lg">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
+        <div className='lg:block hidden'>
+          <h2 className="font-light text-sm lg:text-lg ">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
           <div className="flex flex-row gap-2 items-center">
 
           <div className="text-sm text-gray-500 line-through">INR 3,597</div>

@@ -46,19 +46,19 @@ export default function FAQ() {
   return (
     <div className='bg-light w-full'>
 
-    <div className="max-w-5xl py-8  text-dark-green mx-auto p-4">
-      <h2 className="text-4xl font-medium uppercase tracking-wider text-center mb-6">Frequently asked questions (FAQs)</h2>
+    <div className="max-w-4xl py-8  mx-8 text-dark-green lg:mx-auto p-4">
+      <h2 className="lg:text-4xl text-2xl font-medium uppercase tracking-wider text-center mb-8">Frequently asked questions (FAQs)</h2>
       {faqData.map((faq, index) => (
           <div
           key={index}
           className="border rounded mb-3 shadow-lg transition-all duration-300"
           >
           <button
-            className="w-full flex justify-between items-center p-3 text-left font-medium"
+            className="w-full flex justify-between items-center lg:text-base text-sm p-3 text-left font-light"
             onClick={() => toggleFAQ(index)}
             >
             {faq.question}
-            <span className="text-xl">{openIndex === index ? '▲' : '▼'}</span>
+            <span className="lg:text-xl text-sm">{openIndex === index ? '▲' : '▼'}</span>
           </button>
           {openIndex === index && (
               <div className="px-4 pb-4 ">

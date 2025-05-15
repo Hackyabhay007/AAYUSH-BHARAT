@@ -26,13 +26,13 @@ export default function Certifications() {
         {certifications.map((cert, idx) => (
           <div
             key={idx}
-            className="bg-light rounded-2xl border border-transparent hover:border-green-400 shadow-xl hover:shadow-2xl p-8 transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02] group"
+            className="bg-light rounded-2xl border border-transparent hover:border-dark-green shadow-xl hover:shadow-2xl p-8 transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02] group"
           >
             <div className="flex items-center gap-5 mb-6">
               <div className="bg-dark-green p-4 rounded-full shadow-lg group-hover:rotate-6 transition-all duration-300">
                 {cert.icon}
               </div>
-              <h3 className="text-2xl font-medium tracking-wide text-dark-green uppercase  group-hover:text-green-600">
+              <h3 className="text-2xl font-medium tracking-wide text-dark-green uppercase  group-hover:text-dark-green">
                 {cert.title}
               </h3>
             </div>

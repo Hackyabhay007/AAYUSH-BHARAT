@@ -46,7 +46,7 @@ export default function ProductInsights() {
   return (
     <div className="bg-dark-green py-8">
       {/* Consumer Studies */}
-      <div className="max-w-6xl  text-light mx-auto px-4 py-10 space-y-16">
+      <div className="max-w-6xl  text-light mx-8 lg:mx-auto px-4 py-10 space-y-16">
         <h2 className="text-center text-4xl  font-medum tracking-wide uppercase mb-8">Consumer Studies</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {consumerStudies.map((study, idx) => (
@@ -64,7 +64,7 @@ export default function ProductInsights() {
       </div>
 
       {/* What To Expect */}
-      <div className="max-w-6xl  text-light mx-auto px-4 py-10 space-y-16">
+      <div className="max-w-6xl  text-light lg:mx-auto mx-8 px-4 py-10 space-y-16">
         <h2 className="text-center text-4xl  font-medum tracking-wide uppercase mb-8">What To Expect</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {whatToExpect.map((item, idx) => (

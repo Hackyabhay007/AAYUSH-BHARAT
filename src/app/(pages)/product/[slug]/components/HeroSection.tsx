@@ -28,7 +28,7 @@ function HeroSection() {
       <div className="flex justify-center items-center">
         <div className="flex flex-col lg:flex-row max-w-8xl gap-8 p-2" ref={containerRef}>
           {/* Left Image Slider */}
-          <div className="lg:w-1/2 w-full pr-4">
+          <div className="lg:w-1/2 w-full ">
             <div
               className="sticky top-20"
               style={{ maxHeight: `${containerHeight}px`, overflow: "auto" }}

@@ -1,4 +1,7 @@
 // components/CTA.tsx
+import { FaLeaf } from "react-icons/fa6";
+
+import { LuMessageSquareText } from "react-icons/lu";
 export default function CTA() {
   return (
 <section
@@ -21,11 +24,18 @@ export default function CTA() {
     </p>
 
     <div className="flex flex-col sm:flex-row justify-center gap-4">
+
       <button className="bg-dark-green text-white px-6 py-3 rounded text-lg transition shadow-lg">
-        🌿 Explore Our Ritual Kits
+      <div className="flex gap-2 items-center">
+        <FaLeaf /> 
+        Explore Our Ritual Kits
+      </div>
       </button>
       <button className="bg-white hover:bg-gray-100 text-dark-green border border-dark-green px-6 py-3 rounded text-lg transition shadow">
-        💬 Join Our Healing Circle
+        <div className="flex gap-2 items-center">
+          <LuMessageSquareText />
+           Join Our Healing Circle
+        </div>
       </button>
     </div>
   </div>

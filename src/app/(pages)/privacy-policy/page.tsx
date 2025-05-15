@@ -13,9 +13,8 @@ function page() {
     <Navbar scrolled={true} />
     </div>
       <ProductContent/>
-      <div className='mb-18'>
       <Footer/>
-      </div>
+      
       </div>
   )
 }

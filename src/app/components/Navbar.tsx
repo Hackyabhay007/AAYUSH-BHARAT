@@ -1,56 +1,3 @@
-// import Image from "next/image";
-// interface NavbarProps {
-//   scrolled: boolean;
-// }
-
-// const logo={
-//     src:"/logo/Artboard_1_copy_15@4x.png"
-
-// }
-// const Navbar = (scrolled: NavbarProps) => {
-//   return (
-//     <>
-
-//       {/* Main Navbar */}
-//       <div
-//         className={`px-6 font-notosans md:px-12 flex items-center justify-between shadow-md ${
-//           scrolled ? "border-b border-primary" : "border-none border-transparent"
-//         }`}
-//       >
-//         {/* Left Nav */}
-//         <nav className=" hidden md:flex gap-6 text-sm">
-//           <a href="#" className="hover:underline">
-//             <Image 
-//                 src={logo.src}
-//                 width={120}
-//                 height={150}
-//                 className="object-cover "
-//                 alt="AayudhBharat Logo"
-//             />
-//           </a>
-//         </nav>
-
-      
-//         <div className="flex items-center gap-6 text-primary text-sm">
-//           <a href="#" className="hidden md:inline hover:underline">
-//             SHOP
-//           </a>
-//           <a href="#" className="hidden md:inline hover:underline">
-//             ABOUT US
-//           </a>
-//           <a href="#" className="hidden md:inline hover:underline">
-//             CONTACT US
-//           </a>
-//           <a href="#" className="hidden md:inline hover:underline">
-//             BLOG
-//           </a>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Navbar;
 "use client";
 import { useState } from "react";
 import Image from "next/image";
@@ -102,46 +49,51 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         </div>
       </div>
 
-      {/* Mobile Fullscreen Drawer */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-white font-notosans text-dark">
-          {/* Top bar inside drawer */}
-          <div className="flex items-center bg-dark-green justify-between px-6 py-4 border-b">
-            <Link href={'/'}>
+      {/* Mobile Fullscreen Drawer with Slide Animation */}
+      <div
+        className={`
+          fixed top-0 right-0 h-full w-full z-50 bg-white font-notosans text-dark
+          transform transition-transform duration-300 ease-in-out
+          ${menuOpen ? "translate-x-0" : "translate-x-full"}
+        `}
+      >
+        {/* Top bar inside drawer */}
+        <div className="flex items-center bg-dark-green justify-between px-6 py-4 border-b">
+          <Link href={"/"}>
             <Image
               src={logo.src}
               width={100}
               height={100}
               alt="Logo"
               className="object-cover"
-              />
-              </Link>
-            <div className="flex text-primary items-center gap-4">
-              <button onClick={() => setMenuOpen(false)}>
-                <X size={28} />
-              </button>
-            </div>
+            />
+          </Link>
+          <div className="flex text-primary items-center gap-4">
+            <button onClick={() => setMenuOpen(false)}>
+              <X size={28} />
+            </button>
           </div>
-
-          {/* Mobile Menu Links */}
-          <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
-            {[
-              {titiel:"SHOP",link:"/product/12"},
-              {titel:"ABOUT US",link:"/about-us"},
-              {title:"CONTACT US",link:"/contact-us"},
-              {title:"BLOG",link:"/blog"},
-            ].map((item) => (
-              <a
-                href={item.link}
-                key={item.titel}
-                className="flex py-2 justify-between items-center hover:underline"
-              >
-                {item.titel} <ChevronRight />
-              </a>
-            ))}
-          </nav>
         </div>
-      )}
+
+        {/* Mobile Menu Links */}
+        <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
+          {[
+            { title: "SHOP", link: "/product/12" },
+            { title: "ABOUT US", link: "/about-us" },
+            { title: "CONTACT US", link: "/contact-us" },
+            { title: "BLOG", link: "/blog" },
+          ].map((item) => (
+            <a
+              href={item.link}
+              key={item.title}
+              onClick={() => setMenuOpen(false)} // Optional: close on link click
+              className="flex py-2 justify-between items-center hover:underline"
+            >
+              {item.title} <ChevronRight />
+            </a>
+          ))}
+        </nav>
+      </div>
     </>
   );
 };

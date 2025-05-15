@@ -17,7 +17,7 @@ function ProductContent() {
     <NatureIngredients/>
     <ProductInsights/>
     <SectionFive/>
-    {/* <ProductCardSection/> */}
+
     <FAQ/>
     <FixedBottomCart/>
     </>
