@@ -10,22 +10,22 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: <FaHandPeace className="text-white text-2xl" />,
+    icon: <FaHandPeace className="text-light text-2xl" />,
     title: 'Grantha-Based Classical Formulas',
     link: '#',
   },
   {
-    icon: <FaLeaf className="text-white text-2xl" />,
+    icon: <FaLeaf className="text-light text-2xl" />,
     title: 'No Chemicals',
     link: '#',
   },
   {
-    icon: <FaLock className="text-white text-2xl" />,
+    icon: <FaLock className="text-light text-2xl" />,
     title: '3-Capsule Ritual: Balance • Detox • Regulate',
     link: '#',
   },
   {
-    icon: <FaLock className="text-white text-2xl" />,
+    icon: <FaLock className="text-light text-2xl" />,
     title: 'Backed by AYUSH & GMP Certified Facilities',
     link: '#',
   },

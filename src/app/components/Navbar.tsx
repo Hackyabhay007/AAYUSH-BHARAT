@@ -55,6 +55,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Menu, X, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 interface NavbarProps {
   scrolled: boolean;
@@ -75,7 +76,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
           scrolled ? "border-b border-primary" : "border-none border-transparent"
         }`}
       >
-        <a href="#" className="flex items-center">
+        <a href={"/"} className="flex items-center">
           <Image
             src={logo.src}
             width={120}
@@ -106,13 +107,15 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         <div className="fixed inset-0 z-50 bg-white font-notosans text-dark">
           {/* Top bar inside drawer */}
           <div className="flex items-center bg-dark-green justify-between px-6 py-4 border-b">
+            <Link href={'/'}>
             <Image
               src={logo.src}
               width={100}
               height={100}
               alt="Logo"
               className="object-cover"
-            />
+              />
+              </Link>
             <div className="flex text-primary items-center gap-4">
               <button onClick={() => setMenuOpen(false)}>
                 <X size={28} />
@@ -123,17 +126,17 @@ const Navbar = ({ scrolled }: NavbarProps) => {
           {/* Mobile Menu Links */}
           <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
             {[
-              "SHOP",
-              "HOME",
-              "ABOUT US",
-              "BLOG"
+              {titiel:"SHOP",link:"/product/12"},
+              {titel:"ABOUT US",link:"/about-us"},
+              {title:"CONTACT US",link:"/contact-us"},
+              {title:"BLOG",link:"/blog"},
             ].map((item) => (
               <a
-                href="#"
-                key={item}
+                href={item.link}
+                key={item.titel}
                 className="flex py-2 justify-between items-center hover:underline"
               >
-                {item} <ChevronRight />
+                {item.titel} <ChevronRight />
               </a>
             ))}
           </nav>
