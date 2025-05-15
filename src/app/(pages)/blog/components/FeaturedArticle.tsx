@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const articles = [
   {
@@ -45,7 +46,7 @@ export default function FeaturedArticles() {
               <p className="text-sm text-gray-500">Grantha: {article.grantha}</p>
               <div className="flex flex-wrap gap-2 pt-2">
                 <button className="px-4 py-2 text-sm bg-black text-white rounded-full hover:bg-gray-800">
-                  Shop the Right Kit
+             <Link href={'/blog/12'}> Shop the Right Kit</Link>    
                 </button>
                 <button className="px-4 py-2 text-sm border border-black rounded-full hover:bg-black hover:text-white">
                   Book a Free Consult

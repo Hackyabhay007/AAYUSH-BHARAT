@@ -87,10 +87,10 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-primary text-sm">
-          <a href="#" className="hover:underline">SHOP</a>
-          <a href="#" className="hover:underline">ABOUT US</a>
-          <a href="#" className="hover:underline">CONTACT US</a>
-          <a href="#" className="hover:underline">BLOG</a>
+          <a href={"/"} className="hover:underline">SHOP</a>
+          <a href={"/about-us"} className="hover:underline">ABOUT US</a>
+          <a href={"/contact-us"} className="hover:underline">CONTACT US</a>
+          <a href={"/blog"} className="hover:underline">BLOG</a>
         </div>
 
         {/* Hamburger Icon */}
