@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 
 interface NavbarProps {
@@ -34,12 +34,31 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         </a>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6 text-primary text-sm">
-          <a href={"/product/12"} className="hover:underline">SHOP</a>
-          <a href={"/about-us"} className="hover:underline">ABOUT US</a>
-          <a href={"/contact-us"} className="hover:underline">CONTACT US</a>
-          <a href={"/blog"} className="hover:underline">BLOG</a>
-        </div>
+    <div className="hidden md:flex items-center gap-6 text-primary text-sm">
+  {[
+    { title: "SHOP", link: "/product/12" },
+    { title: "ABOUT US", link: "/about-us" },
+    { title: "CONTACT US", link: "/contact-us" },
+    { title: "BLOG", link: "/blog" },
+  ].map((item) => (
+    <a
+      key={item.title}
+      href={item.link}
+      className="relative group"
+    >
+      {item.title}
+      <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+    </a>
+  ))}
+
+  <a href={"/cart"} className="hover:text-green-700">
+    <ShoppingCart size={20} />
+  </a>
+  <a href={"/profile"} className="hover:text-green-700">
+    <User size={20} />
+  </a>
+</div>
+
 
         {/* Hamburger Icon */}
         <div className="md:hidden flex gap-4 items-center">
@@ -77,21 +96,28 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
         {/* Mobile Menu Links */}
         <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
-          {[
-            { title: "SHOP", link: "/product/12" },
-            { title: "ABOUT US", link: "/about-us" },
-            { title: "CONTACT US", link: "/contact-us" },
-            { title: "BLOG", link: "/blog" },
-          ].map((item) => (
-            <a
-              href={item.link}
-              key={item.title}
-              onClick={() => setMenuOpen(false)} // Optional: close on link click
-              className="flex py-2 justify-between items-center hover:underline"
-            >
-              {item.title} <ChevronRight />
-            </a>
-          ))}
+         {[
+  { title: "SHOP", link: "/product/12" },
+  { title: "ABOUT US", link: "/about-us" },
+  { title: "CONTACT US", link: "/contact-us" },
+  { title: "BLOG", link: "/blog" },
+  { title: "CART", link: "/cart", icon: <ShoppingCart size={20} /> },
+  { title: "PROFILE", link: "/profile", icon: <User size={20} /> },
+].map((item) => (
+  <a
+    href={item.link}
+    key={item.title}
+    onClick={() => setMenuOpen(false)}
+    className="flex py-2 justify-between items-center group"
+  >
+    <span className="relative">
+      {item.title}
+      <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-dark-green transition-all duration-300 group-hover:w-full" />
+    </span>
+    {item.icon ?? <ChevronRight />}
+  </a>
+))}
+
         </nav>
       </div>
     </>

@@ -24,11 +24,13 @@ interface SocialLink {
 
 const quickLinks: QuickLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'Consultation', href: '/consultation' },
-  { label: 'Shop', href: '/shop' }, // Replace with actual shop path
-  { label: 'About Us', href: '/about' },
+  { label: 'Privacy Policy', href: '/privarcy-policy' },
+  { label: 'Shop', href: '/product/12' }, 
+  { label: 'Shipping Policy', href: '/shipping-policy' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Community', href: '/community' },
+  { label: 'Term & Condition', href: '/terms-and-conditions' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Track Order', href: '/track-order' },
 ];
 
 const trustIcons = [

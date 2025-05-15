@@ -94,30 +94,30 @@ export default function SectionFour() {
     {[
       {
         id: "balance",
-        icon: <FaCalendarDay size={56} className="text-beige" />,
+        icon: <FaCalendarDay size={84} className="text-dark-green bg-light p-2 rounded-full" />,
         title: "Balance",
         description: "Hormonal rhythm using herbs like Shatavari & Ashoka",
       },
       {
         id: "detox",
-        icon: <GiDroplets size={56} className="text-beige" />,
+        icon: <GiDroplets size={84} className="text-dark-green bg-light p-2 rounded-full" />,
         title: "Detox",
         description: "Clear toxins (Ama) from digestion and metabolism",
       },
       {
         id: "regulate",
-        icon: <GiHerbsBundle size={56} className="text-beige" />,
+        icon: <GiHerbsBundle size={84} className="text-dark-green bg-light p-2 rounded-full" />,
         title: "Regulate",
         description: "Restore healthy menstrual cycles",
       },
     ].map(({ id, icon, title, description }) => (
       <div
         key={id}
-        className="bg-dark-green flex justify-center h-64 flex-col items-center rounded-2xl shadow-lg p-6 w-full md:w-[300px] hover:shadow-xl transition-shadow duration-300"
+        className="bg-dark-green flex justify-center h-64 flex-col items-center rounded-2xl shadow-lg p-6 w-full md:w-[300px] hover:shadow-xl hover:scale-105 duration-300"
       >
         <div className=" text-4xl mb-4">{icon}</div>
-        <h3 className="text-xl font-light text-beige mb-3">{title}</h3>
-        <p className="text-beige text-base font-light">{description}</p>
+        <h3 className="text-2xl uppercase font-light text-light mb-3">{title}</h3>
+        <p className="text-light uppercase text-sm font-extralight tracking-wide">{description}</p>
       </div>
     ))}
   </div>
