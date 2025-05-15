@@ -54,7 +54,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Menu, X, ChevronRight, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 
 interface NavbarProps {
   scrolled: boolean;
