@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const consumerStudies = [
   {
     percentage: "76%",
@@ -70,7 +72,7 @@ export default function ProductInsights() {
               key={idx}
               className="bg-gray-100 h-64 flex items-start flex-col justify-center rounded-xl p-6 text-left shadow-sm"
             >
-              <div className="text-2xl mb-2"><img src={item.icon} alt="" className="h-16" /> </div>
+              <div className="text-2xl mb-2"><Image width={500} height={500} src={item.icon} alt="" className="h-16" /> </div>
               <p className="text-sm font-medium text-dark mb-1">{item.month}</p>
               <h3 className=" text-lg text-dark-green mb-2">{item.title}</h3>
               <p className="text-sm text-dark">{item.description}</p>

@@ -77,7 +77,7 @@ export default function ProductCardSection() {
               <span className="absolute top-2 left-2 bg-green-700 text-white text-xs px-2 py-1 rounded">
                 -{product.discount}%
               </span>
-              <img
+              <Image
                 src={product.image}
                 alt={product.name}
                 width={600}

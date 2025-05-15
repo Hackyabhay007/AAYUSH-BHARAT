@@ -44,9 +44,9 @@ export default function FAQ() {
   };
 
   return (
-    <div className='bg-beige w-full'>
+    <div className='bg-light w-full'>
 
-    <div className="max-w-5xl py-8 bg-beige text-dark-green mx-auto p-4">
+    <div className="max-w-5xl py-8  text-dark-green mx-auto p-4">
       <h2 className="text-4xl font-medium uppercase tracking-wider text-center mb-6">Frequently asked questions (FAQs)</h2>
       {faqData.map((faq, index) => (
           <div

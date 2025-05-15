@@ -99,15 +99,15 @@ return (
   <section className="py-16 bg-beige text-dark-green">
     <div className="container w-full flex flex-col items-center text-center mx-auto px-4">
 
-        <h2 className="text-4xl md:text-4xl font-bold mb-4">
+        <h2 className="text-2xl  md:text-4xl uppercase font-medium mb-4">
             Your Healing Continues After You Order.
           </h2>
           <p className="text-lg text-dark mb-10">With every box, you receive:</p>
 
-      <div className="flex flex-col md:flex-row sm:flex-col  items-center mx-16 justify-center gap-10">
+      <div className="flex flex-col md:flex-row sm:flex-col  items-center mx-2 lg:mx-16 justify-center gap-10">
         
         {/* Video Section */}
-        <div className="w-full flex-1/8">
+        <div className="w-full sm:flex-1 flex-1/8">
           <video
             className="w-6xl h-full rounded-lg shadow-lg"
             controls

@@ -1,7 +1,6 @@
 import {
-  Rabbit,
+
   Leaf,
-  CreditCard,
   ShieldCheck,
   HandHeart,
 } from "lucide-react";

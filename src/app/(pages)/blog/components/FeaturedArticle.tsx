@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const articles = [
   {
     title: 'How to Treat PCOD Naturally (Ayurveda vs. Hormone Pills)',
@@ -36,7 +38,7 @@ export default function FeaturedArticles() {
             key={idx}
             className="bg-white rounded-xl shadow-md overflow-hidden transition hover:shadow-lg hover:-translate-y-1"
           >
-            <img src={article.image} alt={article.title} className="w-full h-48 object-cover" />
+            <Image width={500} height={500} src={article.image} alt={article.title} className="w-full h-48 object-cover" />
             <div className="p-4 space-y-2">
               <h3 className="text-xl font-semibold">{article.title}</h3>
               <p className="text-sm text-gray-600 italic">Story: {article.example}</p>

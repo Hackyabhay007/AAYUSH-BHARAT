@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FaFacebookF, FaTwitter, FaInstagram, FaPinterestP } from 'react-icons/fa';
 
 const articles = [
@@ -36,7 +37,7 @@ export default function BlogArticle() {
                 key={idx}
                 className="rounded-xl overflow-hidden shadow-md transition duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1"
               >
-                <img src={article.image} alt={article.title} className="w-full h-36 object-cover" />
+                <Image width={500} height={500} src={article.image} alt={article.title} className="w-full h-36 object-cover" />
                 <div className="p-4 bg-white space-y-2">
                   <h3 className="text-md font-semibold">{article.title}</h3>
                   <p className="text-sm text-gray-600 italic">{article.example}</p>
@@ -57,7 +58,8 @@ export default function BlogArticle() {
 
         {/* Main Blog Content */}
         <article className="md:col-span-3 space-y-6 text-sm leading-7 text-gray-800">
-          <img
+          <Image
+          width={500} height={500}
             src="https://images.pexels.com/photos/6766221/pexels-photo-6766221.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Glowing skin"
             className="w-full rounded-md shadow-lg"

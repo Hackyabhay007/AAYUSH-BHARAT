@@ -47,7 +47,7 @@ const socialLinks: SocialLink[] = [
 export default function Footer() {
   return (
     <footer className="bg-dark-green text-light pt-12 pb-4">
-      <div className="containe px-16">
+      <div className="containe px-8 lg:px-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Quick Links */}
           <div>

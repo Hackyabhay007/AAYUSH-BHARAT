@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function SectionSix() {
   
 const motifs = [
@@ -36,7 +38,7 @@ const motifs = [
         {motifs.map((motif, index) => (
           <div key={index} className="flex flex-col items-center">
             <div className={`w-40 h-40 flex items-center justify-center rounded-full ${motif.bg}`}>
-              <img src={motif.image} alt={`Motif ${index + 1}`}  className=" max-w-full max-h-full" />
+              <Image width={500} height={500}  src={motif.image} alt={`Motif ${index + 1}`}  className=" max-w-full max-h-full" />
             </div>
             <p className="text-sm text-gray-700 mt-4 max-w-xs">{motif.text}</p>
           </div>

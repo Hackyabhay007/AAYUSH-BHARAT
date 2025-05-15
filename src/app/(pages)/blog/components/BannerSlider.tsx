@@ -64,6 +64,7 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const slides = [
   {
@@ -112,6 +113,7 @@ const BannerSlider = () => {
     if (!slider.current) return;
     slider.current.on("slideChanged", (s) => setCurrentSlide(s.track.details.rel));
   }, [slider]);
+console.log(currentSlide);
 
   return (
     <div className="relative">
@@ -123,7 +125,9 @@ const BannerSlider = () => {
   style={{ backgroundColor: slide.bgColor }}
 >
   {/* Image as base layer */}
-  <img
+  <Image
+  width={500}
+  height={500}
     src={slide.imageUrl}
     alt={`Slide ${index + 1}`}
     className="absolute inset-0 w-full h-full object-cover"
@@ -163,6 +167,7 @@ const BannerSlider = () => {
               <path d="M0 20H39.5675" stroke="#ffff" />
               <path d="M31.2383 29.3713C33.565 24.2506 35.4083 22.1009 40.0008 20.0141C35.3058 17.7032 33.4834 15.5456 31.2383 10.6288" stroke="#ffff" />
             </svg>
+
           </button>
         </div>
       )}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 // Replace with actual image paths
 const images = [
@@ -41,7 +42,7 @@ const ProductImageSlider: React.FC = () => {
       {/* Thumbnails */}
       <div className="flex justify-center items-center gap-3 mt-4">
         {images.map((img, index) => (
-          <img
+                  <Image width={500} height={500}
             key={index}
             src={img}
             alt={`Thumbnail ${index}`}

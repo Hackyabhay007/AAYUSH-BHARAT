@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 
@@ -49,7 +50,7 @@ export default function Hero() {
             key={index}
             className="overflow-hidden transition-transform"
           >
-            <img src={post.image} alt={post.title} className="w-lg h-96  object-cover" />
+            <Image width={500} height={500} src={post.image} alt={post.title} className="w-lg h-96  object-cover" />
             <div className="py-4">
               <h3 className="text-2xl text-dark-green uppercase font-light leading-snug tracking-wide line-clamp-2">
                 {post.title}

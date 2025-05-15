@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Vision() {
   return (
     <section className="bg-beige text-dark-green py-20 px-6 md:px-16">
@@ -20,9 +22,10 @@ export default function Vision() {
 
         {/* Right Image Column */}
         <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-lg">
-          <img
+          <Image
             src="https://sahara-cosmetics-digifist.myshopify.com/cdn/shop/files/pexels-monstera-6979015_2.jpg?v=1690543145&width=720" // replace with correct image path
             alt="Vision"
+            width={500} height={500}
             className="w-full h-full object-cover"
           />
         </div>

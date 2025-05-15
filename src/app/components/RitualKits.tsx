@@ -7,7 +7,7 @@ const RitualKits = () => {
       <h1 className='font-semibold uppercase tracking-wider text-dark-green text-4xl text-center'>Our Ayurvedic Ritual Kits</h1>
 
       {/* Grid for the kit boxes */}
-      <div className="flex-1/2 max-w-5xl mt-6  mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-4"> {/* Adjusted md:grid-cols-2 for better layout if only 4 items */}
+      <div className="flex-1/2 max-w-5xl mt-6  mx-auto grid gap-6 md:grid-cols-1 lg:grid-cols-3"> {/* Adjusted md:grid-cols-2 for better layout if only 4 items */}
         {/* Top Left Box */}
         <div className="relative rounded-2xl bg-dark-green text-beige p-8 overflow-hidden shadow-2xl flex flex-col"> {/* Added flex flex-col */}
           <h2 className="text-2xl font-bold mb-2">Heavy Flow Kit</h2> {/* Reduced mb */}
@@ -31,19 +31,18 @@ const RitualKits = () => {
         </div>
 
 {/* Bottom right Box */}
-        <div className="relative rounded-2xl bg-beige text-dark-green p-8 overflow-hidden shadow-2xl flex flex-col">
+        {/* <div className="relative rounded-2xl bg-beige text-dark-green p-8 overflow-hidden shadow-2xl flex flex-col">
           <h2 className="text-2xl font-bold mb-2">Triphala Rasayan</h2>
           <p className="mb-4 flex-grow">Daily gut detox for clear skin and digestion</p>
-        </div>
+        </div> */}
         </div>
 
       {/* Container for the centered "SHOP NOW" button */}
       {/* This div is now a direct child of the main section flex container */}
       <div className='flex justify-center mt-4'> {/* Added mt-8 for spacing */}
-        <button className='px-8 py-3 border font-semibold border-dark-green text-dark-green hover:bg-dark-green hover:text-beige transition text-lg'>
-          {/* Changed text-dark to text-dark-green for better visibility on beige, and hover state */}
+        {/* <button className='px-8 py-3 border font-semibold border-dark-green text-dark-green hover:bg-dark-green hover:text-beige transition text-lg'>
           SHOP ALL KITS
-        </button>
+        </button> */}
       </div>
     </section>
   );

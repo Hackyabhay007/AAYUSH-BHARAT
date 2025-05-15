@@ -1,17 +1,19 @@
+import Image from 'next/image';
 import React from 'react';
 
 const FixedBottomCart: React.FC = () => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex items-center justify-center gap-24">
+    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex lg:flex-row flex-col items-center justify-center gap-4 lg:gap-24">
       {/* Left - Product Info */}
       <div className="flex items-center gap-4">
-        <img
+        <Image
+        width={500} height={500}
           src="https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990" // Replace with actual image path
           alt="Zeroharm Back to Teens Tablets"
           className="w-12 h-12 object-cover rounded"
         />
         <div>
-          <h2 className="font-light text-lg">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
+          <h2 className="font-light text-sm lg:text-lg">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
           <div className="flex flex-row gap-2 items-center">
 
           <div className="text-sm text-gray-500 line-through">INR 3,597</div>

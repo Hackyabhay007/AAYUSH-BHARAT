@@ -6,7 +6,7 @@ import React from 'react';
 import { FaShieldAlt, FaBolt, FaUsers, FaRocket } from 'react-icons/fa';
 
 interface FeatureCardProps {
-  logo: JSX.Element;
+  logo: React.ReactNode;
   description: string;
 }
 

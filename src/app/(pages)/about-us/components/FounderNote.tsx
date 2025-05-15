@@ -1,4 +1,7 @@
 "use client";
+
+import Image from "next/image";
+
 export default function FounderNote() {
   return (
     <main className=" text-dark-green">
@@ -19,7 +22,7 @@ export default function FounderNote() {
             </h2>
             <div className="mt-6 text-lg leading-relaxed text-gray-700 relative">
               <span className="text-4xl absolute -top-6 -left-4 text-green-400 ">“</span>
-              I started Ayudh Bharat because I saw my mother and grandmother use Ayurvedic wisdom that worked. Not capsules, but rituals. This is more than a brand — it's a legacy I want to preserve and pass on to the modern Indian woman.
+              I started Ayudh Bharat because I saw my mother and grandmother use Ayurvedic wisdom that worked. Not capsules, but rituals. This is more than a brand — its a legacy I want to preserve and pass on to the modern Indian woman.
               <span className="text-4xl absolute -bottom-4 right-2 text-green-400 ">”</span>
             </div>
             <p className="mt-8 text-green-700  text-xl">— [Founder’s Name]</p>
@@ -28,7 +31,8 @@ export default function FounderNote() {
           {/* Founder Image in blob shape */}
           <div className="md:w-1/3 animate-slide-in-up">
             <div className="w-full max-w-sm mx-auto relative">
-              <img
+              <Image
+              height={500} width={500}
                 src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Founder"
                 className="w-full h-auto object-cover mask-blob shadow-2xl transition-transform duration-700 hover:scale-105"

@@ -42,7 +42,7 @@ export default function NatureIngredients() {
             key={index}
             className="bg-gray-100 rounded-xl p-6 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow"
           >
-            <img
+            <Image
               src={item.image}
               alt={item.name}
               width={160}

@@ -2,11 +2,11 @@
 import React from 'react'
 import FAQ from './components/FAQ'
 import ProductInsights from './components/ProductInsights'
-import ProductCardSection from './components/ProductCardSelection'
 import NatureIngredients from './components/Naturalingredients'
 import HeroSection from './components/HeroSection'
 import VideoScrollSection from './components/VideoScrollSectoin'
 import FixedBottomCart from './components/FixedBottomCart'
+import SectionFive from '@/app/components/SectionFive'
 
 function ProductContent() {
   return (
@@ -16,7 +16,8 @@ function ProductContent() {
 
     <NatureIngredients/>
     <ProductInsights/>
-    <ProductCardSection/>
+    <SectionFive/>
+    {/* <ProductCardSection/> */}
     <FAQ/>
     <FixedBottomCart/>
     </>

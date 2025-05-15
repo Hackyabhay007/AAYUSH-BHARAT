@@ -1,43 +1,43 @@
 'use client';
 
 import React from 'react';
-import { FaBalanceScaleLeft, FaCalendarDay } from 'react-icons/fa';
-import { GiWaterDrop, GiCycle, GiHerbsBundle, GiDroplets } from 'react-icons/gi';
+import {  FaCalendarDay } from 'react-icons/fa';
+import {  GiHerbsBundle, GiDroplets } from 'react-icons/gi';
 
 // Types
-interface BenefitDetail {
-  id: string;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
+// interface BenefitDetail {
+//   id: string;
+//   icon: React.ReactNode;
+//   title: string;
+//   description: string;
+// }
 
-const benefitDetails: BenefitDetail[] = [
-  {
-    id: 'balance',
-    icon: <GiHerbsBundle size={36} className="text-green-600" />,
-    title: 'Balance',
-    description: 'Hormonal rhythm using herbs like Shatavari & Ashoka.',
-  },
-  {
-    id: 'detox',
-    icon: <GiDroplets size={36} className="text-blue-500" />,
-    title: 'Detox',
-    description: 'Clear toxins (Ama) from digestion and metabolism.',
-  },
-  {
-    id: 'regulate',
-    icon: <FaCalendarDay size={36} className="text-purple-600" />,
-    title: 'Regulate',
-    description: 'Restore healthy menstrual cycles.',
-  },
-];
+// const benefitDetails: BenefitDetail[] = [
+//   {
+//     id: 'balance',
+//     icon: <GiHerbsBundle size={36} className="text-green-600" />,
+//     title: 'Balance',
+//     description: 'Hormonal rhythm using herbs like Shatavari & Ashoka.',
+//   },
+//   {
+//     id: 'detox',
+//     icon: <GiDroplets size={36} className="text-blue-500" />,
+//     title: 'Detox',
+//     description: 'Clear toxins (Ama) from digestion and metabolism.',
+//   },
+//   {
+//     id: 'regulate',
+//     icon: <FaCalendarDay size={36} className="text-purple-600" />,
+//     title: 'Regulate',
+//     description: 'Restore healthy menstrual cycles.',
+//   },
+// ];
 
-const visualIconsData = [
-  { label: 'Balance', icon: <FaBalanceScaleLeft size={28} className="text-dark-green" /> },
-  { label: 'Detox', icon: <GiWaterDrop size={28} className="text-dark-green" /> },
-  { label: 'Regulate', icon: <GiCycle size={28} className="text-dark-green" /> },
-];
+// const visualIconsData = [
+//   { label: 'Balance', icon: <FaBalanceScaleLeft size={28} className="text-dark-green" /> },
+//   { label: 'Detox', icon: <GiWaterDrop size={28} className="text-dark-green" /> },
+//   { label: 'Regulate', icon: <GiCycle size={28} className="text-dark-green" /> },
+// ];
 
 export default function SectionFour() {
   return (
