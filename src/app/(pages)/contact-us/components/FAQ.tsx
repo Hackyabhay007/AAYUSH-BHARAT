@@ -17,11 +17,11 @@ const faqs = [
   },
 ];
 
-export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(null);
+export default function FAQSection() {const [openIndex, setOpenIndex] = useState<number | null>(null);
+
 
   const toggle = (index:number) => {
-    
+
     setOpenIndex(openIndex === index ? null : index);
   };
 
