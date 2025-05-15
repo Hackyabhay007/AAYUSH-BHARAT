@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       "sahara-cosmetics-digifist.myshopify.com",
+      "cdn.shopify.com",
       "images.pexels.com",
       "cdn.myotherstore.com",
       "images.unsplash.com","www.zeroharm.in",

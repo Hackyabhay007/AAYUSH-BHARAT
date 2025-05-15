@@ -118,15 +118,15 @@ const plans = [
       {/* Consumption Instructions */}
       <div className="flex justify-center items-center gap-18 text-center sm:gap-4 text-xs text-gray-700">
         <div>
-          <Image width={500} height={500} src="https://www.zeroharm.in/cdn/shop/files/TWICE_A_DAY-01_07dfc5bd-82ea-4eee-8304-136e82a79cb0_300x.png?v=1705991459" alt="Twice a Day" className="mx-auto h-12" />
+          <Image width={48} height={48} src="https://www.zeroharm.in/cdn/shop/files/TWICE_A_DAY-01_07dfc5bd-82ea-4eee-8304-136e82a79cb0_300x.png?v=1705991459" alt="Twice a Day" className="mx-auto h-12" />
           <p className="mt-1">Twice a Day</p>
         </div>
         <div>
-          <Image width={500} height={500} src="https://www.zeroharm.in/cdn/shop/files/before-meal_-01_300x.png?v=1702906666" alt="30 min Before/After" className="mx-auto h-12" />
+          <Image width={48} height={48} src="https://www.zeroharm.in/cdn/shop/files/before-meal_-01_300x.png?v=1702906666" alt="30 min Before/After" className="mx-auto h-12" />
           <p className="mt-1">30 min Before/After<br />Breakfast & Dinner</p>
         </div>
         <div>
-          <Image width={500} height={500} src="https://www.zeroharm.in/cdn/shop/files/consume_icons-01_1_300x.png?v=1705992080" alt="3 Months" className="mx-auto h-12" />
+          <Image width={48} height={48} src="https://www.zeroharm.in/cdn/shop/files/consume_icons-01_1_300x.png?v=1705992080" alt="3 Months" className="mx-auto h-12" />
           <p className="mt-1">3 Months For Better<br />Results</p>
         </div>
       </div>
@@ -179,7 +179,7 @@ const plans = [
 
       {/* Delivery Estimate */}
       <div className="flex justify-center items-center gap-2 border border-gray-300 rounded-lg p-3 text-center text-sm">
-        <Image width={500} height={500} src="https://cdn.shopify.com/s/files/1/0606/9298/8070/files/46-truck_100x.gif" className="h-8"  alt="" /> Delivery between <strong>15th - 17th May</strong> | Order within{" "}
+        <Image width={32} height={32} src="https://cdn.shopify.com/s/files/1/0606/9298/8070/files/46-truck_100x.gif" className="h-8"  alt="" /> Delivery between <strong>15th - 17th May</strong> | Order within{" "}
         <span className="text-green-600 font-medium">3hr 50 mins</span>.
       </div>
 
@@ -201,7 +201,7 @@ const plans = [
           { label: "Backed by", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/2_296817ec-91d1-449f-ac40-e889fa839578.png", sub: "Nano-Technology" },
         ].map((item, i) => (
           <div key={i} className="flex flex-col gap-3 items-center">
-            <Image width={500} height={500} src={item.icon} alt={item.label} className="h-16 mb-1" />
+            <Image width={64} height={64} src={item.icon} alt={item.label} className="h-16 mb-1" />
             {/* <p>{item.label}</p> */}
             <span>{item.sub}</span>
           </div>
