@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-// Replace with actual image paths
 const images = [
   "https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990",
   "https://www.zeroharm.in/cdn/shop/products/BiotinAmazonContent17822W1080xH1080pxl30mcg-03.jpg?v=1739794090&width=823",
@@ -22,7 +21,6 @@ const ProductImageSlider: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Main Image Container with fixed height and no scroll jump */}
       <div className="relative h-[550px] overflow-hidden rounded-xl ">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img

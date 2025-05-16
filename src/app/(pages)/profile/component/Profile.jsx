@@ -6,28 +6,7 @@ function Profile() {
   return (
     <div>
           <div className="w-full max-w-6xl">
-                {/* Top Profile Card */}
-        
-        
-                {/* Tab Navigation */}
-                {/* <div className="bg-white rounded-t-xl shadow-md mt-6 px-4 py-4 flex flex-col sm:flex-row gap-4 sm:gap-8 border-b text-sm">
-                  <button className="border-b-2 border-dark-green pb-2 flex items-center gap-2">
-                    <User size={16} />
-                    Profile
-                  </button>
-                  <button className="text-gray-500 hover:text-dark-green flex items-center gap-2">
-                    <Package size={16} />
-                    Orders
-                  </button>
-                  <button className="text-gray-500 hover:text-dark-green flex items-center gap-2">
-                    <MapPin size={16} />
-                    Addresses
-                  </button>
-                  <button className="text-gray-500 hover:text-dark-green flex items-center gap-2">
-                    <Settings size={16} />
-                    Settings
-                  </button>
-                </div> */}
+  
         
                 {/* Overview Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6 bg-white shadow-md rounded-b-xl">

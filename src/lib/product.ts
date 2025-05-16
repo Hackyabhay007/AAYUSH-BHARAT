@@ -1,5 +1,3 @@
-// lib/product.ts
-
 export interface Product {
   id: string
   slug: string

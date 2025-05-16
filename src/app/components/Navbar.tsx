@@ -144,7 +144,6 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
         {/* Cart Content */}
         <div className="flex-1 p-4 overflow-y-auto ">
-          {/* You can map cart items here */}
         </div>
 
         {/* Cart Footer */}

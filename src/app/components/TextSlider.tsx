@@ -11,8 +11,6 @@ const items = [
 ];
 
 export default function TextSlider() {
-  // Duplicate items to ensure content is wider than the viewport for a smoother loop
-  // Duplicating more times can sometimes help if the content is short
   const duplicatedItems = [...items, ...items, ...items];
 
   return (

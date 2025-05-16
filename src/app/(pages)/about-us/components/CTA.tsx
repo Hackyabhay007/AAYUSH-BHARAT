@@ -8,7 +8,7 @@ export default function CTA() {
   className="relative bg-beige bg-center py-32 px-6 md:px-24"
   style={{
     backgroundImage:
-      "url('https://images.pexels.com/photos/1050282/pexels-photo-1050282.jpeg?auto=compress&cs=tinysrgb&w=1600')", // Herbal/spa aesthetic
+      "url('https://images.pexels.com/photos/1050282/pexels-photo-1050282.jpeg?auto=compress&cs=tinysrgb&w=1600')",
   }}
 >
   {/* Overlay */}

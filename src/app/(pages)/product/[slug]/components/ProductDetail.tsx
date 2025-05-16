@@ -59,21 +59,6 @@ const plans = [
         <h2 className="text-2xl text-dark-green font-medium mt-2">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
       </div>
 
-      {/* Icons Section */}
-      {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-        {["Ingredients", "Why choose us", "How it works", "How to use"].map((label, i) => (
-          <div key={i} className="flex flex-col items-center">
-            <img
-              src={`/icons/icon${i + 1}.png`} // replace with actual icons
-              alt={label}
-              className="w-16 h-16 rounded-full border"
-            />
-            <p className="text-sm mt-1">{label}</p>
-          </div>
-        ))}
-      </div> */}
-
-      {/* Benefit Tags */}
       <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
         {[
           "Nourishes Nails",
@@ -224,7 +209,6 @@ const plans = [
           </button>
           {accordionOpen === title && (
             <div className="text-sm text-gray-600 pb-4">
-              {/* Replace with actual content */}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
             </div>
           )}

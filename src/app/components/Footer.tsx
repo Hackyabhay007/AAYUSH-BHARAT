@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Link from 'next/link'; // Using Next.js Link for navigation
+import Link from 'next/link'; 
 import {
   FaInstagram,
   FaWhatsapp,
@@ -9,7 +9,7 @@ import {
   FaCreditCard, // For Razorpay
   FaBoxOpen // For COD
 } from 'react-icons/fa';
-import { RiShieldCheckFill } from 'react-icons/ri'; // Another option for certification
+import { RiShieldCheckFill } from 'react-icons/ri'; 
 
 interface QuickLink {
   label: string;

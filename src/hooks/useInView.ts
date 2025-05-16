@@ -5,7 +5,7 @@ const useInView = (threshold = 0.2) => {
   const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
-    const element = ref.current; // ✅ capture the current value
+    const element = ref.current;
     if (!element) return;
 
     const observer = new IntersectionObserver(

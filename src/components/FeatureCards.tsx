@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-// Importing some example icons from react-icons
-// Replace these with your actual logo components or image tags
 import { FaShieldAlt, FaBolt, FaUsers, FaRocket } from 'react-icons/fa';
 
 interface FeatureCardProps {
