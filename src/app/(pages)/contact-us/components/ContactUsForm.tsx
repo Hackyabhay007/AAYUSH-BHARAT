@@ -2,7 +2,7 @@ export default function ContactForm() {
   return (
     <section className="max-w-3xl mx-auto px-4 py-22 text-[#1a1a1a]">
       {/* Heading */}
-      <h1 className="text-4xl font-medium text-dark-green text-center mb-8 tracking-wide uppercase">Contact</h1>
+      <h1 className="lg:text-4xl text-2xl font-medium text-dark-green text-center mb-8 tracking-wide uppercase">Contact</h1>
 
       {/* Opening Hours */}
       <div className="mb-12">

@@ -1,64 +1,76 @@
-"use client";
+'use client';
 
 import React from "react";
 import { Droplet, HeartPulse, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 
+// Animation variants for cards
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  })
+};
+
 const RitualKits = () => {
+  const kits = [
+    {
+      title: "Heavy Flow Kit",
+      description: "Regulates excessive flow and calms Pitta",
+      icon: <Droplet size={28} />,
+      bg: "bg-dark-green",
+      text: "text-beige",
+      iconBg: "bg-beige text-dark-green",
+    },
+    {
+      title: "PCOD / PCOS Kit",
+      description: "Supports cyst reduction and hormonal balance",
+      icon: <HeartPulse size={28} />,
+      bg: "bg-beige",
+      text: "text-dark-green",
+      iconBg: "bg-dark-green text-beige",
+    },
+    {
+      title: "Low / Delayed Periods Kit",
+      description: "Restores flow and improves ovulation",
+      icon: <Moon size={28} />,
+      bg: "bg-dark-green",
+      text: "text-light",
+      iconBg: "bg-beige text-dark-green",
+    },
+  ];
+
   return (
     <section className="justify-center bg-light py-12 my-6 flex flex-col gap-6 px-4">
-      <h1 className="font-semibold uppercase tracking-wider text-dark-green text-4xl text-center">
+      <h1 className="font-semibold uppercase tracking-wider text-dark-green lg:text-4xl text-2xl text-center">
         Our Ayurvedic Ritual Kits
       </h1>
 
-      {/* Grid for the kit boxes */}
-      <div className="flex-1/2 max-w-5xl mt-6 mx-auto grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-        {/* Heavy Flow Kit */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="relative rounded-2xl bg-dark-green text-beige p-8 overflow-hidden shadow-2xl flex flex-col items-center"
-        >
-          <div className="bg-beige text-dark-green p-4 rounded-full mb-4">
-            <Droplet size={28} />
-          </div>
-          <h2 className="text-2xl font-bold mb-2 text-center">Heavy Flow Kit</h2>
-          <p className="mb-4 flex-grow text-center">
-            Regulates excessive flow and calms Pitta
-          </p>
-        </motion.div>
-
-        {/* PCOD / PCOS Kit */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="rounded-2xl bg-beige text-dark-green p-8 shadow-2xl flex flex-col items-center"
-        >
-          <div className="bg-dark-green text-beige p-4 rounded-full mb-4">
-            <HeartPulse size={28} />
-          </div>
-          <h2 className="text-2xl font-bold mb-2 text-center">PCOD / PCOS Kit</h2>
-          <p className="mb-4 flex-grow text-center">
-            Supports cyst reduction and hormonal balance
-          </p>
-        </motion.div>
-
-        {/* Low / Delayed Periods Kit */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="rounded-2xl bg-dark-green text-light p-8 shadow-2xl flex flex-col items-center"
-        >
-          <div className="bg-beige text-dark-green p-4 rounded-full mb-4">
-            <Moon size={28} />
-          </div>
-          <h2 className="text-2xl font-bold mb-2 text-center">
-            Low / Delayed Periods Kit
-          </h2>
-          <p className="mb-4 flex-grow text-center">
-            Restores flow and improves ovulation
-          </p>
-        </motion.div>
+      <div className="flex flex-col items-center max-w-5xl mt-6 mx-auto lg:grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+        {kits.map((kit, index) => (
+          <motion.div
+            key={kit.title}
+            className={`rounded-2xl w-70 lg:w-auto shadow-2xl p-8 flex flex-col items-center ${kit.bg} ${kit.text}`}
+            custom={index}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={cardVariants}
+            whileHover={{ scale: 1.05 }}
+          >
+            <div className={`p-4 rounded-full mb-4 ${kit.iconBg}`}>
+              {kit.icon}
+            </div>
+            <h2 className="text-2xl font-bold mb-2 text-center">{kit.title}</h2>
+            <p className="mb-4 flex-grow text-center">{kit.description}</p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

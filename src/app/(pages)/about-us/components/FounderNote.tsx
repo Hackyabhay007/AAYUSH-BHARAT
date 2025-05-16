@@ -17,15 +17,15 @@ export default function FounderNote() {
         <div className="relative flex flex-col-reverse justify-center md:flex-row items-center max-w-6xl mx-auto gap-6 z-10">
           {/* Text Content */}
           <div className="md:w-1/2 animate-fade-in">
-            <h2 className="text-4xl uppercase md:text-5xl font-medium leading-snug tracking-wider text-dark-green ">
+            <h2 className="text-2xl lg:text-4xl uppercase md:text-5xl font-medium leading-snug tracking-wider text-dark-green ">
               Why I Started <br className="hidden md:block" /> Ayudh Bharat
             </h2>
             <div className="mt-6 text-lg leading-relaxed text-gray-700 relative">
-              <span className="text-4xl absolute -top-6 -left-4 text-green-400 ">“</span>
+              <span className="text-2xl lg:text-4xl absolute -top-6 -left-4 text-green-400 ">“</span>
               I started Ayudh Bharat because I saw my mother and grandmother use Ayurvedic wisdom that worked. Not capsules, but rituals. This is more than a brand — its a legacy I want to preserve and pass on to the modern Indian woman.
-              <span className="text-4xl absolute -bottom-4 right-2 text-green-400 ">”</span>
+              <span className="text-2xl lg:text-4xl absolute -bottom-4 right-2 text-green-400 ">”</span>
             </div>
-            <p className="mt-8 text-green-700  text-xl">— [Founder’s Name]</p>
+            <p className="mt-8 text-green-700  text-base lg:text-xl">— [Founder’s Name]</p>
           </div>
 
           {/* Founder Image in blob shape */}

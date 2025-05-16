@@ -12,7 +12,7 @@ export default function Banner() {
 
       {/* Main Heading */}
       <div className="relative z-10 text-center px-6">
-        <h1 className="text-white text-4xl md:text-6xl font-extrabold leading-tight tracking-wide drop-shadow-lg">
+        <h1 className="text-white text-2xl md:text-6xl font-extrabold leading-tight tracking-wide drop-shadow-lg">
           Ayurveda Reimagined.<br />
           Rooted in Tradition, Designed for Today.
         </h1>

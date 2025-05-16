@@ -31,7 +31,7 @@ export default function FAQSection() {const [openIndex, setOpenIndex] = useState
     <section className="max-w-4xl mx-auto px-4 py-20 text-dark-green">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-semibold uppercase mb-4">Help / FAQs</h1>
+        <h1 className="text-2xl lg:text-4xl md:text-4xl font-semibold uppercase mb-4">Help / FAQs</h1>
         <p className="text-gray-600 text-sm md:text-base font-light">
           If you have a question, please consult our list of frequently asked questions before reaching out for assistance.
         </p>

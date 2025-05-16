@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import Button from "./ui/Button";
+import { motion, useInView } from "framer-motion";
 
 export default function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsVisible(true), 300);
-    return () => clearTimeout(timeout);
-  }, []);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section className="relative w-full h-screen overflow-hidden font-notosans">
@@ -32,10 +29,12 @@ export default function HeroSection() {
       <div className="absolute top-0 left-0 w-full h-full z-10 lg:bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
 
       {/* Overlay Content */}
-      <div
-        className={`relative z-20 flex lg:px-18 px-6 lg:max-w-2xl flex-col text-center lg:text-left items-center justify-center h-full lg:items-start text-primary transition-all duration-1000 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        }`}
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative z-20 flex lg:px-18 px-6 lg:max-w-2xl flex-col text-center lg:text-left items-center justify-center h-full lg:items-start text-primary"
       >
         <h1 className="font-begum text-3xl sm:text-5xl font-semibold tracking-wider mb-6">
           RECLAIM YOUR NATURAL BALANCE
@@ -54,7 +53,7 @@ export default function HeroSection() {
             className="hover:bg-light hover:text-dark hover:border-light"
           />
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

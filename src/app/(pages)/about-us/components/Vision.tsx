@@ -7,7 +7,7 @@ export default function Vision() {
         
         {/* Left Text Column */}
         <div>
-          <h2 className="text-3xl md:text-5xl font-serif font-semibold mb-6 leading-tight">
+          <h2 className="text-2xl  md:text-5xl font-serif font-semibold mb-6 leading-tight">
             NATURE’S WISDOM,<br />OUR VISION
           </h2>
           <p className="text-lg md:text-xl font-light leading-relaxed">

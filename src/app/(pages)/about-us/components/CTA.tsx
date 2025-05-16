@@ -16,7 +16,7 @@ export default function CTA() {
 
   {/* Content */}
   <div className="relative z-10 max-w-4xl mx-auto text-center">
-    <h2 className="text-4xl md:text-4xl font-medium mb-6 uppercase tracking-wider leading-tight">
+    <h2 className="lg:text-4xl text-2xl md:text-4xl font-medium mb-6 uppercase tracking-wider leading-tight">
       Ayurveda That Feels Like Home
     </h2>
     <p className="text-lg md:text-x mb-8">

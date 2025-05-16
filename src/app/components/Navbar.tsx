@@ -29,7 +29,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
             src={logo.src}
             width={120}
             height={150}
-            className="object-cover"
+            className="object-cover w-24 h-14 lg:w-auto lg:h-auto"
             alt="Logo"
           />
         </a>
@@ -63,10 +63,15 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         {/* Hamburger Icon */}
         <div className="md:hidden flex gap-4 items-center">
           <button onClick={() => setCartOpen(true)} className="text-light">
-            <ShoppingCart size={28} />
+            <ShoppingCart size={20} />
+          </button>
+          <button className="text-light">
+            <Link href={'/profile'}>
+            <User size={20} />
+            </Link>
           </button>
           <button onClick={() => setMenuOpen(true)} className="text-light">
-            <Menu size={28} />
+            <Menu size={20} />
           </button>
         </div>
       </div>
@@ -99,7 +104,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
             { title: "CONTACT US", link: "/contact-us" },
             { title: "BLOG", link: "/blog" },
             // { title: "CART", link: "/cart", icon: <ShoppingCart size={20} /> },
-            { title: "PROFILE", link: "/profile", icon: <User size={20} /> },
+            // { title: "PROFILE", link: "/profile", icon: <User size={20} /> },
           ].map((item) => (
             <a
               href={item.link}
@@ -111,7 +116,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
                 {item.title}
                 <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-dark-green transition-all duration-300 group-hover:w-full" />
               </span>
-              {item.icon ?? <ChevronRight />}
+              { <ChevronRight />}
             </a>
           ))}
         </nav>
