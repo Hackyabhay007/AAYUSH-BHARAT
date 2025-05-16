@@ -36,7 +36,7 @@ export default function HeroSection() {
         <h1 className="font-begum text-3xl sm:text-5xl font-semibold tracking-wider mb-6">
           RECLAIM YOUR NATURAL BALANCE
         </h1>
-        <p className="text-base font-notosans tracking-wide bg-beige text-dark lg:px-4 lg:py-1 p-1 rounded mb-4">
+        <p className="text-base font-notosans tracking-wide text-light uppercase  lg:py-1 p-1 rounded mb-4">
           Ayurvedic Ritual Kits crafted from Granthas to restore your inner
           harmony.
         </p>
