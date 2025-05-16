@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface AuthFormProps {
   type: "login" | "register" | "forgot";
@@ -12,6 +13,9 @@ export default function AuthForm({ type }: AuthFormProps) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const isLogin = type === "login";
   const isRegister = type === "register";
@@ -29,8 +33,7 @@ export default function AuthForm({ type }: AuthFormProps) {
   };
 
   return (
-    <div className="flex mt-18 items-center bg-beige text-dark-green flex-col p-4">
-        {/* <h1 className="lg:text-4xl text-2xl font-medium tracking-wider uppercase  py-4">{type}</h1> */}
+    <div className="flex pt-24 items-center bg-beige text-dark-green flex-col p-4">
       <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
         <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
           {isLogin && "Log In to AAYUSH BHARAT"}
@@ -49,10 +52,10 @@ export default function AuthForm({ type }: AuthFormProps) {
           </p>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col ">
+        <form onSubmit={handleSubmit} className="flex flex-col">
           {isRegister && (
             <>
-            <label htmlFor="Full Name">Full Name</label>
+              <label htmlFor="Full Name">Full Name</label>
               <input
                 type="text"
                 placeholder="Enter your full name"
@@ -61,8 +64,8 @@ export default function AuthForm({ type }: AuthFormProps) {
                 required
                 className="p-3 my-2 border rounded"
               />
-              <label htmlFor="phoneNumber">Phone Numer</label>
-             
+
+              <label htmlFor="phoneNumber">Phone Number</label>
               <input
                 type="text"
                 placeholder="Enter 10-digit number"
@@ -73,8 +76,8 @@ export default function AuthForm({ type }: AuthFormProps) {
               />
             </>
           )}
-<label htmlFor="email">Email</label>
-             
+
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             placeholder="email@example.com"
@@ -86,29 +89,50 @@ export default function AuthForm({ type }: AuthFormProps) {
 
           {!isForgot && (
             <>
-            <label htmlFor="password">Password</label>
-             
-              <input
-                type="password"
-                placeholder="Min. 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="p-3 my-2 border rounded"
-              />
+              <label htmlFor="password">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Min. 6 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="p-3 my-2 border rounded w-full pr-10"
+                />
+                {password && (
+                  <span
+                    className="absolute right-3 top-5 cursor-pointer text-xl"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+
+                  </span>
+                )}
+              </div>
+
               {isRegister && (
                 <>
-                <label htmlFor="confirmPassword">Confirm Password</label>
-             
-                <input
-                  type="password"
-                  placeholder="Confirm your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  className="p-3 my-3 border rounded"
-                  />
-              </>
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <div className="flex relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      className="p-3 my-3 border rounded w-full pr-10"
+                    />
+                    {confirmPassword && (
+                      <span
+                        className="absolute right-3 top-5 cursor-pointer text-xl"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+
+                      </span>
+                    )}
+                  </div>
+                </>
               )}
             </>
           )}

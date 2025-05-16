@@ -68,3 +68,8 @@
   background-size: 200% 100%;
   animation: gradient-x 12s ease-in-out infinite alternate;
 }
+
+
+.input-style {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-dark-green;
+}

@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 
@@ -46,10 +47,12 @@ export default function Hero() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {currentPosts.map((post, index) => (
+
           <div
             key={index}
-            className="overflow-hidden transition-transform"
-          >
+            className="overflow-hidden transition-transform hover:scale-105 duration-300"
+            >
+                        <Link href={'/blog/id'}>
             <Image width={500} height={500} src={post.image} alt={post.title} className="w-lg h-96  object-cover" />
             <div className="py-4">
               <h3 className="text-lg lg:text-2xl text-dark-green uppercase font-light leading-snug tracking-wide line-clamp-2">
@@ -60,6 +63,7 @@ export default function Hero() {
                 {post.example}
               </p>
             </div>
+            </Link>
           </div>
         ))}
       </div>
