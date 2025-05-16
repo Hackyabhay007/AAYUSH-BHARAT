@@ -24,12 +24,12 @@ interface SocialLink {
 
 const quickLinks: QuickLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'Privacy Policy', href: '/privarcy-policy' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
   { label: 'Shop', href: '/product/12' }, 
   { label: 'Shipping Policy', href: '/shipping-policy' },
   { label: 'Blog', href: '/blog' },
   { label: 'Term & Condition', href: '/terms-and-conditions' },
-  { label: 'About Us', href: '/about' },
+  { label: 'About Us', href: '/about-us' },
   { label: 'Track Order', href: '/track-order' },
 ];
 

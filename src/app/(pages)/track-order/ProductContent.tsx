@@ -22,7 +22,7 @@ function ProductContent() {
           <input
             type="text"
             placeholder="Enter your order ID"
-            className="w-full sm:w-120 px-4 py-3 rounded-md border border-gray-300 bg-yellow-50 placeholder-gray-800 focus:outline-none focus:ring-2 "
+            className="w-full sm:w-120 px-4 py-3 rounded-md border border-gray-300 bg-yellow-50 placeholder-gray-800 focus:outline-none focus:ring-2 mb-2 lg:mb-0"
           />
           <button className="flex flex-row items-center px-12 py-3 bg-dark-green  text-white rounded-md shadow transition">
             <p>Track</p> <FaTruck className="ml-2" />

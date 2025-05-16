@@ -5,7 +5,7 @@ function ProductContent() {
     <div className="bg-beige">
 
   
-    <div className='pt-20 pb-4 text-dark-green text-center'>
+    <div className='pt-20 px-4 pb-4 text-dark-green text-center'>
     <h1 className='text-2xl py-3 lg:text-4xl font-medium uppercase tracking-wider'>Privacy Policy</h1>
     <p className='text-lg tracking-wide'>Last Updated: 04th March 2025</p>
     <div className="bg-white border border-dark-green rounded-md p-6 md:p-10 my-4 text-left max-w-5xl mx-auto">

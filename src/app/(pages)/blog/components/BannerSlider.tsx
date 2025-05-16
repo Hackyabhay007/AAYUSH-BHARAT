@@ -3,6 +3,7 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const slides = [
   {
@@ -14,7 +15,7 @@ const slides = [
   },
   {
     title: "Sourced from Charaka & Sushruta",
-    subtitle: "PURE. POWERFUL. PLANT-BASED.",
+    subtitle: "Pure. Powerful. Plant-Based.",
     description: "Ancient Scripts. Modern Meaning.",
     imageUrl: "https://images.pexels.com/photos/31984778/pexels-photo-31984778/free-photo-of-aerial-view-of-green-forest-with-circular-structure.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     bgColor: "#e8f0f2",
@@ -73,16 +74,17 @@ console.log(currentSlide);
 
   {/* Overlay Text */}
   <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-6 z-10">
-    <h2 className="text-4xl font-medium tracking-wider uppercase md:text-5xl mb-3">{slide.title}</h2>
+    <h2 className="lg:text-4xl text-2xl font-medium tracking-wider uppercase md:text-5xl mb-3">{slide.title}</h2>
     {/* <p className="pb-2   md:text-base">{slide.subtitle}</p> */}
-    <p className="text-lg font-light md:text-xl">{slide.description}</p>
-    <p className="text-lg md:text-xl font-light">{slide.subtitle}</p>
-      <button className="text-beige border-beige border-2  px-8 py-3 mt-4 rounded text-lg transition shadow-lg">
+    <p className="lg:text-lg text-base tracking-wide font-light md:text-xl">{slide.description}</p>
+    <p className="lg:text-lg text-base tracking-wide md:text-xl font-light">{slide.subtitle}</p>
+      <Link href={"/blog/12"} className="text-light border-light border-2 px-4 lg:px-8 lg:py-3 py-2 mt-4 rounded lg:text-lg text-sm transition shadow-lg hover:bg-dark hover:text-light cursor-pointer hover:border-dark ">
           <div className="flex gap-2 items-center">
-           
+          
             Explore Now
+
           </div>
-          </button>
+          </Link>
   </div>
 </div>
 

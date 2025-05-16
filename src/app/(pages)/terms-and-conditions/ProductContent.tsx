@@ -2,7 +2,7 @@ import React from 'react'
 
 function ProductContent() {
   return (
-    <div className='pt-20 pb-4 bg-beige text-center text-dark-green'>
+    <div className='pt-20 px-4 pb-4 bg-beige text-center text-dark-green'>
 <h1 className='text-2xl py-3 lg:text-4xl font-medium uppercase tracking-wider  '>Terms and Conditions</h1>
     <p className="text-lg tracking-wide">Please read our terms and conditions carefully</p>
     <div className="bg-white border border-dark-green rounded-md p-6 md:p-10 my-4 text-left max-w-5xl mx-auto">

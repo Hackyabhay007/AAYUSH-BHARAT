@@ -69,12 +69,12 @@ return (
         <div className="w-full sm:flex-1 flex-1/8">
           <video
             className="w-6xl h-full rounded-lg shadow-lg"
-            controls
             autoPlay
             loop
             muted
+              playsInline
           >
-            <source src="/your-video.mp4" type="video/mp4" />
+            <source src="https://videos.pexels.com/video-files/1448735/1448735-uhd_2732_1440_24fps.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

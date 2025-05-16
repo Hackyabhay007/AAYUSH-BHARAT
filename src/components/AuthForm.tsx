@@ -30,11 +30,11 @@ export default function AuthForm({ type }: AuthFormProps) {
 
   return (
     <div className="flex mt-18 items-center bg-beige text-dark-green flex-col p-4">
-        <h1 className="lg:text-4xl text-2xl font-medium tracking-wider uppercase  py-4">{type}</h1>
+        {/* <h1 className="lg:text-4xl text-2xl font-medium tracking-wider uppercase  py-4">{type}</h1> */}
       <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
         <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
-          {isLogin && "Log In to Rai's Spices"}
-          {isRegister && "Sign Up to Rai's Spices"}
+          {isLogin && "Log In to AAYUSH BHARAT"}
+          {isRegister && "Sign Up to AAYSH BHARAT"}
           {isForgot && "Reset Your Password"}
         </h2>
 
