@@ -12,6 +12,7 @@ import SectionSix from "@/app/components/SectionSix";
 import FeaturedProducts from "@/app/components/FeaturedProducts";
 
 export default function Home() {
+  
      const [scrolled, setScrolled] = useState(false);
   
     useEffect(() => {

@@ -34,7 +34,7 @@
     "next-env.d.ts",
     "src/app",
     ".next/types/**/*.ts"
-  ],
+, "src/api/auth/register/route.ts"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,4 +1,32 @@
+'use client';
+import { useState } from "react";
 export default function ContactForm() {
+  const [formData, setFormData] = useState({ fullname: "", email: "", message: "" });
+  const [status,setStatus] = useState('');
+
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setFormData({ fullname: " ", email: " ", message: " " });
+        setStatus("Message sent!");
+      } else {
+        setStatus(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      setStatus("Failed to send message.");
+      throw error;
+    }
+  };
   return (
     <section className="max-w-3xl mx-auto px-4 py-22 text-[#1a1a1a]">
       {/* Heading */}
@@ -13,14 +41,16 @@ export default function ContactForm() {
       </div>
 
       {/* Form */}
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
             <label className="block text-xs font-semibold tracking-widest uppercase mb-2">Name</label>
             <input
               type="text"
+              value={formData.fullname}
               placeholder="Name"
+               onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
               className="w-full border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
@@ -34,6 +64,8 @@ export default function ContactForm() {
               type="email"
               placeholder="Email"
               required
+              value={formData.email}
+               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
           </div>
@@ -44,7 +76,9 @@ export default function ContactForm() {
           <label className="block text-xs font-semibold tracking-widest uppercase mb-2">Message</label>
           <textarea
             placeholder="Message"
+            value={formData.message}
             rows={5}
+             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             className="w-full border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black resize-none"
           ></textarea>
         </div>
@@ -57,6 +91,7 @@ export default function ContactForm() {
           >
             Submit
           </button>
+          <p>{status}</p>
         </div>
       </form>
     </section>
