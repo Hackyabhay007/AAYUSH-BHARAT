@@ -8,7 +8,10 @@ import Profile from "./component/Profile";
 
 export default function ProfileDashboard() {
   const [activeTab, setActiveTab] = useState("profile");
-
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+       window.location.href = '/login';
+  };
   const renderTabContent = () => {
     switch (activeTab) {
       case "orders":
@@ -42,7 +45,10 @@ export default function ProfileDashboard() {
             <p className="text-sm">Member Since: May 16, 2025</p>
           </div>
         </div>
-        <button className="border border-white px-4 py-2 rounded hover:bg-white hover:text-dark-green transition text-sm sm:text-base self-start sm:self-auto">
+        <button
+          onClick={handleLogout}
+          className="border border-white px-4 py-2 rounded hover:bg-white hover:text-dark-green transition text-sm sm:text-base self-start sm:self-auto"
+        >
           Sign Out →
         </button>
       </div>
@@ -53,8 +59,16 @@ export default function ProfileDashboard() {
           {[
             { key: "profile", icon: <User size={16} />, label: "Profile" },
             { key: "orders", icon: <Package size={16} />, label: "Orders" },
-            { key: "addresses", icon: <MapPin size={16} />, label: "Addresses" },
-            { key: "settings", icon: <Settings size={16} />, label: "Settings" },
+            {
+              key: "addresses",
+              icon: <MapPin size={16} />,
+              label: "Addresses",
+            },
+            {
+              key: "settings",
+              icon: <Settings size={16} />,
+              label: "Settings",
+            },
           ].map((tab) => (
             <button
               key={tab.key}

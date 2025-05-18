@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import AuthService from "@/appwrite/auth"; // Make sure this path is correct
-
+import jwt from "jsonwebtoken";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -30,25 +30,24 @@ export async function POST(req: NextRequest) {
     }
     
     //  Generate JWT
-    // const token = jwt.sign(
-    //   {
-    //     userId: user.$id,
-    //     email: user.providerUid,
-    //     // full_name: user.full_name,
-    //   },
-    //   process.env.JWT_SECRET || "secret",
-    //   { expiresIn: "720h" }
-    // );
+    const token = jwt.sign(
+      {
+        userId: user.$id,
+        email: email,
+      },
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "720h" }
+    );
     if(user){
 
       return NextResponse.json(
         { 
           success: true,
         message: "Login successful",
-        // token,
+        token,
         user: {
           id: user.$id,
-          email: user.providerUid,
+          email: email,
         },
       },
       { status: 200 }

@@ -74,8 +74,8 @@ export default function AuthForm({ type }: AuthFormProps) {
         if (!response.ok) {throw new Error(data.message || "Registration failed");
         }
         
-        if (data.success) {
-          console.log(data);
+        if (data.success && data.token) {
+          localStorage.setItem('user',data.token)
           console.log("Registration successful, redirecting to profile...");
           router.push("/profile");
         } else {
@@ -121,8 +121,8 @@ export default function AuthForm({ type }: AuthFormProps) {
         
         if (!response.ok) throw new Error(data.message || "Login failed");
 
-         if (data.success) {
-        
+         if (data.success && data.token) {
+          localStorage.setItem('user',data.token)
           console.log("Login successful, redirecting to profile...");
           router.push("/profile");
         }
@@ -148,10 +148,10 @@ export default function AuthForm({ type }: AuthFormProps) {
         });
 
         const data = await response.json();
-        console.log(data);
+        
         
         if (!response.ok) throw new Error(data.message || "Error in Sending Reset Link");
-        if (data.success && data.token) {
+        if (data.success) {
           setValidationError("Reset Link send successful...")
           console.log("Reset Link send successful...");
           router.push("/login");

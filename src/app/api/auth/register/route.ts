@@ -109,7 +109,7 @@
 // }
 import { NextRequest, NextResponse } from "next/server";
 import AuthService from "@/appwrite/auth";
-
+import jwt from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
   try {
@@ -141,26 +141,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // // 4. Create a JWT token
-    // const token = jwt.sign(
-    //   {
-    //     userId: account.$id,
-    //     email,
-    //     fullname,
-    //   },
-    //   process.env.JWT_SECRET || "",
-    //   { expiresIn: "720h" }
-    // );
+    //  Create a JWT token
+    const token = jwt.sign(
+      {
+        userId: user.$id,
+        email,
+        full_name,
+      },
+      process.env.JWT_SECRET || "",
+      { expiresIn: "720h" }
+    );
 
     return NextResponse.json(
       {
         success: true,
         message: "Registration successful",
-        // token,
+        token,
         user: {
-          // id: user.$id,
+          id: user.$id,
           email,
-          full_name,
+          full_name,  
         },
       },
       { status: 201 }
