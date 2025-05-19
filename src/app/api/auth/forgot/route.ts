@@ -32,15 +32,16 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Password Reset Link dont send:", error);
     return NextResponse.json(
       {
         success: false,
         message: "Password Reset Link dont send",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error,
       },
       { status: 500 }
     );
+
   }
 }
