@@ -8,7 +8,8 @@ const nextConfig: NextConfig = {
       "cdn.shopify.com",
       "images.pexels.com",
       "cdn.myotherstore.com",
-      "images.unsplash.com","www.zeroharm.in",
+      "images.unsplash.com","www.zeroharm.in"
+      
     ],
   },
 };

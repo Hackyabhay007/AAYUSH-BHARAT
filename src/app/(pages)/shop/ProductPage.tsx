@@ -1,17 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { products } from "@/lib/product";
+import { useEffect, useState } from "react";
+import { Product } from "@/appwrite/product"; 
 import ProductCard from "./components/ProductCard";
 import Sidebar from "./components/Sidebar";
+import productService from "@/appwrite/product";
 
 const ProductsPage = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const productsPerPage = 4;
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const data = await productService.fetchProduct();
+      setProducts(data);
+      setLoading(false);
+    };
+
+    getProducts();
+  }, []);
 
   const filterProducts = () => {
     const filtered = products.filter((product) => {
@@ -48,6 +62,14 @@ const ProductsPage = () => {
     startIndex + productsPerPage
   );
 
+  if (loading) {
+    return (
+      <div className="pt-24 text-center text-xl font-medium">
+        Loading products...
+      </div>
+    );
+  }
+
   return (
     <div className="flex pt-24 bg-beige gap-4 p-4">
       {/* Sidebar for filters */}
@@ -72,14 +94,15 @@ const ProductsPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ">
-       <div className="flex justify-center items-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-          {currentProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+      <div className="flex-1">
+        <div className="flex justify-center items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+            {currentProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
-</div>
+
         {/* Pagination Controls */}
         <div className="flex justify-center mt-6 space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (
