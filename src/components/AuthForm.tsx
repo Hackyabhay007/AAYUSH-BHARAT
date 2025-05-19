@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -200,6 +200,8 @@ export default function AuthForm({ type }: AuthFormProps) {
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
+
     <div className="flex pt-24 items-center bg-beige text-dark-green flex-col p-4">
       <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
         <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
@@ -235,7 +237,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 }
                 className="p-3 my-2 border rounded"
                 required
-              />
+                />
 
               <label>Phone Number</label>
               <input
@@ -247,7 +249,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 }
                 className="p-3 my-2 border rounded"
                 required
-              />
+                />
             </>
           )}
 
@@ -263,7 +265,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 }
                 className="p-3 my-2 border rounded"
                 required
-              />
+                />
             </>
           )}
 
@@ -280,11 +282,11 @@ export default function AuthForm({ type }: AuthFormProps) {
                   }
                   className="p-3 my-2 border rounded w-full pr-10"
                   required
-                />
+                  />
                 {formData.password && (
                   <span
-                    className="absolute right-3 top-5 cursor-pointer text-xl"
-                    onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-5 cursor-pointer text-xl"
+                  onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
@@ -298,7 +300,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                    />
+                      />
                     Remember Me
                   </label>
                   <a href="/forgot" className="text-green-900 text-sm">
@@ -323,13 +325,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                       }
                       className="p-3 my-2 border rounded w-full pr-10"
                       required
-                    />
+                      />
                     {formData.confirmPassword && (
                       <span
-                        className="absolute right-3 top-5 cursor-pointer text-xl"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
+                      className="absolute right-3 top-5 cursor-pointer text-xl"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       >
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                       </span>
@@ -347,7 +349,7 @@ export default function AuthForm({ type }: AuthFormProps) {
           <button
             type="submit"
             className="bg-dark-green text-white py-3 my-2 rounded text-lg uppercase"
-          >
+            >
             {loading
               ? "Loading..."
               : isLogin
@@ -363,5 +365,6 @@ export default function AuthForm({ type }: AuthFormProps) {
         </form>
       </div>
     </div>
+              </Suspense>
   );
 }

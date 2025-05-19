@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import AuthService from "@/appwrite/auth"; // Make sure this path is correct
-
-
+import AuthService from "@/appwrite/auth";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
