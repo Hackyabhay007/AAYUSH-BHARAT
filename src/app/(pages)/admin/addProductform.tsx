@@ -74,7 +74,7 @@ const AddProductForm = () => {
         />
         <input
           name="tags"
-          placeholder="Tags (comma-separated)"
+          placeholder="Tags"
           value={formData.tags}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
