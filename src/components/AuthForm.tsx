@@ -2,6 +2,8 @@
 import React, { Suspense, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+
 
 interface AuthFormProps {
   type: "login" | "register" | "forgot" | "reset";
@@ -17,9 +19,6 @@ interface RegisterFormData {
 
 export default function AuthForm({ type }: AuthFormProps) {
 
-
-
-
   const router = useRouter();
   const [formData, setFormData] = useState<RegisterFormData>({
     full_name: "",
@@ -29,10 +28,9 @@ export default function AuthForm({ type }: AuthFormProps) {
     confirmPassword: "",
   });
 
-   const searchparams=useSearchParams();
-   const userid=searchparams.get('userId');
-   const secret=searchparams.get('secret');
-
+  const searchparams = useSearchParams();
+  const userid = searchparams.get("userId");
+  const secret = searchparams.get("secret");
 
   const [loading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -60,33 +58,36 @@ export default function AuthForm({ type }: AuthFormProps) {
       try {
         const response = await fetch("/api/auth/register", {
           method: "POST",
-          headers: { "Content-Type": "application/json" ,  Accept: "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
           body: JSON.stringify({
             full_name: formData.full_name,
             email: formData.email,
-            phone: formData.phone,
             password: formData.password,
+            phone: formData.phone,
           }),
         });
 
-        
         const data = await response.json();
-        if (!response.ok) {throw new Error(data.message || "Registration failed");
-        }
-        
-        if (data.success && data.token) {
-          localStorage.setItem('user',data.token)
-          console.log("Registration successful, redirecting to profile...");
-          router.push("/profile");
-        } else {
+        if (!response.ok) {
           throw new Error(data.message || "Registration failed");
         }
 
-      }
-      
-      
-      
-      catch (err: unknown) {
+        if (data.success && data.token) {
+
+          localStorage.setItem("user", data.token);
+          localStorage.setItem("userid", data.user.id);
+          toast.success("Account created successfully!");
+          console.log("Registration successful, redirecting to profile...");
+          router.push("/profile");
+        } else {
+          toast.error("Registration failed. Please try again.");
+          throw new Error(data.message || "Registration failed");
+        }
+      } catch (err: unknown) {
+        toast.error("Registration failed. Please try again.");
         console.error("Registration error:", err);
         if (err instanceof Error) {
           setValidationError(
@@ -100,15 +101,14 @@ export default function AuthForm({ type }: AuthFormProps) {
       }
     }
     
-    
-    
-    
     else if (isLogin) {
       try {
         const response = await fetch("/api/auth/login", {
           method: "POST",
-          headers: {"Content-Type": "application/json",
-            Accept: "application/json", },
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -117,47 +117,52 @@ export default function AuthForm({ type }: AuthFormProps) {
         });
 
         const data = await response.json();
-        console.log(data);
-        
-        if (!response.ok) throw new Error(data.message || "Login failed");
 
-         if (data.success && data.token) {
-          localStorage.setItem('user',data.token)
+        if (!response.ok) {
+          toast.error(data.message);
+          // throw new Error(data.message || "Login failed");
+        }
+        if (data.success && data.token) {
+          localStorage.setItem("user", data.token);
+          localStorage.setItem("userid", data.user.id);
+          // Map Document to User type 
+         
+          toast.success("Login successful!");
           console.log("Login successful, redirecting to profile...");
           router.push("/profile");
         }
-      } catch (err: unknown) {
-        console.error("Login error:", err);
-        if (err instanceof Error) {
-          setValidationError(err.message || "Login failed. Please try again.");
-        } else {
-          setValidationError("Login failed. Please try again.");
-        }
+      } catch (error) {
+        console.error("Login error:", error);
+
+        toast.error("Login failed");
+        setValidationError("Login failed. Please try again.");
+
         setIsLoading(false);
       }
     }
-    
     
     
     else if (isForgot) {
       try {
         const response = await fetch("/api/auth/forgot", {
           method: "POST",
-          headers: { "Content-Type": "application/json" ,  Accept: "application/json",},
-          body: JSON.stringify({ email: formData.email, }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ email: formData.email }),
         });
 
         const data = await response.json();
-        
-        
-        if (!response.ok) throw new Error(data.message || "Error in Sending Reset Link");
+
+        if (!response.ok)
+          throw new Error(data.message || "Error in Sending Reset Link");
         if (data.success) {
-          setValidationError("Reset Link send successful...")
-          console.log("Reset Link send successful...");
+          toast.success("Reset Link send successfully");
           router.push("/login");
         }
       } catch (err: unknown) {
-         console.error("Error in Sending Reset Link:", err);
+        console.error("Error in Sending Reset Link:", err);
         if (err instanceof Error) {
           setValidationError(err.message || "Error in Sending Reset Link");
         } else {
@@ -165,9 +170,11 @@ export default function AuthForm({ type }: AuthFormProps) {
         }
         setIsLoading(false);
       }
-    } else if (isReset) {
+    } 
+    
+    else if (isReset) {
       if (formData.password !== formData.confirmPassword) {
-        setValidationError("Passwords don't match");
+        toast.error("Password don't match");
         setIsLoading(false);
         return;
       }
@@ -176,195 +183,199 @@ export default function AuthForm({ type }: AuthFormProps) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userid,secret,
+            userid,
+            secret,
             password: formData.password,
           }),
         });
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Reset Failed");
-        if (data.success){
+        if (data.success) {
+          toast.success("Password reset successfully");
           console.log("Password reset successfully...");
           router.push("/login");
         }
-      } catch (err: unknown) {
-        console.error("Error in Reseting password:", err);
-        if (err instanceof Error) {
-          setValidationError(err.message || "Error in Reseting password");
-        } else {
-          setValidationError("Error in Reseting password");
-        }
+      } catch (error) {
+        console.error("Error in Reseting password:", error);
+        toast.error("Error in reseting password");
+        // setValidationError(err.message || "Error in Reseting password");
         setIsLoading(false);
       }
     }
+
+    
   };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex pt-24 items-center bg-beige text-dark-green flex-col p-4">
+        <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
+          <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
+            {isLogin && "Log In to AAYUSH BHARAT"}
+            {isRegister && "Sign Up to AAYSH BHARAT"}
+            {isForgot && "Reset Your Password"}
+            {isReset && "Set New Password"}
+          </h2>
 
-    <div className="flex pt-24 items-center bg-beige text-dark-green flex-col p-4">
-      <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
-        <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
-          {isLogin && "Log In to AAYUSH BHARAT"}
-          {isRegister && "Sign Up to AAYSH BHARAT"}
-          {isForgot && "Reset Your Password"}
-          {isReset && "Set New Password"}
-        </h2>
-
-        {isLogin && (
-          <p className="text-center text-base mb-4">
-            Don&apos;t have an account?{" "}
-            <a href="/register" className="text-green-900">Register</a>
-          </p>
-        )}
-        {isRegister && (
-          <p className="text-center text-base mb-4">
-            Already have an account?{" "}
-            <a href="/login" className="text-green-900">Log In</a>
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="flex flex-col">
+          {isLogin && (
+            <p className="text-center text-base mb-4">
+              Don&apos;t have an account?{" "}
+              <a href="/register" className="text-green-900">
+                Register
+              </a>
+            </p>
+          )}
           {isRegister && (
-            <>
-              <label>Full Name</label>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                value={formData.full_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, full_name: e.target.value })
-                }
-                className="p-3 my-2 border rounded"
-                required
-                />
-
-              <label>Phone Number</label>
-              <input
-                type="number"
-                placeholder="Enter your phone number"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className="p-3 my-2 border rounded"
-                required
-                />
-            </>
+            <p className="text-center text-base mb-4">
+              Already have an account?{" "}
+              <a href="/login" className="text-green-900">
+                Log In
+              </a>
+            </p>
           )}
 
-          {(isLogin || isRegister || isForgot) && (
-            <>
-              <label>Email</label>
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="p-3 my-2 border rounded"
-                required
-                />
-            </>
-          )}
-
-          {!isForgot && (
-            <>
-              <label>Password</label>
-              <div className="relative">
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            {isRegister && (
+              <>
+                <label>Full Name</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={formData.password}
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={formData.full_name}
                   onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
+                    setFormData({ ...formData, full_name: e.target.value })
                   }
-                  className="p-3 my-2 border rounded w-full pr-10"
+                  className="p-3 my-2 border rounded"
                   required
+                />
+
+                <label>Phone Number</label>
+                <input
+                  type="number"
+                  placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className="p-3 my-2 border rounded"
+                  required
+                />
+              </>
+            )}
+
+            {(isLogin || isRegister || isForgot) && (
+              <>
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="p-3 my-2 border rounded"
+                  required
+                />
+              </>
+            )}
+
+            {!isForgot && (
+              <>
+                <label>Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    className="p-3 my-2 border rounded w-full pr-10"
+                    required
                   />
-                {formData.password && (
-                  <span
-                  className="absolute right-3 top-5 cursor-pointer text-xl"
-                  onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                )}
-              </div>
-
-              {isLogin && (
-                <div className="flex items-center justify-between my-2">
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      />
-                    Remember Me
-                  </label>
-                  <a href="/forgot" className="text-green-900 text-sm">
-                    Forgot Password?
-                  </a>
-                </div>  
-              )}
-
-              {(isRegister || isReset) && (
-                <>
-                  <label>Confirm Password</label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
-                      value={formData.confirmPassword}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      className="p-3 my-2 border rounded w-full pr-10"
-                      required
-                      />
-                    {formData.confirmPassword && (
-                      <span
+                  {formData.password && (
+                    <span
                       className="absolute right-3 top-5 cursor-pointer text-xl"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                      >
-                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                      </span>
-                    )}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  )}
+                </div>
+
+                {isLogin && (
+                  <div className="flex items-center justify-between my-2">
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                      />
+                      Remember Me
+                    </label>
+                    <a href="/forgot" className="text-green-900 text-sm">
+                      Forgot Password?
+                    </a>
                   </div>
-                </>
-              )}
-            </>
-          )}
+                )}
 
-          {validationError && (
-            <p className="text-red-600 text-sm my-2">{validationError}</p>
-          )}
+                {(isRegister || isReset) && (
+                  <>
+                    <label>Confirm Password</label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        value={formData.confirmPassword}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            confirmPassword: e.target.value,
+                          })
+                        }
+                        className="p-3 my-2 border rounded w-full pr-10"
+                        required
+                      />
+                      {formData.confirmPassword && (
+                        <span
+                          className="absolute right-3 top-5 cursor-pointer text-xl"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                        >
+                          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
 
-          <button
-            type="submit"
-            className="bg-dark-green text-white py-3 my-2 rounded text-lg uppercase"
+            {validationError && (
+              <p className="text-red-600 text-sm my-2">{validationError}</p>
+            )}
+
+            <button
+              type="submit"
+              className="bg-dark-green text-white py-3 my-2 rounded text-lg uppercase"
             >
-            {loading
-              ? "Loading..."
-              : isLogin
-              ? "Log In"
-              : isRegister
-              ? "Sign Up"
-              : isForgot
-              ? "Send Reset Link"
-              : isReset
-              ? "Reset Password"
-              : "Submit"}
-          </button>
-        </form>
+              {loading
+                ? "Loading..."
+                : isLogin
+                ? "Log In"
+                : isRegister
+                ? "Sign Up"
+                : isForgot
+                ? "Send Reset Link"
+                : isReset
+                ? "Reset Password"
+                : "Submit"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-              </Suspense>
+    </Suspense>
   );
 }

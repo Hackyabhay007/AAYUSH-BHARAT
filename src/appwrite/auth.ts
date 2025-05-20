@@ -1,27 +1,31 @@
 import config from "../config/config";
 
-import { Client, Account, ID } from "appwrite";
-
+import { Client, Account, ID, Databases } from "appwrite";
 export class AuthService {
   client = new Client();
   account;
+   databases;
   constructor() {
     this.client
       .setEndpoint(config.appwriteUrl)
       .setProject(config.appwriteProjectId);
     this.account = new Account(this.client);
+     this.databases = new Databases(this.client);
   }
   
 
   async createAccount({
     email,
     password,
-    fullname,
+    fullname
   }: {
     email: string;
     password: string;
     fullname: string;
   }) {
+   
+    
+    
     try {
       const useraccount = await this.account.create(
         ID.unique(),
@@ -29,7 +33,24 @@ export class AuthService {
         password,
         fullname
       );
+      console.log(useraccount.$id,useraccount.email);
+      
       if (useraccount) {
+
+          const res=await this.databases.createDocument(
+          config.appwriteDatabaseId,         
+          config.appwriteUserCollectionId,   
+          ID.unique(),
+          {
+            userid:useraccount.$id,
+            email: useraccount.email,
+            fullname: fullname,
+          }
+          
+        );
+        console.log('after doc',res);
+
+
         return this.login({ email, password });
       } else {
         return useraccount;
@@ -42,17 +63,9 @@ export class AuthService {
   }
 
   async login({ email, password }: { email: string; password: string }) {
-    // const promise = this.account.createEmailPasswordSession(email, password);
-    // promise.then(
-    //   function (response) {
-    //     return response;
-    //   },
-    //   function (error) {
-    //     return error;
-    //   }
-    // );
     try {
-      const user= await this.account.createEmailPasswordSession(email,password);      
+      const user= await this.account.createEmailPasswordSession(email,password);     
+      
       return user;
     } catch (error) {
       throw error;
@@ -61,11 +74,11 @@ export class AuthService {
 
   async getCurrentUser() {
     try {
-      return await this.account.get();
+      const user=await this.account.get();
+      return user;
     } catch (error) {
       throw error;
     }
-    return null;
   }
 
   async logout() {
@@ -77,7 +90,7 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
-    const redirectUrl = "http://localhost:3000/reset-password";
+    const redirectUrl = "https://frontend-frontend-ho6i1o-0c4404-46-202-164-152.traefik.me/reset-password";
     const res = await this.account.createRecovery(email, redirectUrl);
     return res;
   }

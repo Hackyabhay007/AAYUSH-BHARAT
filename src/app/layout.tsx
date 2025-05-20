@@ -1,6 +1,6 @@
 import { Toaster } from 'react-hot-toast'
 import './styles/globals.css'
-
+import ProviderWrapper from '@/store/ProviderWrapper';
 export default function RootLayout({
   children,
 }: {
@@ -10,8 +10,15 @@ export default function RootLayout({
     <html lang="en">
 
       <body>
-        <div> <Toaster position="top-center" /></div>
-        {children}</body>
+           {/* <Provider store={store}> */}
+        {/* <div> <Toaster position="top-center" /></div> */}
+          {/* {children} */}
+        {/* </Provider> */}
+
+         <ProviderWrapper>
+           <div> <Toaster position="top-center" /></div>
+          {children}</ProviderWrapper>
+        </body>
     </html>
   )
 }

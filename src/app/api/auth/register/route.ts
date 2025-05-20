@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
     
     const body = await req.json();
     const { full_name, email, password, phone } = body;
-
     if (!full_name || !email || !password || !phone) {
       return NextResponse.json(
         { message: "All fields (full_name, email, password, phone) are required" },
@@ -21,9 +20,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    
    
     const user = await AuthService.createAccount({email,password,fullname:full_name});
+
     
     if (!user) {
       return NextResponse.json(
@@ -49,7 +48,7 @@ export async function POST(req: NextRequest) {
         message: "Registration successful",
         token,
         user: {
-          id: user.$id,
+          id: user.userId,
           email,
           full_name,  
         },

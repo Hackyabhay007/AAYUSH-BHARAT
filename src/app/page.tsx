@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import SectionSix from "@/app/components/SectionSix";
 import FeaturedProducts from "@/app/components/FeaturedProducts";
+import VideoSection from "./components/VideoSection";
+
 
 export default function Home() {
   
@@ -27,7 +29,6 @@ export default function Home() {
   
     <>
    <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#363f1d] text-black shadow-md" : "bg-transparent text-black"}`}>
-
     <Navbar scrolled={scrolled} />
     </div>
     <HeroSection/>
@@ -38,6 +39,7 @@ export default function Home() {
     <SectionFour/>
     <SectionFive/>
     <SectionSix/>
+    <VideoSection/>
     <Footer/>
     </>
   );

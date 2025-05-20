@@ -1,8 +1,12 @@
-import { MapPin, Package, User } from 'lucide-react'
+"use client";
 import React from 'react'
-
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 function Profile() {
+const userData = useSelector((state: RootState) => state.user.user); // optional
+console.log(userData);
+
   return (
     <div>
           <div className="w-full max-w-6xl">
@@ -41,11 +45,11 @@ function Profile() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-gray-600">Name</p>
-                      <p>Kartik Bhatnagar</p>
+                      <p>{userData?.name}</p>
                     </div>
                     <div>
                       <p className="text-gray-600">Email</p>
-                      <p>bhatnagar@gmail.com</p>
+                      <p>{userData?.email}</p>
                     </div>
                     <div>
                       <p className="text-gray-600">Phone</p>
