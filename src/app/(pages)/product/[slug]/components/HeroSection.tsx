@@ -21,8 +21,8 @@ function HeroSection() {
   }, []);
 
   return (
-    <>
-      <div className="text-center  bg-beige pt-18 pb-2">
+    <div className="pb-20">
+      <div className="text-center bg-beige pt-18 pb-2">
         <h1>Hair and Nail Strength, Boosted by Nano Tech</h1>
       </div>
       <div className="flex justify-center items-center">
@@ -44,7 +44,7 @@ function HeroSection() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

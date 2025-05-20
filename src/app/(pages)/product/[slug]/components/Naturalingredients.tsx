@@ -33,7 +33,7 @@ export default function NatureIngredients() {
   return (
     <div className="flex flex-col justify-center items-center pt-12 pb-18 px-10 md:px-16 text-center">
       <h2 className="lg:text-4xl text-2xl tracking-wider uppercase font-medium text-dark-green mb-10">
-        Sourced from Nature, Purified for Potency
+        {/* Sourced from Nature, Purified for Potency */}
       </h2>
 
       <div className="grid md:grid-cols-3 max-w-6xl gap-8">
@@ -51,9 +51,7 @@ export default function NatureIngredients() {
             />
             <h3 className="text-2xl text-dark-green font-medium mb-2">{item.name}</h3>
             <p className="text-sm text-dark font-light mb-4">{item.description}</p>
-            <button className="bg-dark-green hover:bg-green-800 text-white py-2 px-16 rounded text-lg">
-              Learn more
-            </button>
+            
           </div>
         ))}
       </div>

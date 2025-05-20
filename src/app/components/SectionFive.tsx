@@ -7,7 +7,6 @@ import {
   FaUsers,
   FaVideo,
   FaBookOpen,
-  FaCalendarCheck,
   FaComments,
   FaWhatsapp,
   FaEnvelope,
@@ -25,10 +24,7 @@ const benefits: BenefitItem[] = [
     icon: <FaWhatsapp className="text-dark-green mr-3 flex-shrink-0 lg:size-6 size-4" />,
     text: 'Free 1-on-1 Ayurvedic Consultation (Phone/ )',
   },
-  {
-    icon: <FaCalendarCheck className="text-dark-green mr-3 flex-shrink-0 lg:size-6 size-4" />,
-    text: 'Menstrual Ritual Tracker + Self-Care Reminders',
-  },
+ 
   {
     icon: <FaUserMd className="text-dark-green mr-3 flex-shrink-0 lg:size-6 size-4" />,
     text: 'Lifetime Access to our Wellness Community',
@@ -125,7 +121,7 @@ export default function SectionFive() {
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
           <button className="lg:px-8 px-4 py-3 bg-dark-green text-white font-medium rounded-sm hover:bg-dark transition duration-300 shadow-md">
-            Explore Wellness Community
+            Explore Our Kit
           </button>
           <button className="lg:px-8 px-4 py-3 bg-dark-green text-white font-medium rounded-sm hover:bg-dark transition duration-300 shadow-md">
             Book My Free Consult

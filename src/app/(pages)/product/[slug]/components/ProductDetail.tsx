@@ -8,41 +8,41 @@ export default function ProductDetails () {
 
   const [expanded, setExpanded] = useState(false);
 
-const plans = [
-  {
-    label: "3 bottles",
-    quantity: 180,
-    months: 3,
-    price: 2096,
-    originalPrice: 3297,
-    perTablet: 11.64,
-    discount: "36.43%",
-    tag: "Best Results",
-    tagColor: "bg-green-600",
-    offer: "Free Serum Worth ₹2,799/-",
-  },
-  {
-    label: "1 bottle",
-    quantity: 60,
-    months: 1,
-    price: 780,
-    originalPrice: 1099,
-    perTablet: 13.00,
-    discount: "29.03%",
-  },
-  {
-    label: "2 bottles",
-    quantity: 120,
-    months: 2,
-    price: 1379,
-    originalPrice: 2198,
-    perTablet: 11.49,
-    discount: "37.26%",
-    tag: "Money Saver",
-    tagColor: "bg-yellow-500",
-  },
-];
-  const [selected, setSelected] = useState(0);
+// const plans = [
+//   {
+//     label: "3 bottles",
+//     quantity: 180,
+//     months: 3,
+//     price: 2096,
+//     originalPrice: 3297,
+//     perTablet: 11.64,
+//     discount: "36.43%",
+//     tag: "Best Results",
+//     tagColor: "bg-green-600",
+//     offer: "Free Serum Worth ₹2,799/-",
+//   }, 
+//   {
+//     label: "1 bottle",
+//     quantity: 60,
+//     months: 1,
+//     price: 780,
+//     originalPrice: 1099,
+//     perTablet: 13.00,
+//     discount: "29.03%",
+//   },
+//   {
+//     label: "2 bottles",
+//     quantity: 120,
+//     months: 2,
+//     price: 1379,
+//     originalPrice: 2198,
+//     perTablet: 11.49,
+//     discount: "37.26%",
+//     tag: "Money Saver",
+//     tagColor: "bg-yellow-500",
+//   },
+// ];
+  // const [selected, setSelected] = useState(0);
   const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
 
   return (
@@ -120,7 +120,7 @@ const plans = [
       <div className="p-4 space-y-6 max-w-xl mx-auto">
 
       {/* Pricing Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {plans.map((plan, index) => (
           <div
             key={index}
@@ -129,7 +129,7 @@ const plans = [
               selected === index ? "border-green-600 shadow-md" : "border-gray-300"
             }`}
           >
-            {/* Offer Tag */}
+            //  Offer Tag 
             {plan.offer && (
               <div className="absolute -top-3 -left-3 bg-red-500 text-white text-xs px-2 py-0.5 rounded">
                 {plan.offer}
@@ -142,20 +142,20 @@ const plans = [
             <p className="text-xs text-gray-500 line-through">₹{plan.originalPrice}</p>
             <p className="text-sm text-gray-600 mt-1">₹{plan.perTablet} / tablet</p>
 
-            {/* Badge */}
+            // Badge 
             {plan.tag && (
               <div className={`mt-3 text-white text-xs px-2 py-1 rounded ${plan.tagColor}`}>
                 {plan.tag}
               </div>
             )}
 
-            {/* Checkmark */}
+            // Checkmark 
             {selected === index && (
               <div className="absolute top-2 right-2 w-4 h-4 bg-green-600 rounded-full border-2 border-white" />
             )}
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Offer Banner */}
       <div className="rounded-lg overflow-hidden">
@@ -178,23 +178,8 @@ const plans = [
         </button>
       </div>
 
-      {/* Trust Icons */}
-      <div className="flex justify-center gap-12 text-center text-xs text-dark-green mt-4">
-        {[
-          { label: "Customer Support", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/1_0a0cef1f-1c8e-4a1d-a736-92af3849ef04.png", sub: "10am–7pm" },
-          { label: "90 Day Satisfaction", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/3_4fd354de-ab52-43b3-8735-ae1954a03e5d.png?v=1742891730", sub: "Guarantee" },
-          { label: "Backed by", icon: "https://cdn.shopify.com/s/files/1/0606/9298/8070/files/2_296817ec-91d1-449f-ac40-e889fa839578.png", sub: "Nano-Technology" },
-        ].map((item, i) => (
-          <div key={i} className="flex flex-col gap-3 items-center">
-            <Image width={64} height={64} src={item.icon} alt={item.label} className="h-16 mb-1" />
-            {/* <p>{item.label}</p> */}
-            <span>{item.sub}</span>
-          </div>
-        ))}
-      </div>
-
       {/* Accordions */}
-      {["Ingredients", "Nutrients"].map((title, i) => (
+      {["Ingredients"].map((title, i) => (
         <div key={i} className="border-b">
           <button
             onClick={() => setAccordionOpen(accordionOpen === title ? null : title)}

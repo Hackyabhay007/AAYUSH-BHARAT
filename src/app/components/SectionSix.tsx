@@ -7,17 +7,20 @@ export default function SectionSix() {
     {
       image: "/logo/Cycle.png",
       bg: "bg-[#3f4b2b]",
-      text: "Represents inner balance and energy flow. It is like maintaining harmony within oneself.",
+      heading:"Balance ",
+      text: "The symbol of inner flow and calm, We begin with balance. This symbol reflects alignment within calming your hormones, grounding your thoughts, and reconnecting your body with its natural rhythm. Because healing always starts from within.",
     },
     {
       image: "/logo/Balance.png",
       bg: "bg-[#914c32]",
-      text: "Symbolizes inner awakening and nurturing from within. The drop represents Ojas.",
+      heading:"Awaken",
+      text: "The symbol of Ojas, your inner vitality This flame-like moƟf holds a sacred drop of Ojas the Ayurvedic essence of glow, strength, and immunity. It reminds us to detox gently, nourish deeply, and protect our vital energy as we heal.",
     },
     {
       image: "/logo/Ojas.png",
       bg: "bg-dark-green",
-      text: "Represents the cyclical nature of healing — how healing is not a one-time act but a constant rhythm in life.",
+      heading:"Regulate",
+      text: "The symbol of rhythm and return Healing is a process, not a one-Ɵme fix. This cyclical form mirrors your natural cycle your energy, your flow, your return to balance. It’s about restoring what was always yours.",
     },
   ];
 
@@ -48,8 +51,9 @@ export default function SectionSix() {
           We don’t treat symptoms. We restore rhythm.
         </motion.p>
 
-        <section className="py-10 px-4 text-center max-w-7xl mx-auto">
-          <motion.h2
+        <section className="py-10 px-4 items-center
+  justify-center place-items-center text-center max-w-5xl mx-auto">
+          {/* <motion.h2
             className="text-2xl font-semibold mb-8"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -57,20 +61,21 @@ export default function SectionSix() {
             viewport={{ once: true }}
           >
             Symbols and Motifs
-          </motion.h2>
+          </motion.h2> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:w-4xl  md:grid-cols-3 gap-5">
             {motifs.map((motif, index) => (
               <motion.div
                 key={index}
-                className="flex flex-col items-center"
+                className="flex  flex-col items-center"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
+               
                 <div
-                  className={`w-40 h-40 flex items-center justify-center rounded-full ${motif.bg}`}
+                  className={`w-45 h-45 flex items-center justify-center rounded-full ${motif.bg}`}
                 >
                   <Image
                     width={500}
@@ -80,7 +85,8 @@ export default function SectionSix() {
                     className="max-w-full max-h-full hover:scale-110 duration-300"
                   />
                 </div>
-                <p className="text-sm text-gray-700 mt-4 max-w-xs">{motif.text}</p>
+                 <h1 className="lg:text-2xl py-4 text-xl font-medium tracking-wider uppercaset text-dark-green">{motif.heading}</h1>
+                <p className="text-sm text-gray-700 max-w-xs ">{motif.text}</p>
               </motion.div>
             ))}
           </div>

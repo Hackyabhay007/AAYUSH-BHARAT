@@ -5,6 +5,9 @@ import { Product } from "@/appwrite/product";
 import ProductCard from "./components/ProductCard";
 import Sidebar from "./components/Sidebar";
 import productService from "@/appwrite/product";
+import SectionFour from "@/app/components/SectionFour";
+import VideoSection from "@/app/components/VideoSection";
+import SectionFive from "@/app/components/SectionFive";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -120,6 +123,10 @@ const ProductsPage = () => {
           ))}
         </div>
       </div>
+
+      <SectionFour/>
+      <SectionFive/>
+      <VideoSection/>
     </div>
   );
 };

@@ -27,8 +27,8 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         <a href={"/"} className="flex items-center">
           <Image
             src={logo.src}
-            width={120}
-            height={150}
+            width={121}
+            height={153}
             className="object-cover w-24 h-14 lg:w-auto lg:h-auto"
             alt="Logo"
           />
