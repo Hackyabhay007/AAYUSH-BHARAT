@@ -1,29 +1,46 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./ui/Button";
 import { motion, useInView } from "framer-motion";
+import videoService from "@/appwrite/video";
 
 export default function HeroSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  const [videoUrl,setVideoUrl]=useState(null)
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        const videoList = await videoService.fetchVideo();
+        if (videoList && videoList.length > 0) {
+          setVideoUrl(videoList[0].videourl); // Ensure this matches your DB field
+        }
+      } catch (error) {
+        console.error("Failed to fetch video:", error);
+      }
+    };
+
+    fetchVideo();
+  }, []);
+
+
   return (
     <section className="relative w-full h-screen overflow-hidden font-notosans">
       {/* Background Video */}
-      <video
-        className="absolute top-0 left-0 w-auto min-w-full min-h-full object-cover z-0 brightness-50"
-        autoPlay
-        loop
-        muted
-        playsInline
-      >
-        <source
-          src="https://videos.pexels.com/video-files/1448735/1448735-uhd_2732_1440_24fps.mp4"
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
+        {videoUrl && (
+        <video
+          className="absolute top-0 left-0 w-auto min-w-full min-h-full object-cover z-0 brightness-50"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={videoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )}
 
       {/* Gradient Overlay */}
       <div className="absolute top-0 left-0 w-full h-full z-10 lg:bg-gradient-to-r from-black/80 via-black/50 to-transparent" />

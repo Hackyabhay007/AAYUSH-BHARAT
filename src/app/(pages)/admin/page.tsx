@@ -1,10 +1,10 @@
 import React from 'react'
-import AddProductForm from './addProductform'
+import AdminDashboard from './AdminDashboard'
 
 function page() {
   return (
     <div>
-        <AddProductForm/>
+        <AdminDashboard/>
     </div>
   )
 }

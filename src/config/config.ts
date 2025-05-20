@@ -6,5 +6,8 @@ const config={
     appwriteContactCollectionId:String(process.env.NEXT_PUBLIC_APPWRITE_CONTACT_COLLECTION_ID),
     appwriteProductCollectionId:String(process.env.NEXT_PUBLIC_APPWRITE_PRODUCT_COLLECTION_ID),
     appwriteApiSecretKey:String(process.env.NEXT_PUBLIC_APPWRITE_API_SECRET_KEY),
+    appwriteBucketId:String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID),
+    appwriteVideoCollectionId:String(process.env.NEXT_PUBLIC_APPWRITE_VIDEO_COLLECTION_ID),
+    appwriteReelCollectionId:String(process.env.NEXT_PUBLIC_APPWRITE_REEL_COLLECTION_ID),
 }
 export default config;

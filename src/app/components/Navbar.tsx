@@ -37,7 +37,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-primary text-sm">
           {[
-            { title: "SHOP", link: "/product/12" },
+            { title: "SHOP", link: "/shop" },
             { title: "ABOUT US", link: "/about-us" },
             { title: "CONTACT US", link: "/contact-us" },
             { title: "BLOG", link: "/blog" },
@@ -99,7 +99,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
         <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
           {[
-            { title: "SHOP", link: "/product/12" },
+            { title: "SHOP", link: "/shop" },
             { title: "ABOUT US", link: "/about-us" },
             { title: "CONTACT US", link: "/contact-us" },
             { title: "BLOG", link: "/blog" },

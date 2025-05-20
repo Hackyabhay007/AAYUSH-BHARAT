@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import productService from "@/appwrite/product";
-
+import config from "@/config/config";
+import { ID } from "appwrite";
+import toast from "react-hot-toast";
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,36 +13,63 @@ const AddProductForm = () => {
     tags: "",
     rating: "",
   });
+  const bucketId=config.appwriteBucketId;
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+      if (e.target.name === "image") {
+      const file = e.target.files?.[0] || null;
+      setImageFile(file);
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const productData = {
-      name: formData.name,
-      price: parseFloat(formData.price),
-      image: formData.image,
-      tags: formData.tags,
-      rating: parseFloat(formData.rating),
-    };
+ try {
+      let imageUrl = "";
 
-    const success = await productService.addProduct(productData);
+      if (imageFile) {
+        const fileId = ID.unique();
+        const response = await productService.storage.createFile(bucketId, fileId, imageFile);
 
-    if (success) {
-      setStatus("Product added successfully!");
-      setFormData({ name: "", price: "", image: "", tags: "", rating: "" });
-    } else {
-      setStatus("Failed to add product.");
+        imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
+      }
+
+      const productData = {
+        name: formData.name,
+        price: parseFloat(formData.price),
+        image: imageUrl, // store preview URL
+        tags: formData.tags,
+        rating: parseFloat(formData.rating),
+      };
+
+      const success = await productService.addProduct(productData);
+
+      if (success) {
+        setStatus("Product added successfully!");
+        toast.success('Product added successfully')
+        setFormData({ name: "", price: "", image: "", tags: "", rating: "" });
+        setImageFile(null);
+      } else {
+        toast.error("Failed to add product")
+        setStatus("Failed to add product.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Image upload or product save failed")
+      setStatus("Image upload or product save failed.");
     }
-  };
+
+
+    };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white shadow rounded">
@@ -66,8 +95,9 @@ const AddProductForm = () => {
         />
         <input
           name="image"
+          type="file"
+          accept="image/"
           placeholder="Image URL"
-          value={formData.image}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required
