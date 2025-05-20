@@ -67,14 +67,17 @@ const ProductsPage = () => {
 
   if (loading) {
     return (
-      <div className="pt-24 text-center text-xl font-medium">
+      <div className="pt-22 text-center text-xl font-medium">
         Loading products...
       </div>
     );
   }
 
   return (
-    <div className="flex pt-24 bg-beige gap-4 p-4">
+    <div className="flex flex-col pt-24 bg-beige gap-4 p-4">
+
+      <div className="flex gap-12 flex-row">
+
       {/* Sidebar for filters */}
       <div className="w-64">
         <Sidebar
@@ -96,33 +99,37 @@ const ProductsPage = () => {
         />
       </div>
 
+<div className="flex flex-col">
+
       {/* Main Content */}
       <div className="flex-1">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center ">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {currentProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
+          </div>
 
         {/* Pagination Controls */}
         <div className="flex justify-center mt-6 space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === i + 1
-                  ? "bg-orange-500 text-white"
-                  : "bg-white text-black"
-              }`}
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 border rounded ${
+              currentPage === i + 1
+              ? "bg-orange-500 text-white"
+              : "bg-white text-black"
+            }`}
             >
               {i + 1}
             </button>
           ))}
         </div>
       </div>
+          </div>
 
       <SectionFour/>
       <SectionFive/>
