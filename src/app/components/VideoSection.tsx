@@ -148,8 +148,10 @@ import { FaInstagram } from "react-icons/fa";
 
 const VIDEOS_PER_PAGE = 4;
 
+type Video = { id: string; videourl: string; videoname: string; link?: string };
+
 export default function VideoSection() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
