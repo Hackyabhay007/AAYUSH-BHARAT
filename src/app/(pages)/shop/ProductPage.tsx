@@ -76,7 +76,7 @@ const ProductsPage = () => {
   return (
     <div className="flex flex-col pt-24 bg-beige gap-4 p-4">
 
-      <div className="flex gap-12 flex-row">
+      <div className="flex lg:items-start items-center gap-12 lg:flex-row flex-col">
 
       {/* Sidebar for filters */}
       <div className="w-64">
@@ -99,7 +99,7 @@ const ProductsPage = () => {
         />
       </div>
 
-<div className="flex flex-col">
+<div className="flex flex-col ">
 
       {/* Main Content */}
       <div className="flex-1">

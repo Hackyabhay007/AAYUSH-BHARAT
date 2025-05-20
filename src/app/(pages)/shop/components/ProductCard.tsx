@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
-    <div className="bg-white w-120 shadow rounded-md overflow-hidden text-center">
+    <div className="bg-white lg:w-120 w-90 shadow rounded-md overflow-hidden text-center">
       <Image height={500} width={500} src={product.image} alt={product.name} className="w-full h-90 object-cover" />
       <div className="p-4">
         <h2 className="font-semibold text-lg">{product.name}</h2>
