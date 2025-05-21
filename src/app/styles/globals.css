@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url("/fonts/Begum.ttf");
+@import url("/fonts/Begum/Begum.ttf");
 @import url("/fonts/NotoSans-ExtraLight.ttf");
 @theme {
   --color-primary: #e5e7eb;
@@ -14,7 +14,7 @@
 @font-face {
     font-family: NotoSans-ExtraLight;
     src:
-         url('/fonts/Begum.ttf') format('woff'),
+         url('/fonts/Begum/Begum.ttf') format('woff'),
          url('/fonts/NotoSans-ExtraLight.ttf') format('woff2');
     font-weight: 400;
     font-style: normal;
