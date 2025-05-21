@@ -11,22 +11,29 @@
   --font-notosans:"NotoSans-ExtraLight";
 }
 
+:root {
+  --color-primary: #e5e7eb;
+  --color-beige: #EDE8D0;
+  --color-dark: #000000;
+  --color-light: #fff;
+  --color-dark-green: #363f1d;
+  --font-begum: "Begum";
+  --font-notosans: "NotoSans-ExtraLight";
+}
+
 @font-face {
-    font-family: NotoSans-ExtraLight;
-    src:
-         url('/fonts/Begum/Begum.ttf') format('ttf'),
-         url('/fonts/NotoSans-ExtraLight.ttf') format('ttf');
+    font-family: 'NotoSans-ExtraLight';
+    src:url('/fonts/NotoSans-ExtraLight.ttf');
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
 }
 
 :root{
-    font-family: NotoSans-ExtraLight;
+    font-family: 'NotoSans-ExtraLight';
 }
 
 body{
-  font-family: NotoSans-ExtraLight;
+  font-family: 'NotoSans-ExtraLight';
 }
 @keyframes marquee {
   0% {
