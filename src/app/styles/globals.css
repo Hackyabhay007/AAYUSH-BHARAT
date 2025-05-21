@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import url("/Fonts/Begum/Begum.ttf");
-@import url("/Fonts/Noto_Sans/NOTO_SANS/NotoSans-ExtraLight.ttf");
+@import url("/Fonts/NotoSans-ExtraLight.ttf");
 @theme {
   --color-primary: #e5e7eb;
   --color-beige: #EDE8D0;
