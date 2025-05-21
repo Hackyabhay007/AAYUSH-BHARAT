@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import url("/fonts/Begum/Begum.ttf");
-@import url("/fonts/NotoSans-ExtraLight.ttf");
+@import url("/NotoSans-ExtraLight.ttf");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @theme {
   --color-primary: #e5e7eb;
   --color-beige: #EDE8D0;
@@ -11,29 +13,20 @@
   --font-notosans:"NotoSans-ExtraLight";
 }
 
-:root {
-  --color-primary: #e5e7eb;
-  --color-beige: #EDE8D0;
-  --color-dark: #000000;
-  --color-light: #fff;
-  --color-dark-green: #363f1d;
-  --font-begum: "Begum";
-  --font-notosans: "NotoSans-ExtraLight";
-}
-
 @font-face {
-    font-family: 'NotoSans-ExtraLight';
-    src:url('/fonts/NotoSans-ExtraLight.ttf');
+    font-family: NotoSans-ExtraLight;
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
+    src: url('/fonts/NotoSans-ExtraLight.ttf') format('ttf');
 }
 
 :root{
-    font-family: 'NotoSans-ExtraLight';
+    font-family: NotoSans-ExtraLight;
 }
 
 body{
-  font-family: 'NotoSans-ExtraLight';
+  font-family: NotoSans-ExtraLight;
 }
 @keyframes marquee {
   0% {
@@ -92,4 +85,8 @@ body{
 
 .input-style {
   @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-dark-green;
+}
+
+.hide-scroll-x {
+  overflow-x: hidden;
 }
