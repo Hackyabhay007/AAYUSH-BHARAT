@@ -11,10 +11,23 @@
   --font-notosans:"NotoSans-ExtraLight";
 }
 
-:root{
-    font-family: "NotoSans-ExtraLight";
+@font-face {
+    font-family: NotoSans-ExtraLight;
+    src:
+         url('/Fonts/Begum/Begum.ttf') format('woff'),
+         url('/Fonts/NotoSans-ExtraLight.ttf') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
+:root{
+    font-family: NotoSans-ExtraLight;
+}
+
+body{
+  font-family: NotoSans-ExtraLight;
+}
 @keyframes marquee {
   0% {
     transform: translateX(0%);
