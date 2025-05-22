@@ -29,7 +29,7 @@ const videos = [
 
 const VideoScrollSection = () => {
   return (
-    <div className="bg-cream py-6 mt-16 mb-8">
+    <div className="bg-cream py-6 mt-8 mb-8">
       {/* Horizontal Scroll */}
       <div className="overflow-x-auto justify-center items-center whitespace-nowrap px-4 flex space-x-4 scrollbar-hide">
         {videos.map((video) => (
@@ -40,7 +40,7 @@ const VideoScrollSection = () => {
             <video
               className="w-full h-[380px] object-cover"
               poster={video.thumbnail}
-              controls
+              muted autoPlay
               preload="none"
             >
               <source src={video.src} type="video/mp4" />
@@ -52,7 +52,7 @@ const VideoScrollSection = () => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="mt-16  lg:grid grid-cols-5 gap-4 px-6 text-center  hidden bg-dark-green py-4 text-white">
+      {/* <div className="mt-16  lg:grid grid-cols-5 gap-4 px-6 text-center  hidden bg-dark-green py-4 text-white">
       
           <div className='flex justify-center items-center gap-2'>
 <div className="text-xl">🎬</div>
@@ -76,7 +76,7 @@ const VideoScrollSection = () => {
           <div className="text-xl">🧪</div>
           <div className="text-sm mt-1">Ingredients</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

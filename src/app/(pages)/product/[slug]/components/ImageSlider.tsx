@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+
+
+
+import React, { useState } from "react"; 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-const images = [
-  "https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990",
-  "https://www.zeroharm.in/cdn/shop/products/BiotinAmazonContent17822W1080xH1080pxl30mcg-03.jpg?v=1739794090&width=823",
-  "https://www.zeroharm.in/cdn/shop/files/biotin3-01.jpg?v=1739794090&width=823",
-  "https://www.zeroharm.in/cdn/shop/products/BiotinAmazonContent17822W1080xH1080pxl30mcg-07.jpg?v=1739794090&width=823",
-];
+interface ProductImageSliderProps {
+  images: string[];
+}
 
-const ProductImageSlider: React.FC = () => {
+const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -19,9 +19,13 @@ const ProductImageSlider: React.FC = () => {
     setCurrent(index);
   };
 
+  if (!images || images.length === 0) {
+    return <p>No images available</p>;
+  }
+
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="relative h-[550px] overflow-hidden rounded-xl ">
+    <div className="w-full max-w-6xl mx-auto h-[600px]">
+      <div className="relative h-[500px] overflow-hidden rounded-xl ">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={images[current]}
@@ -38,12 +42,14 @@ const ProductImageSlider: React.FC = () => {
       </div>
 
       {/* Thumbnails */}
-      <div className="flex justify-center items-center gap-3 mt-4">
+      <div className="flex justify-center items-center mt-4 gap-3">
         {images.map((img, index) => (
-                  <Image width={500} height={500}
+          <Image
             key={index}
             src={img}
             alt={`Thumbnail ${index}`}
+            width={500}
+            height={500}
             onClick={() => handleThumbnailClick(index)}
             className={`w-20 h-20 object-cover cursor-pointer rounded-md border-2 transition ${
               index === current ? "border-blue-500" : "border-transparent"
@@ -56,3 +62,4 @@ const ProductImageSlider: React.FC = () => {
 };
 
 export default ProductImageSlider;
+

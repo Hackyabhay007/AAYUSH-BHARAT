@@ -4,45 +4,53 @@ import { Star } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
-export default function ProductDetails () {
+
+interface ProductDetailsProps {
+  productName: string;
+  price: number;
+  description: string;
+  productRating:number;
+}
+
+export default function ProductDetail ({ productName, price, description, productRating }: ProductDetailsProps) {
 
   const [expanded, setExpanded] = useState(false);
 
-// const plans = [
-//   {
-//     label: "3 bottles",
-//     quantity: 180,
-//     months: 3,
-//     price: 2096,
-//     originalPrice: 3297,
-//     perTablet: 11.64,
-//     discount: "36.43%",
-//     tag: "Best Results",
-//     tagColor: "bg-green-600",
-//     offer: "Free Serum Worth ₹2,799/-",
-//   }, 
-//   {
-//     label: "1 bottle",
-//     quantity: 60,
-//     months: 1,
-//     price: 780,
-//     originalPrice: 1099,
-//     perTablet: 13.00,
-//     discount: "29.03%",
-//   },
-//   {
-//     label: "2 bottles",
-//     quantity: 120,
-//     months: 2,
-//     price: 1379,
-//     originalPrice: 2198,
-//     perTablet: 11.49,
-//     discount: "37.26%",
-//     tag: "Money Saver",
-//     tagColor: "bg-yellow-500",
-//   },
-// ];
-  // const [selected, setSelected] = useState(0);
+const plans = [
+  {
+    label: "3 bottles",
+    quantity: 180,
+    months: 3,
+    price: price*3,
+    // originalPrice: 3297,
+    perTablet: 11.64, 
+    // discount: "36.43%",
+    tag: "Best Results",
+    tagColor: "bg-green-600",
+    // offer: "Free Serum Worth ₹2,799/-",
+  }, 
+  {
+    label: "1 bottle",
+    quantity: 60,
+    months: 1,
+    price: price,
+    // originalPrice: 1099,
+    perTablet: 13.00,
+    // discount: "29.03%",
+  },
+  {
+    label: "2 bottles",
+    quantity: 120,
+    months: 2,
+    price: price*2,
+    // originalPrice: 2198,
+    perTablet: 11.49,
+    // discount: "37.26%",
+    tag: "Money Saver",
+    tagColor: "bg-yellow-500",
+  },
+];
+  const [selected, setSelected] = useState(0);
   const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
 
   return (
@@ -51,12 +59,12 @@ export default function ProductDetails () {
       {/* Rating & Title */}
       <div>
         <div className="flex items-center gap-1 text-yellow-500">
-          {Array.from({ length: 5 }).map((_, i) => (
+          {Array.from({ length: productRating }).map((_, i) => (
             <Star key={i} size={16} fill="currentColor" />
           ))}
-          <span className="text-sm text-gray-600 ml-2">4.6 | 1027 reviews</span>
+          <span className="text-sm text-gray-600 ml-2">{productRating} | 1027 reviews</span>
         </div>
-        <h2 className="text-2xl text-dark-green font-medium mt-2">Biotin 30 MCG Tablets For Hair, Skin & Nails</h2>
+        <h2 className="text-2xl text-dark-green font-medium mt-2">{productName}</h2>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
@@ -120,7 +128,7 @@ export default function ProductDetails () {
       <div className="p-4 space-y-6 max-w-xl mx-auto">
 
       {/* Pricing Cards */}
-      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {plans.map((plan, index) => (
           <div
             key={index}
@@ -129,7 +137,6 @@ export default function ProductDetails () {
               selected === index ? "border-green-600 shadow-md" : "border-gray-300"
             }`}
           >
-            //  Offer Tag 
             {plan.offer && (
               <div className="absolute -top-3 -left-3 bg-red-500 text-white text-xs px-2 py-0.5 rounded">
                 {plan.offer}
@@ -142,20 +149,19 @@ export default function ProductDetails () {
             <p className="text-xs text-gray-500 line-through">₹{plan.originalPrice}</p>
             <p className="text-sm text-gray-600 mt-1">₹{plan.perTablet} / tablet</p>
 
-            // Badge 
+          
             {plan.tag && (
               <div className={`mt-3 text-white text-xs px-2 py-1 rounded ${plan.tagColor}`}>
                 {plan.tag}
               </div>
             )}
 
-            // Checkmark 
             {selected === index && (
               <div className="absolute top-2 right-2 w-4 h-4 bg-green-600 rounded-full border-2 border-white" />
             )}
           </div>
         ))}
-      </div> */}
+      </div>
 
       {/* Offer Banner */}
       <div className="rounded-lg overflow-hidden">

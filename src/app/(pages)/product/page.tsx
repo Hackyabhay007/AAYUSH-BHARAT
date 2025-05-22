@@ -1,10 +1,9 @@
 import React from 'react'
-import ProductContent from './ProductContent'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
+import ProductsPage from './ProductPage';
 
-
-export default async function page() {
+function page() {
   const scrolled=true;
   return (
 
@@ -13,10 +12,12 @@ export default async function page() {
 
     <Navbar scrolled={true} />
     </div>
-      <ProductContent/>
-      <div className='mb-18'>
+      <ProductsPage/>
+      
       <Footer/>
-      </div>
+      
       </div>
   )
-};
+}
+
+export default page

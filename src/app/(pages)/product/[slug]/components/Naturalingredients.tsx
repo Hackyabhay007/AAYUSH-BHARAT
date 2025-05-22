@@ -1,57 +1,97 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 
-type Ingredient = {
+type Person = {
   name: string;
   description: string;
   image: string;
 };
 
-const ingredients: Ingredient[] = [
+const people: Person[] = [
   {
-    name: "Horny Goat Weed",
-    description:
-      "Horny Goat Weed, also known as Epimedium, is an herb traditionally used in Chinese medicine. It is believed to have potential aphrodisiac properties and may support sexual health and vitality.",
+    name: "John Morgan",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
     image: "https://www.zeroharm.in/cdn/shop/files/Sesbania_Grandiflora_extract-01_600x.png?v=1707390029",
   },
   {
-    name: "Maca Root",
-    description:
-      "Maca root is a plant native to Peru and is often used as a dietary supplement. It is known for its potential to support sexual health, boost energy, and promote overall well-being.",
+    name: "Ellie Anderson",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
     image: "https://www.zeroharm.in/cdn/shop/files/Sesbania_Grandiflora_extract-01_600x.png?v=1707390029",
   },
   {
-    name: "Safed Musli",
-    description:
-      "Safed Musli is an herb that is traditionally used in Ayurvedic medicine and is believed to have aphrodisiac properties. It may support male reproductive health and vitality.",
+    name: "Nia Adebayo",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+    image: "https://www.zeroharm.in/cdn/shop/files/Sesbania_Grandiflora_extract-01_600x.png?v=1707390029",
+  },
+  {
+    name: "Liam Scott",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+    image: "https://www.zeroharm.in/cdn/shop/files/Sesbania_Grandiflora_extract-01_600x.png?v=1707390029",
+  },
+  {
+    name: "Sophia Lee",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
     image: "https://www.zeroharm.in/cdn/shop/files/Sesbania_Grandiflora_extract-01_600x.png?v=1707390029",
   },
 ];
 
-export default function NatureIngredients() {
-  return (
-    <div className="flex flex-col justify-center items-center pt-12 pb-18 px-10 md:px-16 text-center">
-      <h2 className="lg:text-4xl text-2xl tracking-wider uppercase font-medium text-dark-green mb-10">
-        {/* Sourced from Nature, Purified for Potency */}
-      </h2>
+export default function CardSlider() {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-      <div className="grid md:grid-cols-3 max-w-6xl gap-8">
-        {ingredients.map((item, index) => (
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 340; // Width of one card + gap
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  return (
+    <div className="relative w-full hide-scroll-x max-w-7xl mx-auto px-4 py-10 text-dark-green">
+   
+      {/* Arrows */}
+      <button
+        onClick={() => scroll("left")}
+        className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 rounded-full shadow hover:bg-gray-200"
+      >
+        &#8592;
+      </button>
+      <button
+        onClick={() => scroll("right")}
+        className="absolute top-1/2 right-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 rounded-full shadow hover:bg-gray-200"
+      >
+        &#8594;
+      </button>
+
+      {/* Scrollable card row */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto space-x-4 scroll-smooth snap-x snap-mandatory px-2 py-4 hide-scroll-x"
+        style={{ scrollBehavior: "smooth" }}
+      >
+        {people.map((person, index) => (
           <div
             key={index}
-            className="bg-gray-100 rounded-xl p-6 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow"
+            className="min-w-[400px] max-w-[600px] bg-beige text-black rounded-xl p-6 flex flex-col items-center snap-center flex-shrink-0 shadow-md"
           >
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={160}
-              height={160}
-              className="mb-4"
-            />
-            <h3 className="text-2xl text-dark-green font-medium mb-2">{item.name}</h3>
-            <p className="text-sm text-dark font-light mb-4">{item.description}</p>
-            
+            <div className="w-46 h-46 rounded-full overflow-hidden mb-4">
+              <Image
+                src={person.image}
+                alt={person.name}
+                width={200}
+                height={200}
+                className="object-cover"
+              />
+            </div>
+            <h1 className="text-lg lg:text-2xl font-medium uppercase tracking-wider text-dark-green mb-2">{person.name}</h1>
+            <p className="lg:text-base w-2/3 text-sm font-light tracking-wide text-center mb-4">{person.description}</p>
+            <button className="px-4 py-2 bg-dark-green text-white rounded hover:bg-dark">
+              Read More
+            </button>
           </div>
         ))}
       </div>
