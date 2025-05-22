@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,10 +11,10 @@ import SectionFive from "@/app/components/SectionFive";
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const getProducts = async () => {
       const data = await productService.fetchProduct();
+      console.log(data);
       setProducts(data);
       setLoading(false);
     };

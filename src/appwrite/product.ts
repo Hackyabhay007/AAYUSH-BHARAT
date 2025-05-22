@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { Client, Databases, Models, Storage } from "appwrite";
+import { Client, Databases, Models, Query, Storage } from "appwrite";
 
 export interface Product {
   id: string;
@@ -8,6 +8,7 @@ export interface Product {
   image: string;
   tags: string;
   rating: number;
+  slug:string;
 }
 
 
@@ -55,12 +56,11 @@ class ProductService{
       image: doc.image,
       tags: doc.tags,
       rating: doc.rating,
+      slug:doc.slug,
     }));
 
     return products;
-
         }
-
         catch(error){throw error;}
     }
 
@@ -76,6 +76,24 @@ class ProductService{
         } catch (error) {
             throw error;
         }
+    }
+    async fetchOneProduct(slug:string){
+      try{
+
+        const res = await this.databases.listDocuments(config.appwriteDatabaseId, config.appwriteProductCollectionId, [
+          Query.equal('slug', slug),
+        ]);
+        if(res){
+          return res.documents[0];
+        }
+        else{
+          return "Error in fetching product";
+        }
+      }
+      catch(error){
+        return error;
+      }
+
     }
 }
 

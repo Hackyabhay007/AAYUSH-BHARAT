@@ -160,7 +160,6 @@ export default function VideoSection() {
         const fetchedVideos = await videoService.fetchVideo(config.appwriteReelCollectionId);
         if(fetchedVideos && fetchedVideos.length > 0){
 
-          console.log(fetchedVideos[0].videourl); 
           setVideos(fetchedVideos || []); // fallback to empty array if null
         }
       } catch (error) {
