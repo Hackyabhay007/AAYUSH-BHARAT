@@ -119,6 +119,9 @@ import config from "@/config/config";
 import { ID } from "appwrite";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 type Product = {
   id: string;
@@ -136,7 +139,7 @@ const ProductManager = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    id:"",
+    id: "",
     name: "",
     price: "",
     image: "",
@@ -168,7 +171,7 @@ const ProductManager = () => {
   const openEditModal = (product: Product) => {
     setEditingProduct(product);
     setFormData({
-        id:product.id,
+      id: product.id,
       name: product.name,
       price: String(product.price),
       image: product.image,
@@ -198,14 +201,12 @@ const ProductManager = () => {
         tags: formData.tags,
         rating: parseFloat(formData.rating),
       };
-      
-      console.log(formData.id);
-      
+
       await productService.updateProduct(formData.id, updatedProduct);
       toast.success("Product updated");
       setIsModalOpen(false);
       setEditingProduct(null);
-      setFormData({ id:"",name: "", price: "", image: "", tags: "", rating: "" });
+      setFormData({ id: "", name: "", price: "", image: "", tags: "", rating: "" });
       setImageFile(null);
       fetchProducts();
     } catch (err) {
@@ -246,81 +247,80 @@ const ProductManager = () => {
               />
             )}
             <div className="flex gap-2">
-              <button
+              <Button
+                variant="default"
                 onClick={() => openEditModal(product)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                className="bg-blue-500 hover:bg-blue-600"
               >
                 Edit
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="destructive"
                 onClick={() => handleDelete(product.id)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </li>
         ))}
       </ul>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
-            <input
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Input
               name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Product Name"
-              className="w-full border px-3 py-2 mb-2 rounded"
             />
-            <input
+            <Input
               name="price"
               type="number"
               value={formData.price}
               onChange={handleChange}
               placeholder="Price"
-              className="w-full border px-3 py-2 mb-2 rounded"
             />
-            <input
+            <Input
               name="tags"
               value={formData.tags}
               onChange={handleChange}
               placeholder="Tags"
-              className="w-full border px-3 py-2 mb-2 rounded"
             />
-            <input
+            <Input
               name="rating"
               type="number"
               value={formData.rating}
               onChange={handleChange}
               placeholder="Rating"
-              className="w-full border px-3 py-2 mb-2 rounded"
             />
-            <input
+            <Input
               type="file"
               name="image"
               onChange={handleChange}
-              className="w-full border px-3 py-2 mb-4 rounded"
             />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-300 text-black px-3 py-1 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdate}
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-              >
-                Save
-              </button>
-            </div>
           </div>
-        </div>
-      )}
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              onClick={() => setIsModalOpen(false)}
+              type="button"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleUpdate}
+              type="button"
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

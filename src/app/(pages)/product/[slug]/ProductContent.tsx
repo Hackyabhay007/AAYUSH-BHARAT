@@ -59,7 +59,7 @@ const ProductContent = () => {
       <TextSlider />
       <NatureIngredients />
       <SectionFive />
-      <FixedBottomCart productName={product.name} price={product.price} productImage={product?.image}/>
+      <FixedBottomCart productName={product.name} price={product.price} productImage={product?.image} productTags={product?.tags} productIngredients={product?.ingredients} productDescription={product.description} productCategory={product.category} productSalePrice={product?.sale_price} />
       <VideoSection />
     </div>
   );

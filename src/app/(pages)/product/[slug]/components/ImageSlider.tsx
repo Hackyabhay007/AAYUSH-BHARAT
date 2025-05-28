@@ -22,6 +22,12 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
   if (!images || images.length === 0) {
     return <p>No images available</p>;
   }
+  
+images.map((image,index)=>{
+  console.log(index,'->',image);
+  
+})
+  
 
   return (
     <div className="w-full max-w-6xl mx-auto h-[600px]">
@@ -44,6 +50,7 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
       {/* Thumbnails */}
       <div className="flex justify-center items-center mt-4 gap-3">
         {images.map((img, index) => (
+          
           <Image
             key={index}
             src={img}
@@ -53,8 +60,9 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
             onClick={() => handleThumbnailClick(index)}
             className={`w-20 h-20 object-cover cursor-pointer rounded-md border-2 transition ${
               index === current ? "border-blue-500" : "border-transparent"
-            }`}
-          />
+              }`}
+              />
+
         ))}
       </div>
     </div>

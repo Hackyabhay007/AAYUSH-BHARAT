@@ -1,15 +1,6 @@
 import config from "@/config/config";
-import { Client, Databases, Models, Query, Storage } from "appwrite";
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  tags: string;
-  rating: number;
-  slug:string;
-}
+import { Client, Databases, Query, Storage } from "appwrite";
+import { Product } from "@/types/product";
 
 
 class ProductService{
@@ -49,17 +40,17 @@ class ProductService{
      config.appwriteDatabaseId,
       config.appwriteProductCollectionId
     );
-    const products = response.documents.map((doc: Models.Document) => ({
-      id: doc.$id,
-      name: doc.name,
-      price: doc.price,
-      image: doc.image,
-      tags: doc.tags,
-      rating: doc.rating,
-      slug:doc.slug,
-    }));
+    // const products = response.documents.map((doc: Models.Document) => ({
+    //   id: doc.$id,
+    //   name: doc.name,
+    //   price: doc.price,
+    //   image: doc.image,
+    //   tags: doc.tags,
+    //   rating: doc.rating,
+    //   slug:doc.slug,
+    // }));
 
-    return products;
+    return response.documents;
         }
         catch(error){throw error;}
     }

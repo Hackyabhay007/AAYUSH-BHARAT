@@ -5,6 +5,7 @@ interface FixedBottomCartProps {
   price: number;
   productImage:string;
 }
+import getFilePreview from '@/lib/getFilePreview';
 const FixedBottomCart= ({ productName, price, productImage }: FixedBottomCartProps) => {
   
   return (
@@ -13,7 +14,7 @@ const FixedBottomCart= ({ productName, price, productImage }: FixedBottomCartPro
       <div className="flex items-center gap-4">
         <Image
         width={500} height={500}  
-          src={productImage} // Replace with actual image path
+          src={getFilePreview (productImage)} // Replace with actual image path
           alt="Zeroharm Back to Teens Tablets"
           className="w-12 h-12 object-cover rounded lg:block hidden" 
         />

@@ -2,16 +2,18 @@ import React from "react";
 import { Product } from "@/appwrite/product";
 import Image from "next/image";
 import Link from "next/link";
+import getFilePreview from "@/lib/getFilePreview";
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
 
    <div className="bg-light text-center rounded-lg p-4 shadow-2xl transform transition-all duration-700 ease-in-out group w-74">
               <div className="overflow-hidden rounded-md">
+                
                 <Image
                   width={500}
                   height={500}
-                  src={product.image}
+                  src={getFilePreview( product.image)}
                   alt={product.name || 'Product Image'}
                   className="w-full h-48 object-cover rounded-md mb-4 transform transition-transform duration-300 group-hover:scale-105"
                 />

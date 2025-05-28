@@ -3,12 +3,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "@/appwrite/product"; 
 import ProductCard from "./components/ProductCard";
 // import Sidebar from "./components/Sidebar";
 import productService from "@/appwrite/product";
 import SectionFour from "@/app/components/SectionFour";
 import SectionFive from "@/app/components/SectionFive";
+import { Product } from "@/types/product";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,16 +17,37 @@ const ProductsPage = () => {
   useEffect(() => {
     const getProducts = async () => {
       const data = await productService.fetchProduct();
-      setProducts(data);
+      // Map Document[] to Product[]
+      const productsData: Product[] = data.map((doc) => ({
+        $id: doc.$id,
+        name: doc.name,
+        description: doc.description,
+        rating: doc.rating,
+        category: doc.category,
+        price: doc.price,
+        imageUrl: doc.imageUrl,
+        weight: doc.weight ?? 0,
+        image: doc.image ?? "",
+        additionalImages: doc.additionalImages ?? [],
+        stock: doc.stock ?? 0,
+        brand: doc.brand ?? "",
+        tags: doc.tags ?? [],
+        ingredients: doc.ingredients ?? [],
+        slug: doc.slug ?? "",
+        // Add other fields as required by Product type
+      }));
+      setProducts(productsData);
       setLoading(false);
     };
 
     getProducts();
   }, []);
+  console.log(products);
+  
 
   if (loading) {
     return (
-      <div className="pt-22 text-center text-xl font-medium">
+      <div className="pt-22 h-120 text-center text-xl font-medium">
         Loading products...
       </div>
     );
@@ -43,7 +64,7 @@ const ProductsPage = () => {
             <div className="flex justify-center">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.$id} product={product} />
                 ))}
               </div>
             </div>
