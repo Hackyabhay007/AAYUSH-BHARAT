@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
 
     const user = await AuthService.login({ email, password });
 
+
     if (user === undefined || user === null) {
       return NextResponse.json({ message: "User not found" }, { status: 401 });
     }
@@ -30,6 +31,8 @@ export async function POST(req: NextRequest) {
       {
         userId: user.$id,
         email: email,
+        // name: userdata.documents[0].name,
+
       },
       process.env.JWT_SECRET || "secret",
       { expiresIn: "720h" }

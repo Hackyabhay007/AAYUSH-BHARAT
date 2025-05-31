@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
    
-    const user = await AuthService.createAccount({email,password,fullname:full_name});
+    const user = await AuthService.createAccount({email,password,fullname:full_name,phone});
 
     
     if (!user) {
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    
     //  Create a JWT token
     const token = jwt.sign(
       {

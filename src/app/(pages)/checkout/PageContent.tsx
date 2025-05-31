@@ -1,9 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function PageContent() {
+  const [user, setUser] = useState<{ email?: string } | null>(null);
+  const [currenctProduct,setCurrenctProduct]=useState<{name:string,thumbnail:string,category:string,quatity:number} | null>(null)
+  useEffect(() => {
+    const data = localStorage.getItem('customer_data');
+    if (data) {
+       
+      try {
+        setUser(JSON.parse(data).user);
+
+      } catch {
+        setUser(null);
+      }
+    }
+
+    const productData=localStorage.getItem('buyNowData');
+    console.log(productData);
+    
+    if(productData){
+      try{
+        setCurrenctProduct(JSON.parse(productData).product);
+      }
+      catch{
+        setCurrenctProduct(null);
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen pt-24 bg-beige py-10 px-4 md:px-20">
       <h1 className="text-2xl lg:text-4xl font-medium uppercase tracking-wide text-center mb-10">Checkout</h1>
@@ -14,8 +41,8 @@ export default function PageContent() {
           {/* Contact Info */}
           <div className="bg-white rounded-xl p-6 shadow">
             <h2 className="text-lg lg:text-xl  font-medium uppercase mb-2">Contact Information</h2>
-            <p>Email: test@gmail.com</p>
-            <p>Name: test</p>
+            <p>Email: {user?.email || <span className="text-gray-400">Not available</span>}</p>
+            <p>Name: {user?.name || <span className="text-gray-400">Not available</span>}</p>
           </div>
 
           {/* Delivery Address */}
@@ -89,9 +116,9 @@ export default function PageContent() {
               className="w-16 h-16 rounded"
             />
             <div>
-              <p className="font-medium">Biotin 30 MCG Tablets For Hair, Skin & Nails</p>
-              <p className="text-sm text-gray-500">50g</p>
-              <p className="text-dark-green text-sm">₹900</p>
+              <p className="font-medium">{currenctProduct?.name}</p>
+              <p className="text-sm text-gray-500">{currenctProduct?.category}</p>
+              <p className="text-dark-green text-sm">{currenctProduct?.quatity}</p>
             </div>
             <span className="ml-auto text-gray-400">x1</span>
           </div>

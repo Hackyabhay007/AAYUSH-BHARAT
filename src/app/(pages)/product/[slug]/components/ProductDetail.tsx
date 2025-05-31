@@ -4,9 +4,15 @@ import { Star } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { Variants } from "@/types/product";
-
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../../../store/store';
+import { addToCart, createCart } from '../../../../../store/slice/cartSlice';
+import { Product } from "@/types/product";
 interface ProductDetailProps {
-   
+  product:Product;
+  thumbnail:string,
+   productId:string;
     productName: string,
     description: string,
     price: number,
@@ -16,8 +22,16 @@ interface ProductDetailProps {
     ingredients:string,
     category:string,
     sale_price:number,
-    variants:Variants[],
-  
+  //   variants:{id: string;
+  //   title: number;
+  //   original_price: number; // Regular price
+  //   sale_price: number;    // Discounted price
+  //   stock: number;
+  //   months:number;
+  //   weight:number;  
+  // }[],
+    variants:Variants[];
+
   selectedVariantIndex: number;
   onVariantChange: (index: number) => void;
   
@@ -25,6 +39,9 @@ interface ProductDetailProps {
 
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
+  product,
+  thumbnail,
+  productId,
     productName,
     description,
     price,
@@ -38,10 +55,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   onVariantChange,
   variants,
 }) => {
-  console.log(typeof
-    tags
-   );
+const router=useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+   const { currentCustomer, token } = useSelector((state: RootState) => state.customer);
+  const isLoggedIn = !!token;
   
+  const { cart, loading } = useSelector((state: RootState) => state.cart);
+
+    
+  const [quantity, setQuantity] = useState(1);
+  const [currentVariantId, setCurrentVariantId] = useState( variants[0]?.$id);
+  const [stockError, setStockError] = useState<string | null>(null);
+
 
   // const [expanded, setExpanded] = useState(false);
 
@@ -58,30 +84,152 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 //     tagColor: "bg-green-600",
 //     // offer: "Free Serum Worth ₹2,799/-",
 //   }, 
-//   {
-//     label: "1 bottle",
-//     quantity: 60,
-//     months: 1,
-//     price: price,
-//     // originalPrice: 1099,
-//     perTablet: 13.00,
-//     // discount: "29.03%",
-//   },
-//   {
-//     label: "2 bottles",
-//     quantity: 120,
-//     months: 2,
-//     price: price*2,
-//     // originalPrice: 2198,
-//     perTablet: 11.49,
-//     // discount: "37.26%",
-//     tag: "Money Saver",
-//     tagColor: "bg-yellow-500",
-//   },
 // ];
+
+
+
+
   const [selected, setSelected] = useState(0);
   const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
   // const [selectedVariant, setSelectedVariant] = useState(0);
+
+
+ const handleBuyNow = async () => {
+    if (!isLoggedIn) {
+        // setShowLoginModal(true);
+        return;
+    }
+
+    const currentVariant = variants.find(v => v.$id === currentVariantId);
+    if (!currentVariant) {
+        setStockError('Invalid variant selected');
+        return;
+    }
+
+    const hasStock = await checkStock(currentVariantId, quantity);
+    if (!hasStock) return;
+
+    try {
+        // Create the buyNowData object
+        // const buyNowData = {
+        //   product: {
+        //     id: productId,
+        //     name: productName,
+        //     thumbnail: '',
+        //     category: category,
+        //     quantity: weight,
+        //     selectedVariant: {
+        //       id: 'variants.$id',
+        //       title:'oikok',
+        //       sale_price: 12,
+        //       original_price: 34,
+        //     }
+        //   }
+        // };
+
+        const fixedProduct = {
+  id: productId,
+  name:productName,
+  thumbnail: thumbnail,
+  category: category, // ✅ fixed
+  quantity: 1,
+  selectedVariant: {
+    id: variants[selectedVariantIndex].$id,         // ✅ should be a real ID
+    title: productName,        // ✅ string title
+    sale_price: variants[selectedVariantIndex].sale_price,
+    original_price: variants[selectedVariantIndex].price,
+    months:variants[selectedVariantIndex].months,
+    weight:variants[selectedVariantIndex].weight,
+  }
+};
+
+
+        // Store data with error handling
+        try {
+          localStorage.setItem('buyNowData', JSON.stringify({product:fixedProduct}));
+          
+          // Verify the data was stored correctly
+          const verifyData = localStorage.getItem('buyNowData');
+          if (!verifyData) {
+            throw new Error('Failed to store checkout data');
+          }
+
+          const parsed = JSON.parse(verifyData);
+          if (!parsed?.product?.name) {
+            throw new Error('Stored data is invalid');
+          }
+
+          // Only navigate if data is stored successfully
+          router.push('/checkout?mode=buyNow');
+        } catch (storageError) {
+          console.error('Storage error:', storageError);
+          alert('Failed to start checkout process. Please try again.');
+        }
+    } catch (error) {
+        console.error('Buy Now Error:', error);
+        setStockError('Failed to process buy now request');
+    }
+  };
+
+    const checkStock = async (variantId: string, quantity: number) => {
+    // Get current variant directly from variants prop
+    const currentVariant = variants.find(v => v.$id === variantId);
+    
+    if (!currentVariant) {
+        setStockError('Variant not found');
+        return false;
+    }
+
+    // Direct stock check from variant data
+    if (currentVariant.stock < quantity) {
+        setStockError(`Only ${currentVariant.stock} items available`);
+        return false;
+    }
+
+    // Clear any existing error if stock is available
+    setStockError(null);
+    return true;
+  };
+
+ const handleAddToCart = async () => {
+    try {
+        const currentVariant = variants.find(v => v.$id === currentVariantId);
+        if (!currentVariant) {
+            setStockError('Invalid variant selected');
+            return;
+        }
+
+        // Check stock before adding to cart
+        const hasStock = await checkStock(currentVariantId, quantity);
+        if (!hasStock) return;
+
+        // Continue with adding to cart
+        // Transform to match Weight interface
+        const weights: Weight[] = variants.map(v => ({
+          id: 0, // Default value
+          documentId: v.$id,
+          weight_Value: v.weight,
+          original_Price: v.price,
+          sale_Price: v.sale_price,
+          inventory: [] // Empty array since we don't have inventory data
+        }));
+
+        const weightIndex = variants.findIndex(v => v.$id === currentVariantId);
+        
+        await dispatch(addToCart({
+          product: {
+            ...product,
+            weights
+          },
+          weightIndex,
+          quantity
+        }));
+    } catch (error) {
+        console.error('Failed to add to cart:', error);
+        setStockError('Failed to add to cart');
+    }
+  };
+
 
   return (
     // <>
@@ -292,8 +440,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
               selectedVariantIndex === index ? "border-green-600 shadow-md" : "border-gray-300"
             }`}
           >
-            <p className="font-semibold">{variant.months}</p>
-            <p className="text-sm text-gray-500">{variant.months} months</p>
+            <p className="font-semibold">{variant.months} Months</p>
+            <p className="text-sm text-gray-500">{variant.weight} GMS</p>
             <p className="text-red-600 text-sm font-semibold mt-1">-{variant.price-variant.sale_price} off</p>
             <p className="text-lg font-bold mt-2">₹{variant.price}</p>
             <p className="text-xs text-gray-500 line-through">₹{variant.sale_price}</p>
@@ -334,14 +482,20 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <button className="w-full border border-dark-green text-dark-green py-3 rounded font-medium text-xl">
+        <button className="w-full border border-dark-green text-dark-green py-3 rounded font-medium text-xl" onClick={handleAddToCart}>
           Add To Cart
         </button>
-        <button className="w-full border bg-dark-green text-light py-3 rounded font-medium text-xl">
+        <button className="w-full border bg-dark-green text-light py-3 rounded font-medium text-xl" onClick={handleBuyNow}>
           Buy It Now
         </button>
       </div>
 
+
+        {stockError && (
+          <div className="text-red-600 mb-4 p-2 bg-red-50 rounded">
+              {stockError}
+          </div>
+        )}
       {/* Accordions */}
      
   <div className="border-b">

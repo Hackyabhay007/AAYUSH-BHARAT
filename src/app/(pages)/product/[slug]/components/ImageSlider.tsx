@@ -23,10 +23,10 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
     return <p>No images available</p>;
   }
   
-images.map((image,index)=>{
-  console.log(index,'->',image);
+// images.map((image,index)=>{
+//   // console.log(index,'->',image);
   
-})
+// })
   
 
   return (

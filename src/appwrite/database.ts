@@ -31,4 +31,4 @@ const DatabaseService = {
   },
 };
 
-export default DatabaseService;
+export {DatabaseService,databases};

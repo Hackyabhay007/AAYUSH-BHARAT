@@ -5,9 +5,10 @@ import Orders from "./component/Order";
 import Addresses from "./component/Address";
 import SettingsComponent from "./component/Setting";
 import Profile from "./component/Profile";
-import DatabaseService from "@/appwrite/database";
+import {DatabaseService} from "@/appwrite/database";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/userSlice"; 
+// import { setUser } from "@/store/userSlice"; 
+import { setUser } from "@/store/slice/customerSlice";
 type UserProfile = {
   name: string;
   email: string;
@@ -15,7 +16,7 @@ type UserProfile = {
 };
 
 export default function ProfileDashboard() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("profile");
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -47,12 +48,21 @@ export default function ProfileDashboard() {
           throw new Error("User ID not found in localStorage");
         }
         const userData = await DatabaseService.getUserData(userID);
+         
+        
         if(userData){
-           dispatch(setUser({
-             userid: userData.documents[0].userid,
-             name: userData.documents[0].fullname,
-             email: userData.documents[0].email
-           }));
+          const doc = userData.documents[0];
+          const customerObj = {
+            $id: doc.$id,
+            id: doc.id,
+            userid: doc.userid,
+            full_name: doc.fullname,
+            name: doc.fullname, // for backward compatibility if needed
+            email: doc.email,
+            created_at: doc.created_at,
+            // add any other customer fields here as required by the Customer type
+          };
+          dispatch(setUser(customerObj)); // <-- set in customer slice too
         }
         setUserState({
           name: userData.documents[0].fullname,

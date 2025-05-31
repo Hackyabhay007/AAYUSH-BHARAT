@@ -17,11 +17,12 @@ export class AuthService {
   async createAccount({
     email,
     password,
-    fullname
+    fullname,phone
   }: {
     email: string;
     password: string;
     fullname: string;
+    phone:number;
   }) {
    
     
@@ -33,8 +34,6 @@ export class AuthService {
         password,
         fullname
       );
-      console.log(useraccount.$id,useraccount.email);
-      
       if (useraccount) {
 
           const res=await this.databases.createDocument(
@@ -45,11 +44,12 @@ export class AuthService {
             userid:useraccount.$id,
             email: useraccount.email,
             fullname: fullname,
+            phone:Number(phone),
           }
+
           
         );
         console.log('after doc',res);
-
 
         return this.login({ email, password });
       } else {
@@ -65,7 +65,6 @@ export class AuthService {
   async login({ email, password }: { email: string; password: string }) {
     try {
       const user= await this.account.createEmailPasswordSession(email,password);     
-      
       return user;
     } catch (error) {
       throw error;

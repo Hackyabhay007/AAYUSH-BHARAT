@@ -3,25 +3,25 @@ import React from 'react';
 const videos = [
   {
     id: 1,
-    src: '/videos/video1.mp4',
+    src: '',
     caption: 'Bala movie ke scene haunt karne lagte hain?',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 2,
-    src: '/videos/video2.mp4',
+    src: '',
     caption: 'I don’t wear a helmet, mujhe usse hair fall hota hai',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 3,
-    src: '/videos/video3.mp4',
+    src: '',
     caption: 'most think that it is all genetics',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 4,
-    src: '/videos/video4.mp4',
+    src: '',
     caption: '',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },

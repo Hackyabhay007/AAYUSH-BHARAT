@@ -1,4 +1,5 @@
 export interface Variants {
+  $id:string;
     productId:string;
   price: number;
   weight: number;
@@ -32,4 +33,13 @@ export interface Product {
   slug:string;
   variants?:Variants[];
   collections?:Collections[];
+}
+
+export interface Weight {
+  id: number;
+  documentId: string;
+  weight_Value: number;
+  original_Price: number;
+  sale_Price: number;
+  inventory: any[];
 }

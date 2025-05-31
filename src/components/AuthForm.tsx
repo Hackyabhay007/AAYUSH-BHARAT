@@ -3,6 +3,10 @@ import React, { Suspense, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { RootState } from "@/store";
+import { loginCustomer } from "@/store/slice/customerSlice";
 
 
 interface AuthFormProps {
@@ -12,7 +16,7 @@ interface AuthFormProps {
 interface RegisterFormData {
   full_name: string;
   email: string;
-  phone: string;
+  phone: number;
   password: string;
   confirmPassword: string;
 }
@@ -23,7 +27,7 @@ export default function AuthForm({ type }: AuthFormProps) {
   const [formData, setFormData] = useState<RegisterFormData>({
     full_name: "",
     email: "",
-    phone: "",
+    phone: 0,
     password: "",
     confirmPassword: "",
   });
@@ -32,12 +36,15 @@ export default function AuthForm({ type }: AuthFormProps) {
   const userid = searchparams.get("userId");
   const secret = searchparams.get("secret");
 
-  const [loading, setIsLoading] = useState(false);
+  const [loading2, setIsLoading2] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, error } = useSelector((state: RootState) => state.customer);
   const isLogin = type === "login";
   const isRegister = type === "register";
   const isForgot = type === "forgot";
@@ -46,12 +53,12 @@ export default function AuthForm({ type }: AuthFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError("");
-    setIsLoading(true);
+    setIsLoading2(true);
 
     if (isRegister) {
       if (formData.password !== formData.confirmPassword) {
         setValidationError("Passwords don't match");
-        setIsLoading(false);
+        setIsLoading2(false);
         return;
       }
 
@@ -62,11 +69,12 @@ export default function AuthForm({ type }: AuthFormProps) {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
+          
           body: JSON.stringify({
             full_name: formData.full_name,
             email: formData.email,
             password: formData.password,
-            phone: formData.phone,
+            phone:Number(formData.phone),
           }),
         });
 
@@ -81,7 +89,16 @@ export default function AuthForm({ type }: AuthFormProps) {
           localStorage.setItem("userid", data.user.id);
           toast.success("Account created successfully!");
           console.log("Registration successful, redirecting to profile...");
+
+            // await dispatch(registerCustomer({
+            //         full_name: formData.full_name,
+            //         email: formData.email,
+            //         password: formData.password,
+            //     })).unwrap();
+
           router.push("/profile");
+          
+        
         } else {
           toast.error("Registration failed. Please try again.");
           throw new Error(data.message || "Registration failed");
@@ -96,7 +113,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         } else {
           setValidationError("Registration failed. Please try again.");
         }
-        setIsLoading(false);
+        setIsLoading2(false);
         // setIsNavigating(false); // Stop loading on error
       }
     }
@@ -120,15 +137,22 @@ export default function AuthForm({ type }: AuthFormProps) {
 
         if (!response.ok) {
           toast.error(data.message);
+         
           // throw new Error(data.message || "Login failed");
         }
         if (data.success && data.token) {
+           localStorage.setItem('token', data.token);
           localStorage.setItem("user", data.token);
           localStorage.setItem("userid", data.user.id);
           // Map Document to User type 
          
           toast.success("Login successful!");
           console.log("Login successful, redirecting to profile...");
+            await dispatch(loginCustomer({
+                    email: formData.email,
+                    password: formData.password,
+                    rememberMe: true,
+                })).unwrap();
           router.push("/profile");
         }
       } catch (error) {
@@ -168,14 +192,14 @@ export default function AuthForm({ type }: AuthFormProps) {
         } else {
           setValidationError("Error in Sending Reset Link");
         }
-        setIsLoading(false);
+        setIsLoading2(false);
       }
     } 
     
     else if (isReset) {
       if (formData.password !== formData.confirmPassword) {
         toast.error("Password don't match");
-        setIsLoading(false);
+        setIsLoading2(false);
         return;
       }
       try {
@@ -200,7 +224,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         console.error("Error in Reseting password:", error);
         toast.error("Error in reseting password");
         // setValidationError(err.message || "Error in Reseting password");
-        setIsLoading(false);
+        setIsLoading2(false);
       }
     }
 
@@ -361,7 +385,7 @@ export default function AuthForm({ type }: AuthFormProps) {
               type="submit"
               className="bg-dark-green text-white py-3 my-2 rounded text-lg uppercase"
             >
-              {loading
+              {loading2
                 ? "Loading..."
                 : isLogin
                 ? "Log In"
