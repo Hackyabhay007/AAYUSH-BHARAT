@@ -7,7 +7,7 @@ function page() {
   const scrolled=true;
   return (
 
-    <div>
+    <div className='h-screen'>
       <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#363f1d] text-black shadow-md" : "bg-transparent text-black"}`}>
 
     <Navbar scrolled={true} />

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Menu, X, ChevronRight, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
   scrolled: boolean;
@@ -15,6 +16,7 @@ const logo = {
 const Navbar = ({ scrolled }: NavbarProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false); // NEW
+  const pathname = usePathname();
 
   return (
     <>
@@ -37,7 +39,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-primary text-sm">
           {[
-            { title: "SHOP", link: "/product" },
+            { title: "SHOP", link: "/shop" },
             { title: "ABOUT US", link: "/about-us" },
             { title: "CONTACT US", link: "/contact-us" },
             { title: "BLOG", link: "/blog" },
@@ -99,7 +101,8 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
         <nav className="flex flex-col px-6 py-4 gap-6 text-lg">
           {[
-            { title: "SHOP", link: "/product" },
+            { title: "HOME", link: "/" },
+            { title: "SHOP", link: "/shop" },
             { title: "ABOUT US", link: "/about-us" },
             { title: "CONTACT US", link: "/contact-us" },
             { title: "BLOG", link: "/blog" },
@@ -110,13 +113,15 @@ const Navbar = ({ scrolled }: NavbarProps) => {
               href={item.link}
               key={item.title}
               onClick={() => setMenuOpen(false)}
-              className="flex py-2 justify-between items-center group"
+              className={`flex py-2 justify-between items-center group ${
+                pathname === item.link ? "text-dark-green font-bold" : ""
+              }`}
             >
               <span className="relative">
                 {item.title}
-                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-dark-green transition-all duration-300 group-hover:w-full" />
+                <span className={`absolute left-0 bottom-0 h-0.5 bg-dark-green transition-all duration-300 group-hover:w-full ${pathname === item.link ? "w-full" : "w-0"}`} />
               </span>
-              { <ChevronRight />}
+              <ChevronRight />
             </a>
           ))}
         </nav>
@@ -163,7 +168,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
               Checkout
             </button>
           </div>
-          <p className="text-center text-xs mt-3 text-dark-green underline uppercase"><Link href={"/product/12"}> Continue Shopping </Link></p>
+          <p className="text-center text-xs mt-3 text-dark-green underline uppercase"><Link href={"/shop"}> Continue Shopping </Link></p>
         </div>
       </div>
     </>

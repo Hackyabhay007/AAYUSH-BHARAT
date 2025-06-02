@@ -6,18 +6,22 @@ import Addresses from "./component/Address";
 import SettingsComponent from "./component/Setting";
 import Profile from "./component/Profile";
 import {DatabaseService} from "@/appwrite/database";
-import { useDispatch } from "react-redux";
+import Loader from "@/components/Loader";
+// import { useDispatch } from "react-redux";
 // import { setUser } from "@/store/userSlice"; 
-import { setUser } from "@/store/slice/customerSlice";
+// import { setUser } from "@/store/slice/customerSlice";
 type UserProfile = {
   name: string;
   email: string;
-  // createdAt: string;
+  $createdAt: string;
+  phone:string;
+  $id:string;
 };
 
-export default function ProfileDashboard() {
-  const dispatch = useDispatch();
+export default function ProfileDashboard({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
+  // const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("profile");
+  const [tabLoading, setTabLoading] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
@@ -31,7 +35,15 @@ export default function ProfileDashboard() {
       case "settings":
         return <SettingsComponent />;
       case "profile":
-        return <Profile />;
+        return (
+          <Profile
+            name={user?.name || ""}
+            phone={user?.phone || "No Phone Number"}
+            email={user?.email || ""}
+            createdAt={user?.$createdAt || ""}
+            $id={user?.$id || ""}
+          />
+        );
       default:
         return null;
     }
@@ -48,36 +60,44 @@ export default function ProfileDashboard() {
           throw new Error("User ID not found in localStorage");
         }
         const userData = await DatabaseService.getUserData(userID);
-         
-        
-        if(userData){
+
+        if (userData && userData.documents && userData.documents[0]) {
           const doc = userData.documents[0];
-          const customerObj = {
-            $id: doc.$id,
-            id: doc.id,
-            userid: doc.userid,
-            full_name: doc.fullname,
-            name: doc.fullname, // for backward compatibility if needed
-            email: doc.email,
-            created_at: doc.created_at,
-            // add any other customer fields here as required by the Customer type
-          };
-          dispatch(setUser(customerObj)); // <-- set in customer slice too
+          setUserState({
+            name: doc.fullname || "",
+            email: doc.email || "",
+            phone: doc.phone || "",
+            $createdAt: doc.$createdAt || "",
+            $id:doc.$id || '',
+          });
+        } else {
+          setUserState(null);
         }
-        setUserState({
-          name: userData.documents[0].fullname,
-          email: userData.documents[0].email,
-          // createdAt: new Date(userData.createdAt).toDateString(),
-        });
+        setLoading(false);
+        onLoadingChange(false);
       } catch (error) {
         console.error("Error loading user profile:", error);
+        setUserState(null);
       } finally {
         setLoading(false);
+        onLoadingChange(false);
       }
     };
 
+    setLoading(true);
     fetchUser();
   }, []);
+
+  const handleTabClick = async (tabKey: string) => {
+    setTabLoading(true);
+    setActiveTab(tabKey);
+
+    // Simulate async operation (replace with real fetch if needed)
+    // If you have async fetch for tab, await it here
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Remove or replace with real fetch
+
+    setTabLoading(false);
+  };
 
   if (loading) {
     return <div className="text-white">Loading...</div>;
@@ -120,7 +140,9 @@ export default function ProfileDashboard() {
           </div>
           <div className="font-light">
             <h2 className="text-lg sm:text-xl uppercase">{user.name}</h2>
-            <p className="text-sm sm:text-sm">Member since: 20-05-2025</p>
+            <p className="text-sm sm:text-sm">
+              Member since: {user.$createdAt ? user.$createdAt.split("T")[0] : ""}
+            </p>
             <p className="text-sm">{user.email}</p>
             {/* <p className="text-sm">Member Since: {user.createdAt}</p> */}
           </div>
@@ -139,25 +161,18 @@ export default function ProfileDashboard() {
           {[
             { key: "profile", icon: <User size={16} />, label: "Profile" },
             { key: "orders", icon: <Package size={16} />, label: "Orders" },
-            {
-              key: "addresses",
-              icon: <MapPin size={16} />,
-              label: "Addresses",
-            },
-            {
-              key: "settings",
-              icon: <Settings size={16} />,
-              label: "Settings",
-            },
+            { key: "addresses", icon: <MapPin size={16} />, label: "Addresses" },
+            { key: "settings", icon: <Settings size={16} />, label: "Settings" },
           ].map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => handleTabClick(tab.key)}
               className={`flex items-center gap-2 pb-2 ${
                 activeTab === tab.key
                   ? "border-b-2 border-dark-green text-dark-green font-semibold"
                   : "text-gray-500 hover:text-dark-green"
               }`}
+              disabled={tabLoading}
             >
               {tab.icon}
               {tab.label}
@@ -166,8 +181,8 @@ export default function ProfileDashboard() {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-b-xl shadow-md px-4 py-6">
-          {renderTabContent()}
+        <div className="bg-white rounded-b-xl shadow-md px-4 py-6 min-h-[200px]">
+          {tabLoading ? <Loader /> : renderTabContent()}
         </div>
       </div>
     </div>

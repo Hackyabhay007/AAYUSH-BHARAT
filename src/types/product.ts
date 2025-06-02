@@ -41,5 +41,5 @@ export interface Weight {
   weight_Value: number;
   original_Price: number;
   sale_Price: number;
-  inventory: any[];
+  // inventory: any[];
 }

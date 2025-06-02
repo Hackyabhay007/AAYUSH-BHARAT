@@ -30,8 +30,8 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
   
 
   return (
-    <div className="w-full max-w-6xl mx-auto h-[600px]">
-      <div className="relative h-[500px] overflow-hidden rounded-xl ">
+    <div className="w-full max-w-6xl mx-auto h-[500px] lg:h-[600px]">
+      <div className="relative lg:h-[600px] h-[500px] overflow-hidden rounded-xl ">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={images[current]}
@@ -42,7 +42,7 @@ const ProductImageSlider: React.FC<ProductImageSliderProps> = ({ images }) => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="absolute top-0 left-0 w-full h-full object-contain"
+            className="absolute top-0 left-0 lg:w-[700px] lg:h-[600px] h-[500px] object-cover"
           />
         </AnimatePresence>
       </div>

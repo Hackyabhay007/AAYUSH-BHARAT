@@ -44,21 +44,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ product }) => {
   };
 
   return (
-    <div className="pb-20">
-      <div className="text-center bg-beige pt-18 pb-2">
+    <div className="pt-20">
+      {/* <div className="text-center bg-beige pt-18 pb-2">
         <h1>Hair and Nail Strength, Boosted by Nano Tech</h1>
-      </div>
+      </div> */}
       <div className="flex justify-center items-start">
         <div className="flex flex-col lg:flex-row max-w-7xl w-full gap-8 p-2">
           {/* Left Image Slider */}
-          <div className="lg:w-1/2 w-full">
-            <div className="sticky top-24">
+          <div className="lg:w-1/2 pb-20 lg:pb-4 w-full">
+            <div className="">
               <ProductImageSlider images={images} />
             </div>
           </div>
 
           {/* Right Product Info */}
-          <div className="lg:w-1/2 w-full max-h-[100vh] overflow-y-auto hide-scrollbar pr-2">
+          <div className="lg:w-1/2 w-full  overflow-y-auto hide-scrollbar pr-2">
             <ProductDetail {...details} />
           </div>
         </div>

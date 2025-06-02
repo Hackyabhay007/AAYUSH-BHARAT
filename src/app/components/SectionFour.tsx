@@ -28,7 +28,7 @@ const data = [
 
 export default function SectionFour() {
   return (
-    <section className="bg-beige py-16 px-4 text-center">
+    <section className="bg-white py-16 px-4 text-center">
       <h2 className="text-2xl md:text-4xl text-dark-green tracking-wider font-bold mb-12">
         WHY 3 CAPSULES?
       </h2>

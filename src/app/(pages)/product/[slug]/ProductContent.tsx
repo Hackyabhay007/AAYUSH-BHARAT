@@ -7,9 +7,10 @@ import SectionFive from '@/app/components/SectionFive';
 import TextSlider from '@/app/components/TextSlider';
 import VideoScrollSection from './components/VideoScrollSectoin';
 import VideoSection from '@/app/components/VideoSection';
-import productService, { Product } from '@/appwrite/product';
+import productService from '@/appwrite/product';
 import { useParams } from 'next/navigation';
-
+import FAQ from './components/FAQ';
+import { Product } from '@/types/product';
 const ProductContent = () => {
   const params = useParams();
   const productId = typeof params.slug === 'string' ? params.slug : '';
@@ -59,7 +60,8 @@ const ProductContent = () => {
       <TextSlider />
       <NatureIngredients />
       <SectionFive />
-      <FixedBottomCart productName={product.name} price={product.price} productImage={product?.image} productTags={product?.tags} productIngredients={product?.ingredients} productDescription={product.description} productCategory={product.category} productSalePrice={product?.sale_price} />
+      <FAQ/>
+      <FixedBottomCart productName={product.name} price={product.price} productImage={product?.image} productIngredients={product?.ingredients} productDescription={product.description} productCategory={product.category} productSalePrice={product?.sale_price} />
       <VideoSection />
     </div>
   );

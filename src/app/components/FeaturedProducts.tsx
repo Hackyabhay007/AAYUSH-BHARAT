@@ -28,7 +28,7 @@ const FeaturedProducts = () => {
     <div className="bg-beige">
       <section ref={ref} className="py-12 px-4 max-w-5xl mx-auto">
         <h2 className="lg:text-4xl text-2xl uppercase font-semibold mb-8 tracking-wider text-dark-green text-center">
-          Featured Products
+        Our Ayurvedic Ritual Kits
         </h2>
         <div className="lg:grid flex flex-col items-center lg:grid-cols-3 gap-6">
           {products.map((product, idx) => (

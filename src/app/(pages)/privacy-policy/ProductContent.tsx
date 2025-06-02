@@ -10,7 +10,7 @@ function ProductContent() {
     <p className='text-lg tracking-wide'>Last Updated: 04th March 2025</p>
     <div className="bg-white border border-dark-green rounded-md p-6 md:p-10 my-4 text-left max-w-5xl mx-auto">
       <p className="text-lg mb-6">
-        At RaisSpice, we prioritize the protection of your personal information. This policy outlines how we handle your data
+        At Aayush Bharat, we prioritize the protection of your personal information. This policy outlines how we handle your data
         when you use our website or make purchases from our online store.
       </p>
 
@@ -53,7 +53,7 @@ function ProductContent() {
       </p>
 
       <div className="bg-dark-green text-light px-4 py-3 rounded-md text-lg">
-        For any privacy-related queries, please contact us at: <a href="mailto:info@raisspices.com" className="underline">info@raisspices.com</a>
+        For any privacy-related queries, please contact us at: <a href="mailto:info@aayushbharat.com" className="underline">info@aayushbharat.com</a>
       </div>
     </div>
   </div>

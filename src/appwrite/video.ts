@@ -62,6 +62,8 @@ async fetchVideo(collectionId = config.appwriteVideoCollectionId) {
         videoname:doc.videoname,
       }));
 
+      console.log(videos);
+      
       return videos;
     } catch (error) {
       throw error;
