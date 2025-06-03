@@ -3,25 +3,25 @@ import React from 'react';
 const videos = [
   {
     id: 1,
-    src: '',
+    src: null,
     caption: 'Bala movie ke scene haunt karne lagte hain?',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 2,
-    src: '',
-    caption: 'I don’t wear a helmet, mujhe usse hair fall hota hai',
+    src: null,
+    caption: 'I don\'t wear a helmet, mujhe usse hair fall hota hai',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 3,
-    src: '',
+    src: null,
     caption: 'most think that it is all genetics',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
   {
     id: 4,
-    src: '',
+    src: null,
     caption: '',
     thumbnail: 'https://www.zeroharm.in/cdn/shop/files/biotin-01.jpg?v=1718445398&width=990',
   },
@@ -43,10 +43,9 @@ const VideoScrollSection = () => {
               muted autoPlay
               preload="none"
             >
-              <source src={video.src} type="video/mp4" />
+              {video.src && <source src={video.src} type="video/mp4" />}
               Your browser does not support the video tag.
             </video>
-           
           </div>
         ))}
       </div>
