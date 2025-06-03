@@ -44,7 +44,6 @@ const ProductsPage = () => {
     getProducts();
   }, []);
   
-
   return (
     <div className="relative">
       {loading && (
@@ -53,21 +52,32 @@ const ProductsPage = () => {
         </div>
       )}
       <div className="flex flex-col pt-24 text-center bg-beige gap-4">
-        <h1 className="text-2xl lg:text-4xl font-medium uppercase tracking-wide my-8 text-dark-green">OUR RITUAL KITS</h1>
+        <div className="max-w-6xl mx-auto px-4">
+          <h1 className="text-2xl lg:text-4xl font-medium uppercase tracking-wide my-8 text-dark-green">AAYUDH BHARAT RITUAL KITS</h1>
+          <p className="text-base md:text-lg text-gray-700 max-w-3xl mx-auto mb-8">
+            Discover our authentic collection of Ayurvedic products crafted with time-tested wisdom from Charaka, Sushruta, and Bhaishajya Granthas. 100% natural formulations for holistic wellness without synthetics or chemicals.
+          </p>
+        </div>
+        
         <div className="flex items-center justify-center gap-12 pb-12 lg:flex-row flex-col">
-
           {/* Main Content */}
           <div className="flex flex-col">
             <div className="flex-1">
               <div className="flex justify-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {products.map((product) => (
-                    <ProductCard 
-                      key={product.$id} 
-                      product={product} 
-                      onShowNowLoading={setLoading} // pass the setter as prop
-                    />
-                  ))}
+                  {products.length > 0 ? (
+                    products.map((product) => (
+                      <ProductCard 
+                        key={product.$id} 
+                        product={product} 
+                        onShowNowLoading={setLoading} // pass the setter as prop
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-3 py-12 text-center">
+                      <p className="text-lg text-gray-600">No products found. Please check back later.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,23 +1,16 @@
-import React from 'react'
-import Navbar from '@/app/components/Navbar'
-import Footer from '@/app/components/Footer'
-import ProductsPage from './ProductPage';
+import ShopClient from './ShopClient';
+import JsonLd from '@/components/JsonLd';
+import { shopSchema, shopProductListSchema } from './schema';
+import { metadata } from './metadata';
 
-function page() {
-  const scrolled=true;
+export { metadata };
+
+export default function Page() {
   return (
-
-    <div>
-      <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#363f1d] text-black shadow-md" : "bg-transparent text-black"}`}>
-
-    <Navbar scrolled={true} />
-    </div>
-      <ProductsPage/>
-      
-      <Footer/>
-      
-      </div>
-  )
+    <>
+      <JsonLd data={shopSchema} />
+      <JsonLd data={shopProductListSchema} />
+      <ShopClient />
+    </>
+  );
 }
-
-export default page
