@@ -74,10 +74,17 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+// Update the addToCart thunk type
 export const addToCart = createAsyncThunk(
   'cart/addItem',
   async ({ product, weightIndex, quantity }: { 
-    product: Product & { weights: Weight[] }, 
+    product: Product & { weights: Array<{ 
+      id: string | number, 
+      documentId: string,
+      weight_Value: number,
+      original_Price: number,
+      sale_Price: number
+    }> }, 
     weightIndex: number, 
     quantity: number 
   }) => {

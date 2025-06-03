@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Menu, X, ChevronRight, ShoppingCart, User } from "lucide-react";
+import { Menu, X, ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import CartSidebar from "../components/cart/CartSidebar";
+import CartIcon from "./CartIcon";
 
 interface NavbarProps {
   scrolled: boolean;
@@ -15,7 +17,7 @@ const logo = {
 
 const Navbar = ({ scrolled }: NavbarProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false); // NEW
+  const [cartOpen, setCartOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -23,7 +25,8 @@ const Navbar = ({ scrolled }: NavbarProps) => {
       {/* Main Navbar */}
       <div
         className={`px-6 font-notosans md:px-12 flex items-center justify-between shadow-md ${
-          scrolled ? "border-b border-primary" : "border-none border-transparent"        }`}
+          scrolled ? "border-b border-primary" : "border-none border-transparent"
+        }`}
       >
         <Link href="/" className="flex items-center">
           <Image
@@ -55,15 +58,13 @@ const Navbar = ({ scrolled }: NavbarProps) => {
           <Link href="/profile" className="hover:text-green-700">
             <User size={20} />
           </Link>
-          <button onClick={() => setCartOpen(true)} className="hover:text-green-700">
-            <ShoppingCart size={20} />
-          </button>
+          <CartIcon />
         </div>
 
         {/* Hamburger Icon */}
         <div className="md:hidden flex gap-4 items-center">
           <button onClick={() => setCartOpen(true)} className="text-light">
-            <ShoppingCart size={20} />
+            <CartIcon />
           </button>
           <button className="text-light">
             <Link href={'/profile'}>
@@ -76,7 +77,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Menu */}
       <div
         className={`fixed top-0 right-0 h-full w-full z-50 bg-white font-notosans text-dark transform transition-transform duration-300 ease-in-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
@@ -123,50 +124,9 @@ const Navbar = ({ scrolled }: NavbarProps) => {
           ))}
         </nav>
       </div>
-{/* Cart Overlay Blur */}
-{cartOpen && (
-  <div
-    onClick={() => setCartOpen(false)}
-    className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300"
-  />
-)}
 
-{/* Cart Drawer */}
-<div
-  className={`fixed flex flex-col justify-between top-0 right-0 w-full sm:w-[400px] h-full z-50 bg-light transition-transform duration-300 ease-in-out shadow-xl ${
-    cartOpen ? "translate-x-0" : "translate-x-full"
-  }`}
-      >
-        <div className="flex bg-beige justify-between items-center p-4 border-b">
-          <h2 className="text-xl font-medium uppercase">Your Cart</h2>
-          <button onClick={() => setCartOpen(false)}>
-            <X size={24} />
-          </button>
-        </div>
-
-        {/* Cart Content */}
-        <div className="flex-1 p-4 overflow-y-auto ">
-        </div>
-
-        {/* Cart Footer */}
-        <div className="p-4 border-t bg-[#FCEED5]">
-          <div className="flex justify-between mb-2">
-            <span className="font-medium text-xl uppercase">Total</span>
-            <span className="text-dark-green font-medium text-xl">₹ 0.00</span>          </div>
-          <p className="text-base text-gray-700 font-light mb-3">
-            Tax included. Shipping calculated at checkout.
-          </p>
-          <div className="flex gap-3">
-            <Link href="/cart" className="w-1/2 border border-dark-green text-dark-green py-2 rounded hover:bg-dark-green hover:text-light duration-300 text-center">
-              🛒 View cart
-            </Link>
-            <Link href="/checkout" className="w-1/2 bg-dark-green border border-dark-green text-white py-2 rounded hover:bg-light hover:text-dark-green text-center">
-              Checkout
-            </Link>
-          </div>
-          <p className="text-center text-xs mt-3 text-dark-green underline uppercase"><Link href={"/shop"}> Continue Shopping </Link></p>
-        </div>
-      </div>
+      {/* Cart Sidebar */}
+      <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 };

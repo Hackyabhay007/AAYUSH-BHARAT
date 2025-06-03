@@ -1,5 +1,14 @@
-import { Category as ProductCategory } from './product';
+import { Product } from './product';
 
+export interface Weight {
+  id?: string | number;
+  documentId?: string;
+  weight_Value: number;
+  original_Price: number;
+  sale_Price: number;
+}
+
+// Use this as CartItemWeight to maintain compatibility
 export interface CartItemWeight {
   weight_Value: number;
   original_Price: number;
@@ -13,7 +22,10 @@ export interface CartItem {
   quantity: number;
   weight: CartItemWeight;
   thumbnail: string;
-  category: ProductCategory;
+  category: {
+    $id: string;
+    name: string;
+  };
 }
 
 export interface Cart {

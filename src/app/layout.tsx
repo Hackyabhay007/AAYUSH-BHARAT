@@ -4,6 +4,7 @@ import ProviderWrapper from '@/store/ProviderWrapper';
 import { Metadata } from 'next';
 import JsonLd from '@/components/JsonLd';
 import { websiteSchema, organizationSchema } from '@/lib/schema';
+import CartProvider from './components/CartProvider';
 
 export const metadata: Metadata = {
   title: 'AAYUDH Bharat | Nature\'s Wisdom',
@@ -56,9 +57,11 @@ export default function RootLayout({
       </head>
       <body>
          <ProviderWrapper>
-           <div> <Toaster position="top-center" /></div>
-          {children}</ProviderWrapper>
-        </body>
+           <div><Toaster position="top-center" /></div>
+           {children}
+           <CartProvider />
+         </ProviderWrapper>
+       </body>
     </html>
   )
 }

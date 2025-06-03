@@ -8,6 +8,7 @@ import { fetchCart, updateCartItem, removeCartItem } from '../../../store/slice/
 import { CartItem } from '../../../types/cart';
 import { useRouter } from 'next/navigation'; // Changed from 'next/router' to 'next/navigation'
 import { Package } from 'lucide-react'; // Add this import
+import getFilePreview from "@/lib/getFilePreview"; // Import getFilePreview
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -78,7 +79,7 @@ const ShoppingCartPage: React.FC = () => {
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <Image
-          src={item.thumbnail}
+          src={getFilePreview(item.thumbnail)} // Use getFilePreview to handle image URLs
           alt={item.name}
           width={100}
           height={100}
@@ -168,81 +169,100 @@ const ShoppingCartPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
           {/* Cart Items */}
           <div className="space-y-6">
-            {cart?.items.map(renderCartItem)}
+            {cart?.items && cart.items.length > 0 ? (
+              cart.items.map(renderCartItem)
+            ) : (
+              <motion.div 
+                className="bg-white rounded-xl shadow-premium p-10 text-center"
+                variants={itemVariants}
+              >
+                <p className="text-xl text-gray-600">Your cart is empty</p>
+                <motion.button
+                  onClick={() => router.push('/shop')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="mt-6 px-6 py-3 bg-gradient-to-r from-spice-700 to-spice-600 text-white rounded-lg font-medium"
+                >
+                  Browse Products
+                </motion.button>
+              </motion.div>
+            )}
           </div>
 
-          {/* Enhanced Summary Card */}
-          <motion.div
-            className="lg:sticky lg:top-6 bg-white rounded-xl shadow-premium p-6 h-fit border border-gold-200"
-            variants={itemVariants}
-          >
-            <h2 className="text-2xl font-playfair font-bold text-premium-900 mb-6">Order Summary</h2>
-            <div className="w-24 h-0.5 bg-gradient-to-r from-spice-600 to-spice-400 mb-6"></div>
-            <div className="space-y-4">
-              <motion.div
-                className="flex justify-between items-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                key={cart?.total}
-              >
-                <span className="text-lg font-medium text-premium-900">Total</span>
-                <span className="text-xl font-playfair font-bold text-spice-700">
-                  <span className="font-sans">₹</span> {(cart?.total || 0).toFixed(2)}
-                </span>
-              </motion.div>
-              <p className="text-sm text-premium-700">Shipping calculated at checkout.</p>
-              <motion.button
-                onClick={handleCheckoutClick}
-                whileHover={{ 
-                  scale: 1.02,
-                  boxShadow: "0 20px 40px rgba(212, 160, 93, 0.3)"
-                }}
-                whileTap={{ scale: 0.98 }}
-                disabled={!cart?.items?.length}
-                className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-spice-700 to-spice-600 
-                  text-white rounded-lg font-medium shadow-spice-glow group disabled:opacity-50 
-                  disabled:cursor-not-allowed"
-              >
-                <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Proceed to Checkout
-                  <motion.span
-                    animate={checkoutAnimation ? {
-                      x: [0, -10, 300], // Move left first, then far right
-                      opacity: [1, 1, 0] // Fade out at the end
-                    } : {
-                      x: 0,
-                      opacity: 1
-                    }}
-                    transition={{
-                      duration: 1,
-                      times: [0, 0.2, 1],
-                      ease: "easeInOut"
-                    }}
-                    className="inline-block"
-                  >
-                    <Package className="h-5 w-5" />
-                  </motion.span>
-                </span>
-              </motion.button>
-              <motion.button
-                onClick={() => router.push('/')}
-                whileHover={{ 
-                  scale: 1.02,
-                  boxShadow: "0 20px 40px rgba(212, 160, 93, 0.1)"
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-spice-50 to-spice-100 
-                  text-spice-700 rounded-lg font-medium group border border-spice-200
-                  hover:border-spice-300 transition-all duration-300 mt-4"
-              >
-                <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-50"></span>
-                <span className="relative z-10">
-                  Continue Shopping
-                </span>
-              </motion.button>
-            </div>
-          </motion.div>
+          {/* Enhanced Summary Card - Only show if cart has items */}
+          {cart?.items && cart.items.length > 0 && (
+            <motion.div
+              className="lg:sticky lg:top-6 bg-white rounded-xl shadow-premium p-6 h-fit border border-gold-200"
+              variants={itemVariants}
+            >
+              <h2 className="text-2xl font-playfair font-bold text-premium-900 mb-6">Order Summary</h2>
+              <div className="w-24 h-0.5 bg-gradient-to-r from-spice-600 to-spice-400 mb-6"></div>
+              <div className="space-y-4">
+                <motion.div
+                  className="flex justify-between items-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  key={cart?.total}
+                >
+                  <span className="text-lg font-medium text-premium-900">Total</span>
+                  <span className="text-xl font-playfair font-bold text-spice-700">
+                    <span className="font-sans">₹</span> {(cart?.total || 0).toFixed(2)}
+                  </span>
+                </motion.div>
+                <p className="text-sm text-premium-700">Shipping calculated at checkout.</p>
+                <motion.button
+                  onClick={handleCheckoutClick}
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(212, 160, 93, 0.3)"
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  disabled={!cart?.items?.length}
+                  className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-spice-700 to-spice-600 
+                    text-white rounded-lg font-medium shadow-spice-glow group disabled:opacity-50 
+                    disabled:cursor-not-allowed"
+                >
+                  <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Proceed to Checkout
+                    <motion.span
+                      animate={checkoutAnimation ? {
+                        x: [0, -10, 300], // Move left first, then far right
+                        opacity: [1, 1, 0] // Fade out at the end
+                      } : {
+                        x: 0,
+                        opacity: 1
+                      }}
+                      transition={{
+                        duration: 1,
+                        times: [0, 0.2, 1],
+                        ease: "easeInOut"
+                      }}
+                      className="inline-block"
+                    >
+                      <Package className="h-5 w-5" />
+                    </motion.span>
+                  </span>
+                </motion.button>
+                <motion.button
+                  onClick={() => router.push('/')}
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(212, 160, 93, 0.1)"
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-spice-50 to-spice-100 
+                    text-spice-700 rounded-lg font-medium group border border-spice-200
+                    hover:border-spice-300 transition-all duration-300 mt-4"
+                >
+                  <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-50"></span>
+                  <span className="relative z-10">
+                    Continue Shopping
+                  </span>
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </motion.div>
     </div>
