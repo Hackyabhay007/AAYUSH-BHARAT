@@ -55,9 +55,10 @@ export interface Order extends Models.Document {
   total_price: number;
   pincode: number;
   first_name: string;
-  last_name: string;
-  order_items: string | number;
-  product_ids: string[];
+  last_name: string;  order_items: string | number;
+  product_id: string;
+  product_ids?: string[]; // Keep for backward compatibility
+  weights: number;
   coupon_code?: string;
   coupon_discount?: number;
   discount_price?: number;
