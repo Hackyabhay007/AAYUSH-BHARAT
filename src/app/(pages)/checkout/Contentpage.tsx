@@ -32,6 +32,7 @@ interface CheckoutProduct {
 type User = {
   email: string;
   fullname: string;
+  name?: string;  // Optional name field for compatibility
   phone: string;
   userid: string;
 };
@@ -143,14 +144,28 @@ const CheckoutPage = () => {
                     router.push('/product');
                 }                const userId = localStorage.getItem('userid');
                 if (userId) {
-                    const userData = (await DatabaseService.getUserData(userId)).documents[0];
-                    // Map the document to match User type
-                    setUser({
-                        email: userData.email || '',
-                        fullname: userData.fullname || '',
-                        phone: userData.phone || '',
-                        userid: userData.$id || ''
-                    });
+                    try {
+                        const userData = await DatabaseService.getUserData(userId);
+                        if (userData) {
+                            console.log('User data fetched:', userData);
+                            
+                            // Set user data ensuring consistent field names
+                            const userObj = {
+                                email: userData.email,
+                                fullname: userData.fullname,
+                                phone: userData.phone,
+                                userid: userData.userid
+                            };
+                            
+                            console.log('Processed user data:', userObj);
+                            setUser(userObj);
+                            setEmail(userObj.email);
+                        } else {
+                            console.log('No user data found for ID:', userId);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching user data:', error);
+                    }
                 }
                 
             };
@@ -549,12 +564,14 @@ const CheckoutPage = () => {
 
                     <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-12">
                         {/* Left column */}
-                        <div className="lg:col-span-2 space-y-8">
-                            {/* Contact Info */}
-                            <div className="bg-white p-8 rounded-2xl shadow-premium">
+                        <div className="lg:col-span-2 space-y-8">                            {/* Contact Info */}                            <div className="bg-white p-8 rounded-2xl shadow-premium">
                                 <h2 className="text-2xl font-semibold mb-6">Contact Information</h2>
-                                <p className="text-gray-600 mb-2">Email: {currentCustomer?.email}</p>
-                                <p className="text-gray-600">Name: {user?.fullname}</p>
+                                <p className="text-gray-600 mb-2">
+                                    Email: {user?.email || email || "Not available"}
+                                </p>
+                                <p className="text-gray-600">
+                                    Name: {user?.fullname || "Not available"}
+                                </p>
                             </div>
 
                             {/* Address Section */}

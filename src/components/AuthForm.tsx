@@ -18,7 +18,7 @@ interface AuthFormProps {
 interface RegisterFormData {
   full_name: string;
   email: string;
-  phone: number;
+  phone: string;
   password: string;
   confirmPassword: string;
 }
@@ -29,7 +29,7 @@ export default function AuthForm({ type }: AuthFormProps) {
   const [formData, setFormData] = useState<RegisterFormData>({
     full_name: "",
     email: "",
-    phone: 0,
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -225,7 +225,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                   placeholder="Enter your phone number"
                   value={formData.phone}
                   onChange={(e) =>
-                    setFormData({ ...formData, phone: Number(e.target.value) })
+                    setFormData({ ...formData, phone: e.target.value })
                   }
                   className="p-3 my-2 border rounded"
                   required

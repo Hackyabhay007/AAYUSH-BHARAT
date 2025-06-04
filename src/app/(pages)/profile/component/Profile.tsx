@@ -32,7 +32,7 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
       // Example: await AuthService.updateUser({ name: form.name, phone: form.phone, email: form.email });
       await authService.updateUser({
         name: form.name,
-        phone: Number(form.phone),
+        phone: form.phone,
         email: form.email,
         userId: form.$id,
         password: form.password,

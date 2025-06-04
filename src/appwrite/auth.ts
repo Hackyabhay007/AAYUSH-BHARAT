@@ -22,7 +22,7 @@ export class AuthService {
     email: string;
     password: string;
     fullname: string;
-    phone: number;
+    phone: string;
   }) {
     try {
       const useraccount = await this.account.create(
@@ -40,7 +40,7 @@ export class AuthService {
             userid: useraccount.$id,
             email: useraccount.email,
             fullname: fullname,
-            phone: Number(phone),
+            phone: phone.toString(),
           }
         );
         console.log("after doc", res);
@@ -103,7 +103,7 @@ export class AuthService {
   password,
 }: {
   name: string;
-  phone: number;
+  phone: string;
   email: string;
   userId: string;
   password: string;

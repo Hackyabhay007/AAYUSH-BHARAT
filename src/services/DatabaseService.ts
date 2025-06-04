@@ -18,6 +18,13 @@ export interface AddressData {
 
 export type AddressDocument = Models.Document & AddressData;
 
+interface UserData extends Models.Document {
+  userid: string;
+  email: string;
+  fullname: string;
+  phone: string;
+}
+
 class DatabaseService {
   private static databases = databases;
   static async getUserAddresses(userId: string): Promise<AddressDocument[]> {
@@ -74,13 +81,20 @@ class DatabaseService {
     }
   }
 
-  static async getUserData(userId: string) {
+  static async getUserData(userId: string): Promise<UserData | null> {
     try {
-      return await DatabaseService.databases.listDocuments(
+      const response = await DatabaseService.databases.listDocuments<UserData>(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
         process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
-        [Query.equal('$id', userId)]
+        [Query.equal('userid', userId)]
       );
+
+      if (response.documents.length === 0) {
+        console.log('No user document found for userId:', userId);
+        return null;
+      }
+
+      return response.documents[0];
     } catch (error) {
       console.error('Error getting user data:', error);
       throw error;
