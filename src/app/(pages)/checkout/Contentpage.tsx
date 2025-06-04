@@ -273,7 +273,7 @@ const CheckoutPage = () => {
       if (!orderData.user_id) {
         throw new Error("User ID is required. Please try refreshing the page.");
       }      if (paymentMethod === "COD") {
-        try {
+        try {          setProcessingPayment(true); // Show loader
           // Create order for COD
           const createdOrder = await OrderService.createOrder({
             ...orderData,
@@ -288,8 +288,10 @@ const CheckoutPage = () => {
             dispatch(clearCart());
           }
           
-          // Redirect to order success page
-          router.push(`/order-success/${createdOrder.$id}`);
+          // Show success popup
+          setOrderId(createdOrder.$id);
+          setProcessingPayment(false);
+          setShowConfirmation(true);
           return;
         } catch (error) {
           console.error("Error creating COD order:", error);
@@ -818,25 +820,23 @@ const CheckoutPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50"
           >
             <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              className="bg-white bg-opacity-20 p-8 rounded-2xl backdrop-blur-sm"
+              className="bg-white bg-opacity-10 p-8 rounded-2xl backdrop-blur-sm text-center"
             >
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4">
-                  <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-                <p className="text-white text-lg font-medium">
-                  Processing your payment...
-                </p>
-                <p className="text-amber-200 text-sm mt-2">
-                  Please wait while we confirm your order
-                </p>
+              <div className="w-16 h-16 mx-auto mb-4">
+                <div className="w-16 h-16 border-4 border-dark-green border-t-transparent rounded-full animate-spin"></div>
               </div>
+              <p className="text-white text-lg font-medium">
+                Processing your order...
+              </p>
+              <p className="text-green-200 text-sm mt-2">
+                Please don't close this window
+              </p>
             </motion.div>
           </motion.div>
         )}
@@ -869,8 +869,7 @@ const CheckoutPage = () => {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                </div>
-                <h2 className="text-2xl font-semibold mb-2">Payment Failed</h2>
+                </div>                <h2 className="text-2xl font-semibold mb-2 text-red-600">Payment Failed</h2>
                 <p className="text-gray-600 mb-6">{errorMessage}</p>
                 <div className="flex gap-4 justify-center">
                   <button
@@ -878,13 +877,13 @@ const CheckoutPage = () => {
                       setShowErrorModal(false);
                       setErrorMessage("");
                     }}
-                    className="px-6 py-2 bg-darkRed text-white bg-black rounded-lg hover:bg-red-700 transition-colors"
+                    className="px-6 py-2 bg-dark-green text-white rounded-lg hover:bg-green-900 transition-all duration-300 shadow-lg"
                   >
                     Try Again
                   </button>
                   <button
                     onClick={() => router.push("/cart")}
-                    className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-6 py-2 border-2 border-dark-green text-dark-green rounded-lg hover:bg-green-50 transition-all duration-300"
                   >
                     Back to Cart
                   </button>
@@ -892,14 +891,13 @@ const CheckoutPage = () => {
               </div>
             </motion.div>
           </motion.div>
-        )}
-        {/* Order Confirmation Modal */}
+        )}        {/* Order Confirmation Modal */}
         {showConfirmation && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50"
           >
             <motion.div
               initial={{ scale: 0.95 }}
@@ -908,9 +906,14 @@ const CheckoutPage = () => {
               className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-4"
             >
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-dark-green"
+                >
                   <svg
-                    className="w-8 h-8 text-green-500"
+                    className="w-10 h-10 text-dark-green"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -918,33 +921,40 @@ const CheckoutPage = () => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                </div>
-                <h2 className="text-2xl font-semibold mb-2">
-                  Order Confirmed!
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  Your order has been successfully placed.
-                  <br />
-                  Order ID: {orderId}
-                </p>
-                <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={() => router.push(`/profile/orders/${orderId}`)}
-                    className="px-4 py-2 bg-darkRed text-white rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    View Order
-                  </button>
-                  <button
-                    onClick={() => router.push("/shop")}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    Continue Shopping
-                  </button>
-                </div>
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <h2 className="text-2xl font-semibold mb-2 text-dark-green">
+                    Order Confirmed!
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    Your order has been successfully placed.
+                    <br />
+                    <span className="font-medium">Order ID: </span>
+                    <span className="font-mono">{orderId}</span>
+                  </p>
+                  <div className="flex gap-4 justify-center">
+                    <button
+                      onClick={() => router.push(`/order-success/${orderId}`)}
+                      className="px-6 py-3 bg-dark-green text-white rounded-lg hover:bg-green-900 transition-all duration-300 shadow-lg"
+                    >
+                      View Order Details
+                    </button>
+                    <button
+                      onClick={() => router.push("/shop")}
+                      className="px-6 py-3 border-2 border-dark-green text-dark-green rounded-lg hover:bg-green-50 transition-all duration-300"
+                    >
+                      Continue Shopping
+                    </button>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>
