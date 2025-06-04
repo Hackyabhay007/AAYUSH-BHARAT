@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Address } from '@/types/customer';
+import { AddressDocument } from '@/services/DatabaseService';
 import AddressForm from './AddressForm';
 import ClientOnly from '@/components/ClientOnly';
 
 interface AddressSelectorProps {
-    addresses: Address[];
-    selectedAddress?: Address | null;
-    onSelectAddress: (address: Address) => void;
-    onAddAddress: (address: Address) => void;
+    addresses: AddressDocument[];
+    selectedAddress?: AddressDocument | null;
+    onSelectAddress: (address: AddressDocument) => void;
+    onAddAddress: (address: Omit<AddressDocument, "$id" | "userId">) => void;
     userPhone?: string;
-    hideExistingAddresses?: boolean; // Add this prop
+    hideExistingAddresses?: boolean;
 }
 
 const AddressSelector = ({ 

@@ -1,4 +1,5 @@
 import { databases, ID, Query } from '@/app/api/lib/appwrite';
+import config from '@/config/config';
 import { Models } from 'appwrite';
 
 export interface AddressData {
@@ -60,7 +61,6 @@ class DatabaseService {
       throw error;
     }
   }
-
   static async deleteAddress(documentId: string): Promise<void> {
     try {
       await DatabaseService.databases.deleteDocument(
@@ -70,6 +70,19 @@ class DatabaseService {
       );
     } catch (error) {
       console.error('Error deleting address:', error);
+      throw error;
+    }
+  }
+
+  static async getUserData(userId: string) {
+    try {
+      return await DatabaseService.databases.listDocuments(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
+        [Query.equal('$id', userId)]
+      );
+    } catch (error) {
+      console.error('Error getting user data:', error);
       throw error;
     }
   }

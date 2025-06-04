@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Address } from '@/types/customer';
+import { AddressDocument } from '@/services/DatabaseService';
 import { motion } from 'framer-motion';
 
 interface AddressFormProps {
-    onSubmit: (address: Address) => void;
-    initialData?: Partial<Address>;
+    onSubmit: (address: Omit<AddressDocument, "$id" | "userId">) => void;
+    initialData?: Partial<AddressDocument>;
     userPhone?: string;
     onUpdatePhone?: (phone: string) => void;
 }
@@ -38,12 +38,13 @@ const AddressForm = ({ onSubmit, initialData, userPhone, onUpdatePhone }: Addres
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
+    };    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (validateForm()) {
-            onSubmit(formData as Address);
+            onSubmit({
+                ...formData,
+                country: 'India' // Always set country to India
+            });
         }
     };
 

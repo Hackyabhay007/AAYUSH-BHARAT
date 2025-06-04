@@ -5,13 +5,14 @@ import { motion, useInView } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
-import { clearCart } from '../../../store/slice/cartSlice'; // Add this import
+import { clearCart } from '../../../store/slice/cartSlice';
 import AddressSelector from '@/components/checkout/AddressSelector';
 import ClientOnly from '@/components/ClientOnly';
-import { Customer, Address } from '@/types/customer';
+import { Customer } from '@/types/customer';
 import { Order } from '@/types/order';
 import CouponSection from '@/components/checkout/CouponSection';
-import { DatabaseService } from '@/appwrite/database';
+import DatabaseService, { AddressDocument, AddressData } from '@/services/DatabaseService';
+import { databases } from '@/app/api/lib/appwrite';
 import getFilePreview from '@/lib/getFilePreview';
 import Image from 'next/image';
 interface CheckoutProduct {
@@ -51,15 +52,14 @@ const CheckoutPage = () => {
     const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [email, setEmail] = useState<string>('');
-    const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
-    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [email, setEmail] = useState<string>('');    const [addresses, setAddresses] = useState<AddressDocument[]>([]);
+    const [selectedAddress, setSelectedAddress] = useState<AddressDocument | null>(null);
+    const [addressesLoading, setAddressesLoading] = useState(true);
+    const [addressError, setAddressError] = useState<string | null>(null);
     const [paymentMethod, setPaymentMethod] = useState<'COD' | 'ONLINE'>('COD');
     const [userPhone, setUserPhone] = useState<string>('');
-    const [addressError, setAddressError] = useState<string | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [orderId, setOrderId] = useState<string | null>(null);
-    const [addressesLoading, setAddressesLoading] = useState(true);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showAddressModal, setShowAddressModal] = useState(false);
@@ -81,61 +81,7 @@ const CheckoutPage = () => {
     const contactInView = useInView(contactRef, { once: true });
     const deliveryInView = useInView(deliveryRef, { once: true });
     const paymentInView = useInView(paymentRef, { once: true });
-    const summaryInView = useInView(summaryRef, { once: true });
-
-    const fetchUserAddresses = async () => {
-        try {
-            console.log("fetching user addresses");
-            setAddressesLoading(true);
-            setAddressError(null);
-                
-                
-            const response = await fetch('/api/users/addresses', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            
-            
-            const data = await response.json();
-            console.log('Raw API response:', data);
-        
-            if (data.success && Array.isArray(data.addresses)) {
-                // Parse each string address into an object
-                const parsedAddresses = data.addresses
-  .map((addr: any) => {
-    if (
-      addr &&
-      addr.full_name &&
-      addr.phone &&
-      addr.address_line1 &&
-      addr.address_line2 &&
-      addr.city &&
-      addr.country &&
-      addr.state &&
-      addr.pincode
-    ) {
-      return addr as Address;
-    }
-    return null;
-  });
-
-                console.log('Parsed addresses:', parsedAddresses);
-                setAddresses(data.addresses);
-                
-                if (parsedAddresses.length > 0) {
-                    const defaultAddr = parsedAddresses.find((addr: Address) => addr?.is_default) || parsedAddresses[0];
-                    setSelectedAddress(defaultAddr);
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching addresses:', error);
-            setAddressError('Failed to load addresses. Please try again.');
-        } finally {
-            setAddressesLoading(false);
-        }
-    };
+    const summaryInView = useInView(summaryRef, { once: true });    // fetchUserAddresses has been moved to useAddresses hook
 
    
     useEffect(() => {
@@ -185,11 +131,9 @@ const CheckoutPage = () => {
                     } else {
                         router.push('/product');
                         return;
-                    }
-
-                    // Then fetch addresses
+                    }                    // Then fetch addresses
                     if (currentCustomer?.$id) {
-                        await fetchUserAddresses();
+                        await fetchAddresses();
                     }
 
                     setLoading(false);
@@ -197,12 +141,17 @@ const CheckoutPage = () => {
                     console.error('Checkout error:', error);
                     setError(error instanceof Error ? error.message : 'Failed to initialize checkout');
                     router.push('/product');
+                }                const userId = localStorage.getItem('userid');
+                if (userId) {
+                    const userData = (await DatabaseService.getUserData(userId)).documents[0];
+                    // Map the document to match User type
+                    setUser({
+                        email: userData.email || '',
+                        fullname: userData.fullname || '',
+                        phone: userData.phone || '',
+                        userid: userData.$id || ''
+                    });
                 }
-
-                const userId=localStorage.getItem('userid');
-                const userData=(await DatabaseService.getUserData(userId)).documents[0];
-                setUser(userData);
-                console.log(user);
                 
             };
 
@@ -231,23 +180,18 @@ const CheckoutPage = () => {
             original: Math.round(totals.original),
             sale: Math.round(totals.sale)
         };
-    };
-
-    const handlePaymentSubmit = async () => {
+    };    const handlePaymentSubmit = async () => {
         try {
             setLoading(true);
-            setAddressError(null);
-            setError(null);
+            setError(null); // Remove setAddressError as we're using the error from useAddresses
 
             // Debug log
             console.log('Starting payment with customer:', {
                 id: user?.userid,
                 email: currentCustomer?.email,
                 name: user?.fullname
-            });
-
-            if (!selectedAddress || !checkoutData?.products) {
-                setAddressError('Please select or add a delivery address');
+            });            if (!selectedAddress || !checkoutData?.products) {
+                setError('Please select or add a delivery address');
                 return;
             }
 
@@ -397,51 +341,63 @@ const CheckoutPage = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleAddAddress = async (newAddress: Address) => {
+    };    const handleAddAddress = async (newAddress: Omit<AddressDocument, "userId" | "$id">) => {
         try {
-            const addressWithId = {
-                ...newAddress,
-                id: `addr_${Date.now()}${Math.random().toString(36).substr(2, 9)}`,
+            const userId = localStorage.getItem("userid");
+            if (!userId) {
+                setAddressError("Please log in to continue");
+                return;
+            }
+
+            // Validate required fields
+            const requiredFields = ['full_name', 'address_line1', 'city', 'state', 'pincode', 'mobile'];
+            for (const field of requiredFields) {
+                if (!newAddress[field as keyof typeof newAddress]) {
+                    setAddressError(`Please enter ${field.replace('_', ' ')}`);
+                    return;
+                }
+            }
+
+            // Validate phone number
+            if (!/^\d{10}$/.test(newAddress.mobile)) {
+                setAddressError("Please enter a valid 10-digit mobile number");
+                return;
+            }
+
+            // Validate pincode
+            if (!/^\d{6}$/.test(newAddress.pincode)) {
+                setAddressError("Please enter a valid 6-digit pincode");
+                return;
+            }
+
+            // Convert AddressDocument to AddressData
+            const addressData: AddressData = {
+                full_name: newAddress.full_name,
+                address_line1: newAddress.address_line1,
+                address_line2: newAddress.address_line2 || '',
+                city: newAddress.city,
+                state: newAddress.state,
+                pincode: newAddress.pincode,
+                type: newAddress.type || 'home',
+                mobile: newAddress.mobile,
+                country: newAddress.country || 'IN',
+                userId,
                 is_default: addresses.length === 0 // Make first address default
             };
-            const addressWithoutId = {
-                ...newAddress,
-                // id: `addr_${Date.now()}${Math.random().toString(36).substr(2, 9)}`,
-                // is_default: addresses.length === 0 // Make first address default
-            };
 
-            const updatedAddresses = [...addresses, addressWithId];
-            
-            // Update addresses in Appwrite
-            const response = await fetch('/api/users/addresses', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(
-                    // addresses: updatedAddresses.map(addr => JSON.stringify(addr))
-                    addressWithoutId
-                )
-            });
-            
-            const data = await response.json();
-            if (data.success) {
-                setAddresses(updatedAddresses);
-                setSelectedAddress(addressWithId);
-                setShowAddressModal(false); // Close modal after success
-            } else {
-                throw new Error(data.error || 'Failed to save address');
-            }
+            console.log("Creating new address:", addressData);
+            const createdAddress = await DatabaseService.createAddress(addressData);
+            console.log("Address created:", createdAddress);
+
+            setAddresses(prev => [...prev, createdAddress]);
+            setSelectedAddress(createdAddress);
+            setShowAddressModal(false);
+            setAddressError(null);
         } catch (error) {
             console.error('Error saving address:', error);
             setAddressError('Failed to save address. Please try again.');
         }
-    };
-
-    const handleSelectAddress = (address: Address) => {
+    };const handleSelectAddress = (address: AddressDocument) => {
         setSelectedAddress(address);
     };
 
@@ -460,11 +416,42 @@ const CheckoutPage = () => {
     }, []);
 
     const handleOpenAddressModal = () => setShowAddressModal(true);
-    const handleCloseAddressModal = () => setShowAddressModal(false);
-
-    const handleApplyCoupon = (couponData: any) => {
+    const handleCloseAddressModal = () => setShowAddressModal(false);    const handleApplyCoupon = (couponData: any) => {
         setAppliedCoupon(couponData);
-    }; 
+    };     const fetchAddresses = async () => {
+        try {
+            setAddressesLoading(true);
+            setAddressError(null);
+
+            const userId = localStorage.getItem("userid");
+            if (!userId) {
+                setAddressError("Please log in to continue");
+                return;
+            }
+
+            console.log("Fetching addresses for user:", userId);
+            const fetchedAddresses = await DatabaseService.getUserAddresses(userId);
+            console.log("Fetched addresses:", fetchedAddresses);
+
+            if (Array.isArray(fetchedAddresses)) {
+                setAddresses(fetchedAddresses);
+
+                // Set default address if available
+                if (fetchedAddresses.length > 0) {
+                    const defaultAddr = fetchedAddresses.find((addr) => addr.is_default) || fetchedAddresses[0];
+                    console.log("Setting default address:", defaultAddr);
+                    setSelectedAddress(defaultAddr);
+                }
+            } else {
+                throw new Error("Invalid address data received");
+            }
+        } catch (error) {
+            console.error("Error fetching addresses:", error);
+            setAddressError("Failed to load addresses. Please try again.");
+        } finally {
+            setAddressesLoading(false);
+        }
+    };
 
     const renderAddressSection = () => (
         <div className="bg-white p-8 rounded-2xl shadow-premium">
@@ -492,8 +479,7 @@ const CheckoutPage = () => {
                     <span className="ml-3 text-gray-600">Loading addresses...</span>
                 </div>
             ) : (
-                <>
-                    {addressError && (
+                <>                    {addressError && (
                         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
                             {addressError}
                         </div>
@@ -503,30 +489,24 @@ const CheckoutPage = () => {
                         <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-700">
                             No addresses found. Please add a delivery address.
                         </div>
-                    ) : (
-                        <AddressSelector
+                    ) : (                        <AddressSelector
                             addresses={addresses}
-                            onAddAddress={handleAddAddress}
-                            onSelectAddress={handleSelectAddress}
+                            onAddAddress={(address) => handleAddAddress(address as Omit<AddressDocument, "userId" | "$id">)}
+                            onSelectAddress={(address: AddressDocument) => setSelectedAddress(address)}
                             selectedAddress={selectedAddress}
-                            userPhone={userPhone}
+                            userPhone={user?.phone}
                         />
                     )}
                 </>
             )}
         </div>
-    );
-
-    useEffect(() => {
-        if (currentCustomer?.$id && token) {
-            fetchUserAddresses();
-        } else {
-            setAddressesLoading(false);
+    );    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const userId = localStorage.getItem("userid");
+            if (userId) {
+                fetchAddresses();
+            }
         }
-    }, [currentCustomer?.$id, token]);
-
-    useEffect(()=>{
-        fetchUserAddresses();
     }, []);
 
     if (loading) {
@@ -849,26 +829,33 @@ const CheckoutPage = () => {
                             </div>
                         </motion.div>
                     </motion.div>
-                )}
-
-                {/* Add Address Modal */}
+                )}                {/* Add Address Modal */}
                 {showAddressModal && (
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-blend-color backdrop-blur-lg  bg-opacity-10 flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
                     >
                         <motion.div 
                             initial={{ scale: 0.95 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.95 }}
-                            className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-4"
+                            className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto"
                         >
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-xl font-semibold">Add New Address</h3>
+                                <button 
+                                    onClick={handleCloseAddressModal}
+                                    className="text-gray-500 hover:text-gray-700"
+                                >
+                                    ×
+                                </button>
+                            </div>
                             <AddressSelector
                                 addresses={[]}
-                                onAddAddress={(address: Address) => {
-                                    handleAddAddress(address);
+                                onAddAddress={(address) => {
+                                    handleAddAddress(address as Omit<AddressDocument, "userId" | "$id">);
                                     handleCloseAddressModal();
                                 }}
                                 onSelectAddress={() => {}}
