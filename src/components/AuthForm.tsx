@@ -1,12 +1,14 @@
-"use client";
 import React, { Suspense, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/store";
 import { loginCustomer } from "@/store/slice/customerSlice";
+import authService from "@/appwrite/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 interface AuthFormProps {
@@ -22,8 +24,8 @@ interface RegisterFormData {
 }
 
 export default function AuthForm({ type }: AuthFormProps) {
-
   const router = useRouter();
+  const { login, register } = useAuth();
   const [formData, setFormData] = useState<RegisterFormData>({
     full_name: "",
     email: "",
@@ -49,7 +51,6 @@ export default function AuthForm({ type }: AuthFormProps) {
   const isRegister = type === "register";
   const isForgot = type === "forgot";
   const isReset = type === "reset";
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError("");
@@ -63,48 +64,16 @@ export default function AuthForm({ type }: AuthFormProps) {
       }
 
       try {
-        const response = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          
-          body: JSON.stringify({
-            full_name: formData.full_name,
-            email: formData.email,
-            password: formData.password,
-            phone:Number(formData.phone),
-          }),
-        });
-
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message || "Registration failed");
-        }
-
-        if (data.success && data.token) {
-
-          localStorage.setItem("user", data.token);
-          localStorage.setItem("userid", data.user.id);
-          toast.success("Account created successfully!");
-          console.log("Registration successful, redirecting to profile...");
-
-            // await dispatch(registerCustomer({
-            //         full_name: formData.full_name,
-            //         email: formData.email,
-            //         password: formData.password,
-            //     })).unwrap();
-
-          router.push("/profile");
-          
-        
-        } else {
-          toast.error("Registration failed. Please try again.");
-          throw new Error(data.message || "Registration failed");
-        }
+        // Use the register method from AuthContext
+        await register(
+          formData.full_name, 
+          formData.email, 
+          formData.password, 
+          formData.phone.toString()
+        );
+        // No need to manually set localStorage, show toast, or navigate - 
+        // These are all handled in the AuthContext register method
       } catch (err: unknown) {
-        toast.error("Registration failed. Please try again.");
         console.error("Registration error:", err);
         if (err instanceof Error) {
           setValidationError(
@@ -114,54 +83,32 @@ export default function AuthForm({ type }: AuthFormProps) {
           setValidationError("Registration failed. Please try again.");
         }
         setIsLoading2(false);
-        // setIsNavigating(false); // Stop loading on error
       }
     }
     
     else if (isLogin) {
       try {
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
+        // Use the login method from AuthContext
+        await login(formData.email, formData.password, rememberMe);
+        
+        // Optional: dispatch to Redux if still needed
+        try {
+          await dispatch(loginCustomer({
             email: formData.email,
             password: formData.password,
-            rememberMe,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          toast.error(data.message);
-         
-          // throw new Error(data.message || "Login failed");
+            rememberMe: rememberMe,
+          })).unwrap();
+        } catch (reduxErr) {
+          console.error("Redux state update failed:", reduxErr);
+          // Continue anyway since AuthContext login succeeded
         }
-        if (data.success && data.token) {
-           localStorage.setItem('token', data.token);
-          localStorage.setItem("user", data.token);
-          localStorage.setItem("userid", data.user.id);
-          // Map Document to User type 
-         
-          toast.success("Login successful!");
-          console.log("Login successful, redirecting to profile...");
-            await dispatch(loginCustomer({
-                    email: formData.email,
-                    password: formData.password,
-                    rememberMe: true,
-                })).unwrap();
-          router.push("/profile");
-        }
+        
+        // No need to manually set localStorage, show toast, or navigate - 
+        // These are all handled in the AuthContext login method
       } catch (error) {
         console.error("Login error:", error);
-
-        toast.error("Login failed");
         setValidationError("Login failed. Please try again.");
-
-        setIsLoading(false);
+        setIsLoading2(false);
       }
     }
     
@@ -237,25 +184,23 @@ export default function AuthForm({ type }: AuthFormProps) {
         <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-xl text-dark-green mb-6 font-medium">
           <h2 className="text-2xl lg:text-4xl tracking-wide uppercase font-light text-center mb-2">
             {isLogin && "Log In to AAYUSH BHARAT"}
-            {isRegister && "Sign Up to AAYSH BHARAT"}
+            {isRegister && "Sign Up to AAYUSH BHARAT"}
             {isForgot && "Reset Your Password"}
             {isReset && "Set New Password"}
-          </h2>
-
-          {isLogin && (
+          </h2>          {isLogin && (
             <p className="text-center text-base mb-4">
               Don&apos;t have an account?{" "}
-              <a href="/register" className="text-green-900">
+              <Link href="/register" className="text-green-900">
                 Register
-              </a>
+              </Link>
             </p>
           )}
           {isRegister && (
             <p className="text-center text-base mb-4">
               Already have an account?{" "}
-              <a href="/login" className="text-green-900">
+              <Link href="/login" className="text-green-900">
                 Log In
-              </a>
+              </Link>
             </p>
           )}
 
@@ -280,7 +225,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                   placeholder="Enter your phone number"
                   value={formData.phone}
                   onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
+                    setFormData({ ...formData, phone: Number(e.target.value) })
                   }
                   className="p-3 my-2 border rounded"
                   required
@@ -305,18 +250,18 @@ export default function AuthForm({ type }: AuthFormProps) {
             )}
 
             {!isForgot && (
-              <>
-                <label>Password</label>
+              <>                <label>Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={isRegister ? "Min 8 characters" : "Enter your password"}
                     value={formData.password}
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })
                     }
                     className="p-3 my-2 border rounded w-full pr-10"
                     required
+                    minLength={8}
                   />
                   {formData.password && (
                     <span
@@ -327,6 +272,11 @@ export default function AuthForm({ type }: AuthFormProps) {
                     </span>
                   )}
                 </div>
+                {isRegister && (
+                  <p className="text-xs text-gray-500 -mt-1 mb-2">
+                    Password must be at least 8 characters long
+                  </p>
+                )}
 
                 {isLogin && (
                   <div className="flex items-center justify-between my-2">
@@ -335,12 +285,11 @@ export default function AuthForm({ type }: AuthFormProps) {
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                      />
-                      Remember Me
+                      />                      Remember Me
                     </label>
-                    <a href="/forgot" className="text-green-900 text-sm">
+                    <Link href="/forgot" className="text-green-900 text-sm">
                       Forgot Password?
-                    </a>
+                    </Link>
                   </div>
                 )}
 
@@ -397,6 +346,12 @@ export default function AuthForm({ type }: AuthFormProps) {
                 ? "Reset Password"
                 : "Submit"}
             </button>
+                  {/* Add test credentials hint for development */}
+            {isLogin && (
+              <p className="text-xs text-gray-500 text-center mt-2">
+                For testing: Use email test@gmail.com and password testpassword
+              </p>
+            )}
           </form>
         </div>
       </div>

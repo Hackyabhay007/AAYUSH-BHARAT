@@ -52,138 +52,127 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
 
   return (
     <div>
-          <div className="w-full max-w-6xl">
-  
-        
-                {/* Overview Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6 bg-white shadow-md rounded-b-xl">
-                  <div className="bg-dark-green text-white rounded-xl p-4 shadow">
-                    <p className="text-sm">Total Spent</p>
-                    <h2 className="text-3xl mt-1">₹0</h2>
-                    <p className="text-xs mt-2">Lifetime purchases</p>
-                  </div>
-                  <div className="bg-dark-green text-white rounded-xl p-4 shadow">
-                    <p className="text-sm">Member Status</p>
-                    <h2 className="text-2xl mt-1">Regular</h2>
-                    <div className="w-full bg-white/30 h-2 mt-2 rounded">
-                      <div className="bg-white h-2 w-1/4 rounded"></div>
-                    </div>
-                    <p className="text-xs mt-2">₹5,000 until Silver</p>
-                  </div>
-                  <div className="bg-dark-green text-white rounded-xl p-4 shadow">
-                    <p className="text-sm">Total Orders</p>
-                    <h2 className="text-3xl mt-1">0</h2>
-                    <p className="text-xs mt-2">Orders placed</p>
-                  </div>
-                </div>
-        
-                {/* Profile Info Section */}
-                <div className="bg-white rounded-xl shadow-md my-6 px-4 py-6">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                    <h3 className="text-lg font-semibold">Profile Information</h3>
-                    {!isEditing ? (
-                      <button
-                        className="text-dark-green hover:underline text-sm"
-                        onClick={() => setIsEditing(true)}
-                      >
-                        Edit Profile
-                      </button>
-                    ) : (
-                      <button
-                        className="text-gray-500 hover:underline text-sm"
-                        onClick={() => setIsEditing(false)}
-                        disabled={saving}
-                      >
-                        Cancel
-                      </button>
-                    )}
-                  </div>
-                  {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-                  {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-600">Name</p>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="name"
-                          value={form.name}
-                          onChange={handleChange}
-                          className="border rounded px-2 py-1 w-full"
-                          disabled={saving}
-                        />
-                      ) : (
-                        <p>{name}</p>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Email</p>
-                      {isEditing ? (
-                        <input
-                          type="email"
-                          name="email"
-                          value={form.email}
-                          onChange={handleChange}
-                          className="border rounded px-2 py-1 w-full"
-                          disabled={saving}
-                        />
-                      ) : (
-                        <p>{email}</p>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Phone</p>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="phone"
-                          value={form.phone}
-                          onChange={handleChange}
-                          className="border rounded px-2 py-1 w-full"
-                          disabled={saving}
-                        />
-                      ) : (
-                        <p>{phone}</p>
-                      )}
-                    </div>
+      <div className="w-full max-w-6xl">
+        {/* Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6 bg-white shadow-md rounded-b-xl">
+          <div className="bg-dark-green text-white rounded-xl p-4 shadow">
+            <p className="text-sm">Total Spent</p>
+            <h2 className="text-3xl mt-1">₹0</h2>
+            <p className="text-xs mt-2">Lifetime purchases</p>
+          </div>
+          <div className="bg-dark-green text-white rounded-xl p-4 shadow">
+            <p className="text-sm">Member Status</p>
+            <h2 className="text-2xl mt-1">Regular</h2>
+            <div className="w-full bg-white/30 h-2 mt-2 rounded">
+              <div className="bg-white h-2 rounded w-[10%]"></div>
+            </div>
+            <p className="text-xs mt-2">₹5,000 until Silver</p>
+          </div>
+          <div className="bg-dark-green text-white rounded-xl p-4 shadow">
+            <p className="text-sm">Total Orders</p>
+            <h2 className="text-3xl mt-1">0</h2>
+            <p className="text-xs mt-2">Orders placed</p>
+          </div>
+        </div>
 
-
-                    <div>
-              <p className="text-gray-600">Password</p>
+        {/* Profile Info Section */}
+        <div className="bg-white rounded-xl shadow-md my-6 px-4 py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+            <h3 className="text-lg font-semibold">Profile Information</h3>
+            {!isEditing ? (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="text-sm px-4 py-2 bg-dark-green text-white rounded hover:bg-green-800 transition"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsEditing(false)}
+                className="text-sm px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+          {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="text-gray-500">Full Name</p>
               {isEditing ? (
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="w-full mt-1 p-2 border rounded"
+                />
+              ) : (
+                <p className="font-medium">{name}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-gray-500">Email Address</p>
+              {isEditing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="w-full mt-1 p-2 border rounded"
+                />
+              ) : (
+                <p className="font-medium">{email}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-gray-500">Phone Number</p>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  className="w-full mt-1 p-2 border rounded"
+                />
+              ) : (
+                <p className="font-medium">{phone}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-gray-500">Member Since</p>
+              <p className="font-medium">
+                {new Date(createdAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+          {isEditing && (
+            <div className="mt-4">
+              <div className="mb-2">
+                <label className="text-gray-500 block mb-1">
+                  Current Password (required to update)
+                </label>
                 <input
                   type="password"
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  className="border rounded px-2 py-1 w-full"
-                  disabled={saving}
-                  placeholder="Enter old password"
+                  className="w-full p-2 border rounded"
+                  placeholder="Enter your current password"
                 />
-              ) : (
-                <p className="italic text-gray-400">********</p>
-              )}
-            </div>
-                    <div>
-
-
-
-
-                      <p className="text-gray-600">Member Since</p>
-                      <p> {createdAt ? createdAt.split("T")[0] : ""}</p>
-                    </div>
-                  </div>
-                  {isEditing && (
-                    <button
-                      className="mt-4 bg-dark-green text-white px-4 py-2 rounded"
-                      onClick={handleSave}
-                      disabled={saving}
-                    >
-                      {saving ? "Saving..." : "Save Changes"}
-                    </button>
-                  )}
-                </div>
               </div>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="mt-2 px-4 py-2 bg-dark-green text-white rounded hover:bg-green-800 transition disabled:opacity-50"
+              >
+                {saving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

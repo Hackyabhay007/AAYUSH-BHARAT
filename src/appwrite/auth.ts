@@ -73,11 +73,14 @@ export class AuthService {
       throw error;
     }
   }
-
   async logout() {
     try {
-      return await this.account.deleteSession("Session Id");
+      // Get the current session
+      const session = await this.account.getSession('current');
+      // Delete the current session
+      return await this.account.deleteSession(session.$id);
     } catch (error) {
+      console.error("Logout error:", error);
       throw error;
     }
   }

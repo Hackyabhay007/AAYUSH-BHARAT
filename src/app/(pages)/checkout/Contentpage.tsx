@@ -477,7 +477,7 @@ const CheckoutPage = () => {
   }}
   whileTap={{ scale: 0.98 }}
   onClick={handleOpenAddressModal}
-  className="relative overflow-hidden px-4 py-2 bg-gradient-to-r from-spice-700 to-spice-500 text-dark rounded-lg font-medium shadow-lg group transition-all duration-300 border-2"
+  className="relative overflow-hidden px-4 py-2 bg-gradient-to-r from-gray-700 to-gray-500 text-dark rounded-lg font-medium shadow-lg group transition-all duration-300 border-2"
 >
   <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
   <span className="relative z-10 text-dark-green">Add New Address</span>
@@ -634,7 +634,7 @@ const CheckoutPage = () => {
   whileTap={{ scale: 0.98 }}
   onClick={handlePaymentSubmit}
   disabled={loading}
-  className="relative overflow-hidden w-full p-4 bg-gradient-to-r from-spice-700 to-spice-500 text-black shadow-2xl border-2 rounded-lg font-medium  group transition-all duration-300 disabled:opacity-70"
+  className="relative overflow-hidden w-full p-4 bg-gradient-to-r from-gray-700 to-gray-500 text-black shadow-2xl border-2 rounded-lg font-medium  group transition-all duration-300 disabled:opacity-70"
 >
   <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
   <span className="relative z-10">

@@ -190,7 +190,7 @@ const ShoppingCartPage: React.FC = () => {
                     onClick={() => router.push('/shop')}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="mt-6 px-6 py-3 bg-gradient-to-r from-spice-700 to-spice-600 text-white rounded-lg font-medium"
+                    className="mt-6 px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-600 text-white rounded-lg font-medium"
                   >
                     Browse Products
                   </motion.button>
@@ -205,7 +205,7 @@ const ShoppingCartPage: React.FC = () => {
                 variants={itemVariants}
               >
                 <h2 className="text-2xl font-playfair font-bold text-premium-900 mb-6">Order Summary</h2>
-                <div className="w-24 h-0.5 bg-gradient-to-r from-spice-600 to-spice-400 mb-6"></div>
+                <div className="w-24 h-0.5 bg-gradient-to-r from-gray-600 to-gray-400 mb-6"></div>
                 <div className="space-y-4">
                   <motion.div
                     className="flex justify-between items-center"
@@ -214,7 +214,7 @@ const ShoppingCartPage: React.FC = () => {
                     key={cart?.total}
                   >
                     <span className="text-lg font-medium text-premium-900">Total</span>
-                    <span className="text-xl font-playfair font-bold text-spice-700">
+                    <span className="text-xl font-playfair font-bold text-gray-700">
                       <span className="font-sans">₹</span> {(cart?.total || 0).toFixed(2)}
                     </span>
                   </motion.div>
@@ -228,7 +228,7 @@ const ShoppingCartPage: React.FC = () => {
                     whileTap={{ scale: 0.98 }}
                     disabled={!cart?.items?.length}
                     className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-green-400 to-green-900 
-                      text-white rounded-lg font-medium shadow-spice-glow group disabled:opacity-50 
+                      text-white rounded-lg font-medium shadow-gray-glow group disabled:opacity-50 
                       disabled:cursor-not-allowed"
                   >
                     <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
@@ -260,9 +260,9 @@ const ShoppingCartPage: React.FC = () => {
                       boxShadow: "0 20px 40px rgba(212, 160, 93, 0.1)"
                     }}
                     whileTap={{ scale: 0.98 }}
-                    className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-spice-50 to-spice-100 
-                      text-spice-700 rounded-lg font-medium group border border-spice-200
-                      hover:border-spice-300 transition-all duration-300 mt-4"
+                    className="relative overflow-hidden w-full px-8 py-4 bg-gradient-to-r from-gray-50 to-gray-100 
+                      text-gray-700 rounded-lg font-medium group border border-gray-200
+                      hover:border-gray-300 transition-all duration-300 mt-4"
                   >
                     <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-50"></span>
                     <span className="relative z-10">

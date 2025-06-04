@@ -8,6 +8,17 @@ import { useDispatch,  } from "react-redux";
 import { AppDispatch } from "../../../../../store/store";
 import { addToCart } from "../../../../../store/slice/cartSlice";
 import { Product } from "@/types/product";
+
+// Add this interface before the ProductDetailProps interface
+interface Weight {
+  id: number;
+  documentId: string;
+  weight_Value: number;
+  original_Price: number;
+  sale_Price: number;
+  inventory: any[];
+}
+
 interface ProductDetailProps {
   product: Product;
   thumbnail: string;
@@ -76,11 +87,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   console.log(tag);
   
   const handleBuyNow = async () => {
-    // if (!isLoggedIn) {
-    //   // setShowLoginModal(true);
-    //   return;
-    // }
-
     const currentVariant = variants.find((v) => v.$id === currentVariantId);
     if (!currentVariant) {
       setStockError("Invalid variant selected");
@@ -95,11 +101,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         id: productId,
         name: productName,
         thumbnail: thumbnail,
-        category: category, // ✅ fixed
+        category: category,
         quantity: 1,
         selectedVariant: {
-          id: variants[selectedVariantIndex].$id, // ✅ should be a real ID
-          title: productName, // ✅ string title
+          id: variants[selectedVariantIndex].$id,
+          title: productName,
           sale_price: variants[selectedVariantIndex].sale_price,
           original_price: variants[selectedVariantIndex].price,
           months: variants[selectedVariantIndex].months,
@@ -125,7 +131,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           throw new Error("Stored data is invalid");
         }
 
-        // Only navigate if data is stored successfully
+        // Navigate directly to checkout without authentication check
         router.push("/checkout?mode=buyNow");
       } catch (storageError) {
         console.error("Storage error:", storageError);

@@ -185,7 +185,7 @@ const AddressForm = ({ onSubmit, initialData, userPhone, onUpdatePhone }: Addres
                     type="checkbox"
                     checked={formData.is_default}
                     onChange={(e) => setFormData(prev => ({ ...prev, is_default: e.target.checked }))}
-                    className="rounded border-gray-300 text-spice-600 focus:ring-spice-500"
+                    className="rounded border-gray-300 text-gray-600 focus:ring-green-500"
                 />
                 <label className="ml-2 text-sm text-gray-700">Set as default address</label>
             </div>
@@ -197,10 +197,10 @@ const AddressForm = ({ onSubmit, initialData, userPhone, onUpdatePhone }: Addres
                     boxShadow: "0 20px 40px rgba(212, 160, 93, 0.3)"
                 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative overflow-hidden w-full px-8 py-3 mt-6 bg-gradient-to-r from-spice-700 to-spice-600 
-                    text-white rounded-lg font-medium shadow-spice-glow group"
+                className="relative overflow-hidden w-full px-8 py-3 mt-6 bg-gradient-to-r from-gray-700 to-gray-600 
+                    text-white rounded-lg font-medium shadow-gray-glow group"
             >
-                <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                <span className="absolute inset-0 w-full bg-gray-200 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                 <span className="relative z-10">Save Address</span>
             </motion.button>
         </form>

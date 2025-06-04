@@ -3,21 +3,31 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, loading } = useAuth();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('user');
-    if (token) {
-      router.replace('/profile'); // Redirect to profile if already logged in
-    } else {
-      setLoading(false); // Allow rendering login/register page
-    }
-  }, [router]);
+    setIsClient(true);
+  }, []);
 
-  if (loading) return null; // Or a loading spinner
+  useEffect(() => {
+    if (isClient && !loading && isAuthenticated) {
+      router.replace('/profile'); // Redirect to profile if already logged in
+    }
+  }, [isClient, isAuthenticated, loading, router]);
+
+  if (loading || (isClient && isAuthenticated)) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 border-solid"></div>
+      </div>
+    );
+  }
+
   return <>{children}</>;
 };
 

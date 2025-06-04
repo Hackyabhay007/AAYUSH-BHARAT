@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import CartSidebar from "../components/cart/CartSidebar";
 import CartIcon from "./CartIcon";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface NavbarProps {
   scrolled: boolean;
@@ -19,6 +20,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
@@ -52,10 +54,11 @@ const Navbar = ({ scrolled }: NavbarProps) => {
               className="relative group"
             >
               {item.title}
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />            </Link>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+            </Link>
           ))}
 
-          <Link href="/profile" className="hover:text-green-700">
+          <Link href={isAuthenticated ? "/profile" : "/login"} className="hover:text-green-700">
             <User size={20} />
           </Link>
           <CartIcon />
@@ -67,8 +70,8 @@ const Navbar = ({ scrolled }: NavbarProps) => {
             <CartIcon />
           </button>
           <button className="text-light">
-            <Link href={'/profile'}>
-            <User size={20} />
+            <Link href={isAuthenticated ? '/profile' : '/login'}>
+              <User size={20} />
             </Link>
           </button>
           <button onClick={() => setMenuOpen(true)} className="text-light">

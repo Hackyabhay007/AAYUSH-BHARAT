@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import JsonLd from '@/components/JsonLd';
 import { websiteSchema, organizationSchema } from '@/lib/schema';
 import CartProvider from './components/CartProvider';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 export const metadata: Metadata = {
   title: 'AAYUDH Bharat | Nature\'s Wisdom',
@@ -42,8 +43,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}) {
-  return (
+}) {  return (
     <html lang="en">
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -57,9 +57,11 @@ export default function RootLayout({
       </head>
       <body>
          <ProviderWrapper>
-           <div><Toaster position="top-center" /></div>
-           {children}
-           <CartProvider />
+           <AuthProvider>
+             <div><Toaster position="top-center" /></div>
+             {children}
+             <CartProvider />
+           </AuthProvider>
          </ProviderWrapper>
        </body>
     </html>

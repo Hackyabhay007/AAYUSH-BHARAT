@@ -111,8 +111,8 @@ const CouponSection = ({ onApplyCoupon, totalAmount, onRemoveCoupon, appliedCoup
                         boxShadow: "0 20px 40px rgba(212, 160, 93, 0.3)"
                     }}
                     whileTap={{ scale: 0.98 }}
-                    className="relative overflow-hidden px-6 py-3 bg-gradient-to-r from-spice-700 to-spice-600 
-                        text-black shadow-2xl border-2 rounded-lg font-medium shadow-spice-glow group disabled:opacity-50 
+                    className="relative overflow-hidden px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-600 
+                        text-black shadow-2xl border-2 rounded-lg font-medium shadow-gray-glow group disabled:opacity-50 
                         disabled:cursor-not-allowed min-w-[120px]"
                 >
                     <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
