@@ -324,8 +324,7 @@ const CheckoutPage = () => {
           currency: result.currency,
           name: "AAYUSH BHARAT",
           description: "Purchase from Aayush Bharat",
-          order_id: result.id,
-          handler: async function (response: any) {
+          order_id: result.id,          handler: async function (response: any) {
             try {
               setProcessingPayment(true); // Start loading
               console.log("Payment successful, verifying...", response);
@@ -337,7 +336,11 @@ const CheckoutPage = () => {
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_signature: response.razorpay_signature,
-                  orderData,
+                  orderData: {
+                    ...orderData,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                  },
                   products: checkoutData.products,
                   amount: finalAmount,
                   user_id: orderData.user_id,
@@ -345,7 +348,8 @@ const CheckoutPage = () => {
               });
 
               if (!verifyResponse.ok) {
-                throw new Error("Payment verification failed");
+                const errorData = await verifyResponse.json();
+                throw new Error(errorData.error || "Payment verification failed");
               }
 
               const verifyResult = await verifyResponse.json();
