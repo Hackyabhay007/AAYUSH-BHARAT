@@ -26,7 +26,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
     <>
       {/* Main Navbar */}
       <div
-        className={`px-6 font-notosans md:px-12 flex items-center justify-between shadow-md ${
+        className={`px-6   md:px-12 flex items-center justify-between shadow-md ${
           scrolled ? "border-b border-primary" : "border-none border-transparent"
         }`}
       >
@@ -51,10 +51,10 @@ const Navbar = ({ scrolled }: NavbarProps) => {
             <Link
               key={item.title}
               href={item.link}
-              className="relative group"
+              className="relative  group"
             >
               {item.title}
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300  group-hover:w-full" />
             </Link>
           ))}
 
@@ -82,7 +82,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-full z-50 bg-white font-notosans text-dark transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full z-50 bg-white   text-dark transform transition-transform duration-300 ease-in-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

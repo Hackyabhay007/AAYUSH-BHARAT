@@ -27,7 +27,7 @@ export default function HeroSection() {
 
 
   return (
-    <section className="relative w-full h-screen overflow-hidden font-notosans">
+    <section className="relative w-full h-screen overflow-hidden   ">
       {/* Background Video */}
         {videoUrl && (
         <video
@@ -53,10 +53,10 @@ export default function HeroSection() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-20 flex lg:px-18 px-6 lg:max-w-2xl flex-col text-center lg:text-left items-center justify-center h-full lg:items-start text-primary"
       >
-        <h1 className="font-begum text-3xl sm:text-5xl font-semibold tracking-wider mb-6">
+        <h1 className="   text-3xl sm:text-5xl font-semibold tracking-wider mb-6">
           RECLAIM YOUR NATURAL BALANCE
         </h1>
-        <p className="text-base font-notosans tracking-wide text-light uppercase lg:py-1 p-1 rounded mb-4">
+        <p className="text-base    tracking-wide text-light uppercase lg:py-1 p-1 rounded mb-4">
           Ayurvedic Ritual Kits crafted from Granthas to restore your inner
           harmony.
         </p>

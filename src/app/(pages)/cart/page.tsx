@@ -78,7 +78,7 @@ const ShoppingCartPage: React.FC = () => {
   const renderCartItem = (item: CartItem) => (
     <motion.div
       key={item.id}
-      className="bg-white font-montserrat rounded-xl shadow-premium hover:shadow-premium-hover p-6 transition-all duration-300"
+      className="bg-white  rounded-xl shadow-premium hover:shadow-premium-hover p-6 transition-all duration-300"
       variants={itemVariants}
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -151,7 +151,7 @@ const ShoppingCartPage: React.FC = () => {
         <Navbar scrolled={scrolled} />
       </div>
       
-      <div className="min-h-screen font-montserrat bg-gradient-to-b md:pt-10 pt-14 pb-20 md:pb-8 from-bgColor to-lightBgColor">
+      <div className="min-h-screen font-  bg-gradient-to-b md:pt-10 pt-14 pb-20 md:pb-8 from-bgColor to-lightBgColor">
         {/* Add premium background pattern */}
         <div className="absolute inset-0 bg-texture-grain opacity-5 mix-blend-overlay pointer-events-none"></div>
 

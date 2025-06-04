@@ -645,7 +645,7 @@ const CheckoutPage = () => {
 
   return (
     <ClientOnly>
-      <div className="min-h-screen bg-beige font-montserrat bg-gradient-to-b from-bgColor to-lightBgColor py-12 pt-[15%] md:pt-[7%]">
+      <div className="min-h-screen bg-beige font-  bg-gradient-to-b from-bgColor to-lightBgColor py-12 pt-[15%] md:pt-[7%]">
         <div className="w-[90%] max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
             Checkout

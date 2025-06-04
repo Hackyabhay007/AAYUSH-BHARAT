@@ -40,22 +40,20 @@ export class OrderService {
       throw error;
     }
   }
-
-  static async getOrder(orderId: string) {
+  static async getOrder(orderId: string): Promise<Order> {
     try {
       const response = await databases.getDocument(
         DATABASE_ID,
         ORDERS_COLLECTION_ID,
         orderId
       );
-      return response;
+      return response as Order;
     } catch (error) {
       console.error('Error fetching order:', error);
       throw error;
     }
   }
-
-  static async getUserOrders(userId: string) {
+  static async getUserOrders(userId: string): Promise<Order[]> {
     try {
       const response = await databases.listDocuments(
         DATABASE_ID,
@@ -65,7 +63,7 @@ export class OrderService {
           Query.orderDesc('created_at')
         ]
       );
-      return response.documents;
+      return response.documents as Order[];
     } catch (error) {
       console.error('Error fetching user orders:', error);
       throw error;

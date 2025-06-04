@@ -1,8 +1,7 @@
 "use client";
 import authService from '@/appwrite/auth';
-import React, { useState } from 'react'
-// import { useSelector } from 'react-redux';
-// import { RootState } from '@/store/store';
+import React, { useState, useEffect } from 'react'
+import { OrderService } from '@/services/OrderService';
 
 type ProfileProps = {
   name: string;
@@ -18,6 +17,36 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [stats, setStats] = useState({
+    totalSpent: 0,
+    totalOrders: 0,
+    memberStatus: "Regular",
+    progress: 0
+  });
+
+  useEffect(() => {
+    const fetchOrderStats = async () => {
+      try {
+        const userId = localStorage.getItem("userid");
+        if (!userId) return;
+
+        const orders = await OrderService.getUserOrders(userId);
+        const totalSpent = orders.reduce((sum, order) => sum + (order.payment_amount || 0), 0);
+        const progress = Math.min((totalSpent / 5000) * 100, 100); // Progress toward Silver status
+        
+        setStats({
+          totalSpent,
+          totalOrders: orders.length,
+          memberStatus: totalSpent >= 5000 ? "Silver" : "Regular",
+          progress: progress
+        });
+      } catch (error) {
+        console.error("Error fetching order stats:", error);
+      }
+    };
+
+    fetchOrderStats();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -57,20 +86,27 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6 bg-white shadow-md rounded-b-xl">
           <div className="bg-dark-green text-white rounded-xl p-4 shadow">
             <p className="text-sm">Total Spent</p>
-            <h2 className="text-3xl mt-1">₹0</h2>
+            <h2 className="text-3xl mt-1">₹{stats.totalSpent.toLocaleString()}</h2>
             <p className="text-xs mt-2">Lifetime purchases</p>
           </div>
           <div className="bg-dark-green text-white rounded-xl p-4 shadow">
             <p className="text-sm">Member Status</p>
-            <h2 className="text-2xl mt-1">Regular</h2>
+            <h2 className="text-2xl mt-1">{stats.memberStatus}</h2>
             <div className="w-full bg-white/30 h-2 mt-2 rounded">
-              <div className="bg-white h-2 rounded w-[10%]"></div>
+              <div 
+                className="bg-white h-2 rounded transition-all duration-500" 
+                style={{ width: `${stats.progress}%` }}
+              ></div>
             </div>
-            <p className="text-xs mt-2">₹5,000 until Silver</p>
+            {stats.memberStatus === "Regular" && (
+              <p className="text-xs mt-2">
+                ₹{(5000 - stats.totalSpent).toLocaleString()} until Silver
+              </p>
+            )}
           </div>
           <div className="bg-dark-green text-white rounded-xl p-4 shadow">
             <p className="text-sm">Total Orders</p>
-            <h2 className="text-3xl mt-1">0</h2>
+            <h2 className="text-3xl mt-1">{stats.totalOrders}</h2>
             <p className="text-xs mt-2">Orders placed</p>
           </div>
         </div>
