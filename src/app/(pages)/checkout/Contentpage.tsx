@@ -13,6 +13,8 @@ import ClientOnly from "@/components/ClientOnly";
 import { Customer } from "@/types/customer";
 import { Order } from "@/types/order";
 import CouponSection from "@/components/checkout/CouponSection";
+import { PaymentSection } from "@/components/checkout/PaymentSection";
+import OrderSummary from "@/components/checkout/OrderSummary";
 import DatabaseService, {
   AddressDocument,
   AddressData,
@@ -677,144 +679,21 @@ const CheckoutPage = () => {
                   appliedCoupon={appliedCoupon}
                 />
               </div>
-              {/* Payment Section */}
-              <div
-                ref={paymentRef}
-                className="bg-white p-8 rounded-2xl shadow-premium"
-              >
-                <h2 className="text-2xl font-semibold mb-6 flex items-center">
-                  <span className="w-8 h-8 bg-darkRed text-white rounded-full flex items-center justify-center mr-3 text-sm">
-                    3
-                  </span>
-                  Payment Method
-                </h2>
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      id="cod"
-                      name="payment"
-                      value="COD"
-                      checked={paymentMethod === "COD"}
-                      onChange={(e) =>
-                        setPaymentMethod(e.target.value as "COD")
-                      }
-                      className="form-radio text-darkRed"
-                    />
-                    <label htmlFor="cod">Cash on Delivery</label>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      id="online"
-                      name="payment"
-                      value="ONLINE"
-                      checked={paymentMethod === "ONLINE"}
-                      onChange={(e) =>
-                        setPaymentMethod(e.target.value as "ONLINE")
-                      }
-                      className="form-radio text-darkRed"
-                    />
-                    <label htmlFor="online">Online Payment</label>
-                  </div>
-                </div>
-                <motion.button
-                  whileHover={{
-                    scale: 1.02,
-                    boxShadow: "0 20px 40px rgba(212, 160, 93, 0.3)",
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handlePaymentSubmit}
-                  disabled={loading}
-                  className="relative overflow-hidden w-full p-4 bg-gradient-to-r from-gray-700 to-gray-500 text-black shadow-2xl border-2 rounded-lg font-medium  group transition-all duration-300 disabled:opacity-70"
-                >
-                  <span className="absolute inset-0 w-full bg-gold-shimmer -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                  <span className="relative z-10">
-                    {loading
-                      ? "Processing..."
-                      : `Proceed with ${
-                          paymentMethod === "COD"
-                            ? "Cash on Delivery"
-                            : "Online Payment"
-                        }`}
-                  </span>
-                </motion.button>
+              {/* Payment Section */}              <div ref={paymentRef}>
+                <PaymentSection
+                  paymentMethod={paymentMethod}
+                  loading={loading}
+                  onPaymentMethodChange={(method) => setPaymentMethod(method)}
+                  onSubmit={handlePaymentSubmit}
+                />
               </div>
-            </div>
-
-            {/* Right column - Order Summary */}
+            </div>            {/* Right column - Order Summary */}
             <div ref={summaryRef} className="lg:col-span-1">
-              <div className="bg-white p-8 rounded-2xl shadow-premium sticky top-24">
-                <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
-                <div className="space-y-4">
-                  {checkoutData?.products.map((product) => (
-                    <div
-                      key={`${product.id}-${product.selectedVariant.id}`}
-                      className="flex gap-4 p-4 bg-gray-50 rounded-lg"
-                    >
-                      <div className="h-20 w-20 bg-white rounded-lg overflow-hidden">
-                        <Image
-                          src={getFilePreview(product.thumbnail)}
-                          alt={product.name}
-                          className="w-full h-full object-cover"
-                          width={500}
-                          height={500}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-gray-600">
-                          {product.selectedVariant.title}g
-                        </p>
-                        <div className="mt-1">
-                          <span className="text-darkRed font-medium">
-                            ₹{product.selectedVariant.sale_price}
-                          </span>
-                          {product.selectedVariant.original_price >
-                            product.selectedVariant.sale_price && (
-                            <span className="ml-2 text-sm text-gray-500 line-through">
-                              ₹{product.selectedVariant.original_price}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        x{product.quantity}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="mt-6 space-y-4 border-t pt-6">
-                    {calculateTotals().original > calculateTotals().sale && (
-                      <div className="flex justify-between text-gray-600">
-                        <span>Original Price</span>
-                        <span className="line-through">
-                          ₹{calculateTotals().original}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-gray-600">
-                      <span>Subtotal</span>
-                      <span>₹{calculateTotals().sale}</span>
-                    </div>
-                    {appliedCoupon && (
-                      <div className="flex justify-between text-green-600">
-                        <span>Coupon Discount ({appliedCoupon.discount}%)</span>
-                        <span>-₹{appliedCoupon.discountAmount}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between font-bold text-xl">
-                      <span>Total</span>
-                      <span>
-                        ₹
-                        {appliedCoupon
-                          ? appliedCoupon.finalPrice
-                          : calculateTotals().sale}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <OrderSummary 
+                products={checkoutData?.products}
+                appliedCoupon={appliedCoupon}
+                calculateTotals={calculateTotals}
+              />
             </div>
           </div>
         </div>
