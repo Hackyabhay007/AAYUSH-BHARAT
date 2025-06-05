@@ -7,20 +7,28 @@ import toast from 'react-hot-toast';
 import getFilePreview from '@/lib/getFilePreview';
 
 interface FixedBottomCartProps {
-  productId: string;
+  productId?: string;
   productName: string;
   price: number;
-  productImage: string;
-  product: any; // Replace with proper Product type
-  selectedVariantIndex: number;
+  productImage?: string;
+  productDescription?: string;
+  productCategory?: string;
+  productSalePrice?: number;
+  productIngredients?: string;
+  product?: any; // Replace with proper Product type
+  selectedVariantIndex?: number;
 }
 
 const FixedBottomCart = ({ 
   productName, 
   price, 
   productImage,
+  productDescription,
+  productCategory,
+  productSalePrice,
+  productIngredients,
   product,
-  selectedVariantIndex
+  selectedVariantIndex = 0
 }: FixedBottomCartProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [quantity, setQuantity] = React.useState(1);
@@ -41,10 +49,9 @@ const FixedBottomCart = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex lg:flex-row flex-col items-center justify-center gap-4 lg:gap-24">
       {/* Left - Product Info */}
-      <div className="flex items-center gap-4">
-        <Image
+      <div className="flex items-center gap-4">        <Image
           width={500} height={500}  
-          src={getFilePreview(productImage)}
+          src={productImage ? getFilePreview(productImage) : '/placeholder.jpg'}
           alt={productName}
           className="w-12 h-12 object-cover rounded lg:block hidden" 
         />

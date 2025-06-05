@@ -43,6 +43,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 text-primary text-sm">
           {[
+            { title: "HOME", link: "/" },
             { title: "SHOP", link: "/shop" },
             { title: "ABOUT US", link: "/about-us" },
             { title: "CONTACT US", link: "/contact-us" },

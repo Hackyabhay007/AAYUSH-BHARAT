@@ -11,6 +11,8 @@ import productService from '@/appwrite/product';
 import { useParams } from 'next/navigation';
 import FAQ from './components/FAQ';
 import { Product } from '@/types/product';
+import { motion } from 'framer-motion';
+import ProductSkeleton from './components/ProductSkeleton';
 const ProductContent = () => {
   const params = useParams();
   const productId = typeof params.slug === 'string' ? params.slug : '';
@@ -19,6 +21,8 @@ const ProductContent = () => {
 
   useEffect(() => {
     const getProduct = async () => {
+      setLoading(true); // Ensure loading is true when starting
+      
       if (productId) {
         try {
           const data = await productService.fetchOneProduct(productId);
@@ -33,15 +37,9 @@ const ProductContent = () => {
       }
     };
 
-    getProduct();
-  }, [productId]);
-
-  if (loading) {
-    return (
-      <div className="pt-22 text-center text-xl font-medium">
-        Loading product...
-      </div>
-    );
+    getProduct();  }, [productId]);  
+    if (loading) {
+    return <ProductSkeleton />;
   }
 
   if (!product) {
@@ -51,19 +49,32 @@ const ProductContent = () => {
       </div>
     );
   }
-
   // Pass the product as prop to HeroSection
   return (
-    <div className='hide-scroll-x'>
+    <motion.div 
+      className='hide-scroll-x'
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <HeroSection product={product} />
       <VideoScrollSection />
       <TextSlider />
       <NatureIngredients />
       <SectionFive />
       <FAQ/>
-      <FixedBottomCart productName={product.name} price={product.price} productImage={product?.image} productIngredients={product?.ingredients} productDescription={product.description} productCategory={product.category} productSalePrice={product?.sale_price} />
+      <FixedBottomCart 
+        productName={product.name} 
+        price={product.price} 
+        productImage={product?.image} 
+        productDescription={product.description} 
+        productCategory={product.category} 
+        productSalePrice={product?.sale_price}
+        productIngredients={product.ingredients}
+        product={product}
+      />
       <VideoSection />
-    </div>
+    </motion.div>
   );
 };
 

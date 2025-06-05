@@ -10,7 +10,7 @@ import getFilePreview from "@/lib/getFilePreview";
 import { Product, Variants } from "@/types/product";
 import { CheckCircle } from 'lucide-react';
 
-const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boolean) => void }> = ({ product, onShowNowLoading }) => {
+const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boolean) => void }> = ({ product }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [addedToCart, setAddedToCart] = useState(false);
@@ -47,9 +47,9 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
       console.log(`Product ${product.name}: Created default variant as no variants exist`);
     }
   }, [product]);
-
   const handleShopNow = async () => {
-    onShowNowLoading?.(true);
+    // Don't set loading state when navigating
+    // onShowNowLoading?.(true);
     router.push(`/product/${product.slug}`);
   };
 

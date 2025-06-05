@@ -43,10 +43,8 @@ const ProductsPage = () => {
 
     getProducts();
   }, []);
-  
-  return (
-    <div className="relative">
-      {loading && (
+    return (
+    <div className="relative">      {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-70">
           <Loader />
         </div>
@@ -66,11 +64,9 @@ const ProductsPage = () => {
               <div className="flex justify-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.length > 0 ? (
-                    products.map((product) => (
-                      <ProductCard 
+                    products.map((product) => (                      <ProductCard 
                         key={product.$id} 
                         product={product} 
-                        onShowNowLoading={setLoading} // pass the setter as prop
                       />
                     ))
                   ) : (
