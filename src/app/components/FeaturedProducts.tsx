@@ -27,9 +27,13 @@ const FeaturedProducts = () => {
   return (
     <div className="bg-beige">
       <section ref={ref} className="py-12 px-4 max-w-5xl mx-auto">
-        <h2 className="lg:text-4xl text-2xl uppercase font-semibold mb-8 tracking-wider text-dark-green text-center">
+        <h2 className="lg:text-4xl text-2xl uppercase font-semibold mb-4 tracking-wider text-dark-green text-center">
         Our Ayurvedic Ritual Kits
         </h2>
+        <p className="text-center text-gray-700 mb-8 max-w-2xl mx-auto font-light">
+          Experience ancient wisdom through our traditional Ayurvedic formulations.
+          Each kit is crafted to balance your doshas and enhance your overall well-being.
+        </p>
         <div className="lg:grid flex flex-col items-center lg:grid-cols-3 gap-6">
           {products.map((product, idx) => (
             <div
@@ -39,7 +43,7 @@ const FeaturedProducts = () => {
               `}
               style={{ transitionDelay: `${idx * 200}ms` }}
             >
-              <div className="overflow-hidden rounded-md">
+                <div className="overflow-hidden rounded-md">
                 <Image
                   width={500}
                   height={500}
@@ -47,7 +51,7 @@ const FeaturedProducts = () => {
                   alt={product.title || 'Product Image'}
                   className="w-full h-48 object-cover rounded-md mb-4 transform transition-transform duration-300 group-hover:scale-105"
                 />
-              </div>
+                </div>
 
               <div className="text-yellow-500 text-sm flex justify-center items-center space-x-1">
                 <span>★★★★☆</span>

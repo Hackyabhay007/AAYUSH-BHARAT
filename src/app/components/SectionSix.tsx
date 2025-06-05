@@ -28,7 +28,7 @@ export default function SectionSix() {
     <section className="py-16 md:py-24 bg-[#f7f3ef] text-[#363f1d]">
       <div className="container mx-auto px-6 md:px-8 text-center max-w-3xl">
         <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight"
+          className="text-xl sm:text-2xl md:text-5xl font-semibold mb-6 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -47,7 +47,7 @@ export default function SectionSix() {
           viewport={{ once: true }}
         >
           Ayudh Bharat revives the original purpose of Ayurveda – healing through daily rituals.
-          <br className="hidden sm:block" />
+          
           We don’t treat symptoms. We restore rhythm.
         </motion.p>
 
