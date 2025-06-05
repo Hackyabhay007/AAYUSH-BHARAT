@@ -459,9 +459,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                   <div
                     key={index}
                     onClick={() => onVariantChange(index)}
-                    className={`relative border rounded-xl p-4 cursor-pointer transition-all ${
+                    className={`relative border rounded-lg p-4 cursor-pointer transition-all ${
                       selectedVariantIndex === index
-                        ? "border-green-600 shadow-md"
+                        ? "border-green-600 shadow-md bg-blue-100"
                         : "border-gray-300"
                     }`}
                   >
@@ -503,7 +503,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       </div> */}
 
       {/* Delivery Estimate */}
-      <div className="flex justify-center items-center gap-2 border border-gray-300 rounded-lg p-3 text-center text-sm">
+      <div className="flex justify-center items-center gap-2 border border-gray-300 rounded-lg p-3 mb-4 text-center text-sm">
         <Image
           width={32}
           height={32}
@@ -518,13 +518,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
         <button
-          className="w-full border border-dark-green text-dark-green py-3 rounded font-medium text-xl"
+          className="w-full border border-dark-green text-dark-green py-3 rounded  font-medium text-xl"
           onClick={handleAddToCart}
         >
           Add To Cart
         </button>
         <button
-          className="w-full border bg-dark-green text-light py-3 rounded font-medium text-xl"
+          className="w-full border bg-dark-green  text-light py-3 rounded font-medium text-xl"
           onClick={handleBuyNow}
         >
           Buy It Now
