@@ -7,8 +7,8 @@ const ShimmerProductsGrid = () => {
   const shimmerCards = Array(6).fill(null);
   
   return (
-    <div className="w-full py-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="w-full max-w-6xl mx-auto py-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {shimmerCards.map((_, index) => (
           <ShimmerCard key={index} />
         ))}

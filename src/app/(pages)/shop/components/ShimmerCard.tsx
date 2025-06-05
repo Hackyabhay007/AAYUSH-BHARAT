@@ -2,7 +2,7 @@
 
 const ShimmerCard = () => {
   return (
-    <div className="bg-light rounded-lg p-4 shadow-md animate-pulse">
+    <div className="bg-light rounded-lg p-4 shadow-md animate-pulse w-full">
       {/* Image placeholder */}
       <div className="w-full h-48 bg-gray-300 rounded-md mb-4"></div>
       
