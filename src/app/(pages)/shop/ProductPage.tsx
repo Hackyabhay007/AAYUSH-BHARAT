@@ -7,7 +7,7 @@ import productService from "@/appwrite/product";
 import SectionFour from "@/app/components/SectionFour";
 import SectionFive from "@/app/components/SectionFive";
 import { Product } from "@/types/product";
-import Loader from "@/components/Loader";
+import ShimmerProductsGrid from "./components/ShimmerProductsGrid";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -42,13 +42,8 @@ const ProductsPage = () => {
     };
 
     getProducts();
-  }, []);
-    return (
-    <div className="relative">      {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-70">
-          <Loader />
-        </div>
-      )}
+  }, []);    return (
+    <div className="relative">
       <div className="flex flex-col pt-0 text-center bg-beige gap-4">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-2xl lg:text-4xl font-medium uppercase tracking-wide my-8 text-dark-green">AAYUDH BHARAT RITUAL KITS</h1>
@@ -62,19 +57,24 @@ const ProductsPage = () => {
           <div className="flex flex-col">
             <div className="flex-1">
               <div className="flex justify-center">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {products.length > 0 ? (
-                    products.map((product) => (                      <ProductCard 
-                        key={product.$id} 
-                        product={product} 
-                      />
-                    ))
-                  ) : (
-                    <div className="col-span-3 py-12 text-center">
-                      <p className="text-lg text-gray-600">No products found. Please check back later.</p>
-                    </div>
-                  )}
-                </div>
+                {loading ? (
+                  <ShimmerProductsGrid />
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {products.length > 0 ? (
+                      products.map((product) => (
+                        <ProductCard 
+                          key={product.$id} 
+                          product={product} 
+                        />
+                      ))
+                    ) : (
+                      <div className="col-span-3 py-12 text-center">
+                        <p className="text-lg text-gray-600">No products found. Please check back later.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
