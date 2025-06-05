@@ -47,7 +47,7 @@ const FixedBottomCart = ({
   };
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex lg:flex-row flex-col items-center justify-center gap-4 lg:gap-24">
+  <div className="fixed bottom-0 left-0 right-0 bg-green-100 shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex lg:flex-row flex-col items-center justify-end gap-4 lg:gap-10">
       {/* Left - Product Info */}
       <div className="flex items-center gap-4">        <Image
           width={500} height={500}  
@@ -64,7 +64,7 @@ const FixedBottomCart = ({
       </div>
 
       {/* Center - Size and Quantity */}
-      <div className="flex items-center gap-4 w-full md:w-auto justify-center">
+      <div className="flex items-center gap-6 w-full md:w-auto justify-between">
         <div className="px-4 py-1 flex flex-col rounded border border-gray-200 bg-gray-50">
           <label className="block text-xs text-gray-500">Size</label>
           <div className="text-sm font-medium">{product?.weights?.[selectedVariantIndex]?.weight_Value}g</div>
@@ -89,7 +89,7 @@ const FixedBottomCart = ({
       {/* Right - Add to Cart */}
       <button 
         onClick={handleAddToCart}
-        className="bg-green-800 text-white px-6 py-2 rounded font-light text-base hover:bg-green-700 transition"
+        className="bg-green-800 text-white px-6 cursor-pointer border py-2 rounded  text-base uppercase hover:bg-white hover:text-green-900 hover:border-black transition"
       >
         Add To Cart ( ₹{price * quantity} )
       </button>
