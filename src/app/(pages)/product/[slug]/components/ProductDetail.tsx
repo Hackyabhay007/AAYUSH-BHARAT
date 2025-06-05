@@ -518,13 +518,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
         <button
-          className="w-full border border-dark-green text-dark-green py-3 rounded  font-medium text-xl"
+          className="w-full border border-dark-green text-dark-green py-3 rounded   font-medium text-xl cursor-pointer"
           onClick={handleAddToCart}
         >
           Add To Cart
         </button>
         <button
-          className="w-full border bg-dark-green  text-light py-3 rounded font-medium text-xl"
+          className="w-full border bg-dark-green  text-light py-3 rounded font-medium text-xl cursor-pointer"
           onClick={handleBuyNow}
         >
           Buy It Now
@@ -538,7 +538,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       )}
       {/* Accordions */}
 
-      <div className="border-b">
+      <div className="border-b mt-2">
         <button
           onClick={() =>
             setAccordionOpen(
