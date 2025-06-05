@@ -163,7 +163,7 @@ const ShoppingCartPage: React.FC = () => {
           variants={containerVariants}
         >
           <motion.h1
-            className="text-center font-bold text-4xl md:text-5xl text-gray-800 mb-4"
+            className="text-center font-semibold text-2xl md:text-4xl text-gray-800 mb-4"
             variants={itemVariants}
           >
             Your Shopping Cart
