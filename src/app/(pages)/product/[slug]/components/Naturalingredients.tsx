@@ -56,13 +56,13 @@ export default function CardSlider() {
       {/* Arrows */}
       <button
         onClick={() => scroll("left")}
-        className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 rounded-full shadow hover:bg-gray-200"
+        className="absolute top-1/2 left-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 px-3 rounded-full shadow hover:bg-gray-200"
       >
         &#8592;
       </button>
       <button
         onClick={() => scroll("right")}
-        className="absolute top-1/2 right-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 rounded-full shadow hover:bg-gray-200"
+        className="absolute top-1/2 right-2 z-10 transform -translate-y-1/2 bg-white text-black p-2 px-3 rounded-full shadow hover:bg-gray-200"
       >
         &#8594;
       </button>

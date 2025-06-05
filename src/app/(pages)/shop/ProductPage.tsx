@@ -49,7 +49,7 @@ const ProductsPage = () => {
           <Loader />
         </div>
       )}
-      <div className="flex flex-col pt-24 text-center bg-beige gap-4">
+      <div className="flex flex-col pt-0 text-center bg-beige gap-4">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-2xl lg:text-4xl font-medium uppercase tracking-wide my-8 text-dark-green">AAYUDH BHARAT RITUAL KITS</h1>
           <p className="text-base md:text-lg text-gray-700 max-w-3xl mx-auto mb-8">

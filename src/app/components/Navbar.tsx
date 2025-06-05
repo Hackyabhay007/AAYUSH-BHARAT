@@ -27,7 +27,7 @@ const Navbar = ({ scrolled }: NavbarProps) => {
       {/* Main Navbar */}
       <div
         className={`px-6   md:px-12 flex items-center justify-between shadow-md ${
-          scrolled ? "border-b border-primary" : "border-none border-transparent"
+          scrolled ? "border-b border-green-600" : "border-none border-transparent"
         }`}
       >
         <Link href="/" className="flex items-center">

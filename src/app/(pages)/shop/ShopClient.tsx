@@ -17,7 +17,7 @@ export default function ShopClient() {
       </div>
       
       {/* Breadcrumb Navigation */}
-      <div className="max-w-7xl mx-auto pt-28 px-4 sm:px-6 lg:px-8 mb-4">
+      <div className="max-w-full bg-beige mx-auto pt-20 px-4 sm:px-6 lg:px-8 ">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2">
             <li>

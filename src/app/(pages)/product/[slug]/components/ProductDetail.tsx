@@ -348,9 +348,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           alt="Promo Banner"
           className="w-full"
         />
-      </div> */}
-
-      {/* Delivery Estimate */}
+      </div> */}      {/* Delivery Estimate */}
       <div className="flex justify-center items-center gap-2 border border-gray-300 rounded-lg p-3 mb-4 text-center text-sm">
         <Image
           width={32}
@@ -359,7 +357,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           className="h-8"
           alt=""
         />{" "}
-        Delivery between <strong>15th - 17th May</strong> | Order within{" "}
+        Delivery between <strong>{new Date().toLocaleDateString('en-US', {day: 'numeric', month: 'short'})} - {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {day: 'numeric', month: 'short'})}</strong> | Order within{" "}
         <span className="text-green-600 font-medium">3hr 50 mins</span>.
       </div>
 
