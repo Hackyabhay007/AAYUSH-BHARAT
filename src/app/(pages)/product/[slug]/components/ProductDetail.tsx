@@ -357,7 +357,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           className="h-8"
           alt=""
         />{" "}
-        Delivery between <strong>{new Date().toLocaleDateString('en-US', {day: 'numeric', month: 'short'})} - {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {day: 'numeric', month: 'short'})}</strong> | Order within{" "}
+        Delivery between <strong>{new Date().toLocaleString('en-IN', {day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata'})} - {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleString('en-IN', {day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata'})}</strong> | Order within{" "}
         <span className="text-green-600 font-medium">3hr 50 mins</span>.
       </div>
 
