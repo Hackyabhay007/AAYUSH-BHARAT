@@ -44,10 +44,8 @@ const FixedBottomCart = ({
     } catch (error) {
       toast.error('Failed to add to cart');
     }
-  };
-  
-  return (
-  <div className="fixed bottom-0 left-0 right-0 bg-green-100 shadow-lg border-t border-gray-200 z-50 px-4 py-2 flex lg:flex-row flex-col items-center justify-end gap-4 lg:gap-10">
+  };  return (
+  <div className="bg-green-100 shadow-lg border-t border-greenn-500 px-4 py-2 flex lg:flex-row flex-col items-center justify-center gap-4 lg:gap-10">
       {/* Left - Product Info */}
       <div className="flex items-center gap-4">        <Image
           width={500} height={500}  
