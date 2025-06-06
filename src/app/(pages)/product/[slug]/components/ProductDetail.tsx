@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { ChevronDown, ShoppingCart, ShoppingBag } from "lucide-react";
-
 import Image from "next/image";
-import { Variants } from "@/types/product";
 import { useRouter } from "next/navigation";
-import { useDispatch,  } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../store/store";
 import { addToCart } from "../../../../../store/slice/cartSlice";
-import { Product } from "@/types/product";
+import { Product, Variants } from "@/types/product";
 
-// Add this interface before the ProductDetailProps interface
 interface Weight {
   id: number;
   documentId: string;
@@ -21,90 +18,82 @@ interface Weight {
 
 interface ProductDetailProps {
   product: Product;
-  thumbnail: string;
   productId: string;
   productName: string;
   description: string;
-  price: number;
-  rating: number;
-  weight: number;
-  tags: string[];
-  ingredients: string;
   category: string;
-  sale_price: number;
-  //   variants:{id: string;
-  //   title: number;
-  //   original_price: number; // Regular price
-  //   sale_price: number;    // Discounted price
-  //   stock: number;
-  //   months:number;
-  //   weight:number;
-  // }[],
+  tags: string | string[];
+  ingredients: string;
   variants: Variants[];
-
+  selectedVariant: Variants | null;
   selectedVariantIndex: number;
   onVariantChange: (index: number) => void;
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
   product,
-  thumbnail,
   productId,
   productName,
   description,
-  price,
-  // rating,
-  weight,
   tags,
   ingredients,
   category,
-  sale_price,
+  selectedVariant,
   selectedVariantIndex,
   onVariantChange,
   variants,
 }) => {
   const router = useRouter();
-
   const dispatch = useDispatch<AppDispatch>();
-  // const { currentCustomer, token } = useSelector(
-  //   (state: RootState) => state.customer
-  // );
-  // const isLoggedIn = !!token;
-
-  // const { cart, loading } = useSelector((state: RootState) => state.cart);
 
   const [quantity, setQuantity] = useState(1);
-  const [currentVariantId, setCurrentVariantId] = useState(variants[0]?.$id);
   const [stockError, setStockError] = useState<string | null>(null);
   const [descExpanded, setDescExpanded] = useState(false);
-
- 
-
   const [selected, setSelected] = useState(0);
   const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
-  // const [selectedVariant, setSelectedVariant] = useState(0);
-  const tag=String(tags).split(',');
-  console.log(tag);
   
-  const handleBuyNow = async () => {
-    const currentVariant = variants.find((v) => v.$id === currentVariantId);
+  const tag = Array.isArray(tags) ? tags : (tags || '').split(',');
+
+  const checkStock = async (variantId: string | undefined, quantity: number) => {
+    if (!variantId) {
+      setStockError("Invalid variant ID");
+      return false;
+    }
+
+    const currentVariant = variants.find((v) => v.$id === variantId);
+
     if (!currentVariant) {
-      setStockError("Invalid variant selected");
+      setStockError("Variant not found");
+      return false;
+    }
+
+    if (currentVariant.stock < quantity) {
+      setStockError(`Only ${currentVariant.stock} items available`);
+      return false;
+    }
+
+    setStockError(null);
+    return true;
+  };
+
+  const handleBuyNow = async () => {
+    if (!selectedVariant) {
+      setStockError("Please select a variant");
       return;
     }
 
-    const hasStock = await checkStock(currentVariantId, quantity);
+    const hasStock = await checkStock(selectedVariant.$id, quantity);
     if (!hasStock) return;
 
     try {
       const fixedProduct = {
         id: productId,
         name: productName,
-        thumbnail: thumbnail,
+        image: selectedVariant.image,
         category: category,
         quantity: 1,
         selectedVariant: {
-          id: variants[selectedVariantIndex].$id,
+          id: variants[selectedVariantIndex].$id || '',
           title: productName,
           sale_price: variants[selectedVariantIndex].sale_price,
           original_price: variants[selectedVariantIndex].price,
@@ -113,80 +102,34 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         },
       };
 
-      // Store data with error handling
-      try {
-        localStorage.setItem(
-          "buyNowData",
-          JSON.stringify({ product: fixedProduct })
-        );
-
-        // Verify the data was stored correctly
-        const verifyData = localStorage.getItem("buyNowData");
-        if (!verifyData) {
-          throw new Error("Failed to store checkout data");
-        }
-
-        const parsed = JSON.parse(verifyData);
-        if (!parsed?.product?.name) {
-          throw new Error("Stored data is invalid");
-        }
-
-        // Navigate directly to checkout without authentication check
-        router.push("/checkout?mode=buyNow");
-      } catch (storageError) {
-        console.error("Storage error:", storageError);
-        alert("Failed to start checkout process. Please try again.");
-      }
+      localStorage.setItem("buyNowData", JSON.stringify({ product: fixedProduct }));
+      router.push("/checkout?mode=buyNow");
     } catch (error) {
       console.error("Buy Now Error:", error);
       setStockError("Failed to process buy now request");
     }
   };
 
-  const checkStock = async (variantId: string, quantity: number) => {
-    // Get current variant directly from variants prop
-    const currentVariant = variants.find((v) => v.$id === variantId);
-
-    if (!currentVariant) {
-      setStockError("Variant not found");
-      return false;
-    }
-
-    // Direct stock check from variant data
-    if (currentVariant.stock < quantity) {
-      setStockError(`Only ${currentVariant.stock} items available`);
-      return false;
-    }
-
-    // Clear any existing error if stock is available
-    setStockError(null);
-    return true;
-  };
-
   const handleAddToCart = async () => {
     try {
-      const currentVariant = variants.find((v) => v.$id === currentVariantId);
-      if (!currentVariant) {
-        setStockError("Invalid variant selected");
+      if (!selectedVariant) {
+        setStockError("Please select a variant");
         return;
       }
 
-      // Check stock before adding to cart
-      const hasStock = await checkStock(currentVariantId, quantity);
+      const hasStock = await checkStock(selectedVariant.$id, quantity);
       if (!hasStock) return;
 
-      // Continue with adding to cart
-      // Transform to match Weight interface
       const weights: Weight[] = variants.map((v) => ({
-        id: 0, // Default value
-        documentId: v.$id,
+        id: 0,
+        documentId: v.$id || '',
         weight_Value: v.weight,
         original_Price: v.price,
         sale_Price: v.sale_price,
-        inventory: [], // Empty array since we don't have inventory data
+        inventory: [],
       }));
 
-      const weightIndex = variants.findIndex((v) => v.$id === currentVariantId);
+      const weightIndex = selectedVariant ? variants.findIndex((v) => v.$id === selectedVariant.$id) : 0;
 
       await dispatch(
         addToCart({
@@ -216,11 +159,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         </div> */}
           <h2 className="text-2xl uppercase text-dark-green font-medium mt-2">
             {productName}
-          </h2>
-
-          <h1 className="text-xl uppercase text-dark-green mt-2">
-            Price: ₹{price} / {weight} gms
-          </h1>
+          </h2>          {selectedVariant && (
+            <h1 className="text-xl uppercase text-dark-green mt-2">
+              Price: ₹{selectedVariant.price} / {selectedVariant.weight} gms
+            </h1>
+          )}
           <h1 className="text-base uppercase text-dark-green mt-2">
             CATEGORY: {category}
           </h1>
