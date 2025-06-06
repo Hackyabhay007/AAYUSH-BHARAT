@@ -163,10 +163,8 @@ export default function HeroSection() {
               />
             ))}
           </div>
-        )}
-
-        {/* Content Overlay */}
-        <div className="absolute inset-0 z-50 container mx-auto px-4">
+        )}        {/* Content Overlay */}
+        <div className="absolute inset-0 z-50 container mx-auto pl-8 md:pl-12 lg:pl-24">
           <div ref={ref} className="h-full flex flex-col text-center lg:text-left items-center justify-center lg:items-start max-w-2xl">
             {heroContent.heading && (
               <h1 className="text-4xl sm:text-6xl font-bold tracking-wider mb-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
