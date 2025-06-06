@@ -74,10 +74,10 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      {/* Product Image Section */}
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 w-[320px] cursor-pointer">
+      {/* Product Image Section - 60% */}
       <div 
-        className="relative w-full h-64 cursor-pointer"
+        className="relative w-full h-[200px]"
         onClick={handleShopNow}
       >
         <Image
@@ -93,30 +93,30 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
         )}
       </div>
 
-      {/* Product Info Section */}
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-dark-green mb-2">{product.name}</h3>
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+      {/* Product Info Section - 40% */}
+      <div className="p-3 text-left px-4">
+        <h3 className="text-lg font-medium text-dark-green line-clamp-1 mb-1">{product.name}</h3>
+        <p className="text-gray-600 text-sm line-clamp-2 h-10 mb-2">{product.description}</p>
 
         {/* Price Display */}
         {selectedVariant && (
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xl font-bold text-dark-green">
-              ₹{selectedVariant.sale_price}
+          <div className="flex items-start gap-2 mb-3">
+            <span className="text-lg font-semibold text-dark-green">
+              <span className="text-sm font-normal">₹</span>{selectedVariant.sale_price}
             </span>
             {selectedVariant.sale_price < selectedVariant.price && (
               <span className="text-sm text-gray-500 line-through">
-                ₹{selectedVariant.price}
+                <span className="text-xs">₹</span>{selectedVariant.price}
               </span>
             )}
           </div>
         )}
 
         {/* Buttons */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 pt-0  ">
           <button
             onClick={handleShopNow}
-            className="flex-1 bg-dark-green text-white py-2 px-4 rounded-md hover:bg-dark-green/90 transition-colors"
+            className="flex-1 bg-dark-green pointer-cursor text-white py-1.5 px-3 rounded font-medium text-sm hover:bg-dark-green/10 hover:text-dark-green transition-colors"
           >
             Shop Now
           </button>
@@ -124,7 +124,7 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="flex-1 bg-dark-green/10 text-dark-green py-2 px-4 rounded-md hover:bg-dark-green/20 transition-colors disabled:opacity-50"
+              className="flex-1 pointer-cursor bg-dark-green/10 text-dark-green py-1.5 px-3 rounded font-medium text-sm hover:bg-dark-green/90 hover:text-white transition-colors disabled:opacity-50"
             >
               Add to Cart
             </button>
@@ -133,7 +133,7 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
 
         {/* Stock Status */}
         {selectedVariant && selectedVariant.stock <= 0 && (
-          <p className="text-red-500 text-sm mt-2 text-center">Out of Stock</p>
+          <p className="text-red-500 text-xs text-center">Out of Stock</p>
         )}
       </div>
     </div>
