@@ -13,13 +13,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ product }) => {
 
   const selectedVariant: Variants | null =
     product.variants?.[selectedVariantIndex] || null;
-
   const mainImage = selectedVariant?.image || product.image;
   const additionalImages = selectedVariant?.additionalImages
-    ? String(selectedVariant.additionalImages).split(',').map(id => id.trim()).filter(Boolean)
+    ? (Array.isArray(selectedVariant.additionalImages)
+        ? selectedVariant.additionalImages
+        : String(selectedVariant.additionalImages).split(',').map(id => id.trim()).filter(Boolean))
     : (typeof product.additionalImages === 'string'
         ? (product.additionalImages as string).split(',').map(id => id.trim()).filter(Boolean)
-        : []);
+        : Array.isArray(product.additionalImages) 
+          ? product.additionalImages 
+          : []);
 
   const images: string[] = [mainImage, ...additionalImages]
     .filter(Boolean)
