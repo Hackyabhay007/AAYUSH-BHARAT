@@ -1,7 +1,7 @@
 import config from "@/config/config";
 
-const getFilePreview = (fileId: string) => {
-    if (!fileId) return '';
+const getFilePreview = (fileId?: string | null) => {
+    if (!fileId) return '/placeholder.jpg';
     
     try {
         const baseUrl = 'http://backend.aayudhbharat.com/v1';
@@ -12,7 +12,7 @@ const getFilePreview = (fileId: string) => {
         return `${baseUrl}/storage/buckets/${bucketId}/files/${fileId}/view?project=${projectId}&mode=admin`;
     } catch (error) {
         console.error('Error generating file preview URL:', error);
-        return '';
+        return '/placeholder.jpg';
     }
 };
 

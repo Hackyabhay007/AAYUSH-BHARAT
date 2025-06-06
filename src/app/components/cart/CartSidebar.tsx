@@ -1,14 +1,14 @@
 "use client";
-import React from 'react';
-import { X, ShoppingCart, ShoppingBag, Trash2 } from 'lucide-react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { X, ShoppingCart, ShoppingBag } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
-import Image from 'next/image';
-import { removeCartItem, updateCartItem } from '@/store/slice/cartSlice';
-import { CartItem } from '@/types/cart';
-import getFilePreview from '@/lib/getFilePreview';
-import toast from 'react-hot-toast';
+import { setCartOpen, updateCartItem, removeCartItem } from '@/store/slice/cartSlice';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import toast from 'react-hot-toast';
+import getFilePreview from '@/lib/getFilePreview';
+import { CartItem } from '@/types/cart';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -19,23 +19,35 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cart } = useSelector((state: RootState) => state.cart);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  // Memoize total calculation
+  const total = cart?.items.reduce((sum, item) => 
+    sum + (item.weight.sale_Price * item.quantity)
+  , 0) ?? 0;
 
   const handleUpdateQuantity = async (lineId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
+      setLoading(true);
       await dispatch(updateCartItem({ lineId, quantity: newQuantity }));
       toast.success('Cart updated successfully');
     } catch (error) {
       toast.error('Failed to update cart');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRemoveItem = async (lineId: string) => {
     try {
+      setLoading(true);
       await dispatch(removeCartItem({ lineId }));
       toast.success('Item removed from cart');
     } catch (error) {
       toast.error('Failed to remove item');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,8 +57,8 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
   };
 
   const handleCheckout = () => {
+    dispatch(setCartOpen(false));
     router.push('/checkout?mode=cart');
-    onClose();
   };
 
   return (
@@ -82,60 +94,77 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
             <div className="space-y-4">
               {cart.items.map((item: CartItem) => (
                 <div key={item.id} className="flex gap-4 pb-4 hover:bg-beige/30 p-2 transition-all">
-                  <div className="w-20 h-20 relative overflow-hidden">
+                  <div className="w-20 h-20 relative overflow-hidden rounded-lg bg-gray-100">
                     <Image
-                      src={getFilePreview(item.thumbnail)}
-                      alt={item.name}
-                      fill
-                      className="object-cover transition-transform duration-300 hover:scale-105"
+                      src={item.thumbnail ? getFilePreview(item.thumbnail) : '/placeholder.jpg'}
+                      alt={item.name || 'Product image'}
+                      width={80}
+                      height={80}
+                      className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                        const img = e.target as HTMLImageElement;
+                        img.src = '/placeholder.jpg';
+                      }}
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-dark-green">{item.name}</h3>
-                    <p className="text-sm text-gray-500">{item.weight.weight_Value}g</p>
-                    <div className="flex justify-between items-center mt-2">
-                      <div className="flex items-center space-x-2">
+                    <div className="flex justify-between">
+                      <h3 className="font-medium text-sm">{item.name}</h3>
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="text-gray-500 hover:text-red-500"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {item.weight.weight_Value}g
+                    </p>
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center border rounded">
                         <button
                           onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                          className="text-gray-700 hover:bg-gray-200 w-6 h-6 flex items-center justify-center border border-gray-300 cursor-pointer transition-all"
+                          className="px-3 py-1 hover:bg-gray-100"
+                          disabled={item.quantity <= 1}
                         >
                           -
                         </button>
-                        <span className="font-medium">{item.quantity}</span>
+                        <span className="px-3 py-1 border-x">{item.quantity}</span>
                         <button
                           onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                          className="text-gray-700 hover:bg-gray-200 w-6 h-6 flex items-center justify-center border border-gray-300 cursor-pointer transition-all"
+                          className="px-3 py-1 hover:bg-gray-100"
                         >
                           +
                         </button>
                       </div>
+                      <p className="font-medium">₹{item.weight.sale_Price * item.quantity}</p>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-end justify-between">
-                    <p className="font-medium text-dark-green">₹{item.weight.sale_Price * item.quantity}</p>
-                    <button
-                      onClick={() => handleRemoveItem(item.id)}
-                      className="text-red-500 hover:text-red-700 cursor-pointer p-2 hover:bg-red-50 transition-all"
-                      title="Remove item"
-                    >
-                      <Trash2 size={16} />
-                    </button>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500">
-              <ShoppingCart size={48} className="mb-4" />
-              <p>Your cart is empty</p>
+            <div className="h-full flex flex-col items-center justify-center text-gray-500">
+              <div className="flex items-center gap-2">
+                <ShoppingBag size={18} />
+                <span className="text-lg">Your cart is empty</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="mt-4 text-dark-green hover:underline"
+              >
+                Continue Shopping
+              </button>
             </div>
           )}
-        </div>{/* Footer */}
+        </div>
+        
+        {/* Footer */}
         {cart?.items && cart.items.length > 0 && (
-          <div className="p-4 border-t bg-[#FCEED5]">
-            <div className="flex justify-between mb-4">
-              <span className="font-medium">Subtotal</span>
-              <span className="font-medium text-dark-green">₹{cart.total}</span>
+          <div className="border-t p-4 space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Total</span>
+              <span className="text-xl font-medium">₹{total}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <button 

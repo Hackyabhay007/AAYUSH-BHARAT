@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { CartState, CartItem, Cart } from '@/types/cart'
-import { Product, Weight } from '@/types/product'
-import Cookies from 'js-cookie'
-import { v4 as uuidv4 } from 'uuid'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { CartState, CartItem, Cart, Weight } from '@/types/cart';
+import { Product } from '@/types/product';
+import Cookies from 'js-cookie';
+import { v4 as uuidv4 } from 'uuid';
 
 const CART_COOKIE_NAME = 'cart_data';
 const CART_EXPIRY_HOURS = 1;
@@ -90,9 +90,8 @@ export const addToCart = createAsyncThunk(
   }) => {
     let cart = getCartFromCookie();
     if (!cart) {
-      // Generate a new unique cart ID
       cart = {
-        id: `cart_${uuidv4()}`, // Add prefix to make it more unique
+        id: `cart_${uuidv4()}`,
         items: [],
         total: 0,
         created_at: new Date().toISOString(),
@@ -102,6 +101,8 @@ export const addToCart = createAsyncThunk(
     }
 
     const selectedWeight = product.weights[weightIndex];
+    const selectedVariant = product.variants?.[weightIndex];
+    
     const existingItemIndex = cart.items.findIndex(
       item => item.documentId === product.$id && 
               item.weight.weight_Value === selectedWeight.weight_Value
@@ -112,20 +113,25 @@ export const addToCart = createAsyncThunk(
       cart.items[existingItemIndex].quantity += quantity;
     } else {
       // Add new item with unique ID
+      const variantImage = selectedVariant?.image || 
+                          product.variants?.[0]?.image || 
+                          (product.variants && product.variants.length > 0 ? product.variants[0].image : null) ||
+                          '/placeholder.jpg';
+      
       cart.items.push({
-        id: `item_${uuidv4()}`, // Add prefix to make it more unique
+        id: `item_${uuidv4()}`,
         documentId: product.$id,
         name: product.name,
         quantity,
         weight: {
           weight_Value: selectedWeight.weight_Value,
           original_Price: selectedWeight.original_Price,
-          sale_Price: selectedWeight.sale_Price,
+          sale_Price: selectedWeight.sale_Price
         },
-        thumbnail: product.image,
+        thumbnail: variantImage,
         category: { 
-          $id: product.category[0],
-          name: 'Unknown' // You might want to fetch the actual category name
+          $id: typeof product.category === 'string' ? product.category : 'unknown',
+          name: typeof product.category === 'string' ? product.category : 'Unknown'
         }
       });
     }

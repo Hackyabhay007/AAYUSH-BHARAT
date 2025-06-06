@@ -75,20 +75,32 @@ const ShoppingCartPage: React.FC = () => {
     }, 1000);
   };
 
-  const renderCartItem = (item: CartItem) => (
-    <motion.div
+  const renderCartItem = (item: CartItem) => (    <motion.div
       key={item.id}
-      className="bg-white  rounded-xl shadow-premium hover:shadow-premium-hover p-6 transition-all duration-300"
+      className="bg-white rounded-xl shadow-premium hover:shadow-premium-hover p-6 transition-all duration-300 border border-gray-100 hover:border-gray-200"
       variants={itemVariants}
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <Image
-          src={getFilePreview(item.thumbnail)} // Use getFilePreview to handle image URLs
-          alt={item.name}
-          width={100}
-          height={100}
-          className="w-24 h-24 object-cover rounded sm:w-28 sm:h-28"
-        />
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded overflow-hidden">
+          {item.thumbnail ? (
+            <Image
+              src={getFilePreview(item.thumbnail)}
+              alt={item.name || 'Product image'}
+              width={200}
+              height={200}
+              className="w-full h-full object-cover rounded transition-transform duration-300 hover:scale-105"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const img = e.target as HTMLImageElement;
+                img.src = '/placeholder.jpg';
+              }}
+              priority
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 shimmer rounded flex items-center justify-center">
+              <span className="text-gray-400">No image</span>
+            </div>
+          )}
+        </div>
         <div className="flex-1 space-y-2">
           <div>
             <h3 className="font-medium text-lg">{item.name}</h3>
