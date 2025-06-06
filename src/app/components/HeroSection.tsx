@@ -101,11 +101,10 @@ export default function HeroSection() {
 
   const heroContent = heroContents[currentSlide];
 
-  return (
-    <section className="relative w-full h-screen overflow-hidden bg-black">
-      <div className="absolute inset-0 -z-10">
+  return (    <section className="relative w-full h-screen overflow-hidden">
+      <div className="absolute inset-0">
         {/* Background media */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           {heroContent.video ? (
             <video
               key={currentSlide}
@@ -134,14 +133,14 @@ export default function HeroSection() {
           <>
             <button
               onClick={prevSlide}
-              className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-3 z-50 transition-all duration-300"
+              className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-3 z-20 transition-all duration-300"
               aria-label="Previous slide"
             >
               <IoIosArrowBack size={28} className="text-white drop-shadow-lg" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-3 z-50 transition-all duration-300"
+              className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-3 z-20 transition-all duration-300"
               aria-label="Next slide"
             >
               <IoIosArrowForward size={28} className="text-white drop-shadow-lg" />
@@ -151,7 +150,7 @@ export default function HeroSection() {
 
         {/* Dots Indicator */}
         {heroContents.length > 1 && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-50">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
             {heroContents.map((_, index) => (
               <button
                 key={index}
@@ -164,8 +163,8 @@ export default function HeroSection() {
             ))}
           </div>
         )}        {/* Content Overlay */}
-        <div className="absolute inset-0 z-50 container mx-auto pl-8 md:pl-12 lg:pl-24">
-          <div ref={ref} className="h-full flex flex-col text-center lg:text-left items-center justify-center lg:items-start max-w-2xl">
+        <div className="absolute inset-0 z-10 container mx-auto pl-8 md:pl-12 lg:pl-24">
+          <div ref={ref} className="relative h-full flex flex-col text-center lg:text-left items-center justify-center lg:items-start max-w-2xl">
             {heroContent.heading && (
               <h1 className="text-4xl sm:text-6xl font-bold tracking-wider mb-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
                 {heroContent.heading}

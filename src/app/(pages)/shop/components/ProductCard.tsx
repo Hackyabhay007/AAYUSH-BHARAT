@@ -100,13 +100,13 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
 
         {/* Price Display */}
         {selectedVariant && (
-          <div className="flex items-start gap-2 mb-3">
+          <div className="flex items-center justify-start gap-2 mb-3">
             <span className="text-lg font-semibold text-dark-green">
               <span className="text-sm font-normal">₹</span>{selectedVariant.sale_price}
             </span>
             {selectedVariant.sale_price < selectedVariant.price && (
               <span className="text-sm text-gray-500 line-through">
-                <span className="text-xs">₹</span>{selectedVariant.price}
+                <span className="text-sm">₹</span>{selectedVariant.price}
               </span>
             )}
           </div>
