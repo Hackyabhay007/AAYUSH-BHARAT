@@ -69,4 +69,21 @@ export class OrderService {
       throw error;
     }
   }
+  static async cancelOrder(orderId: string): Promise<Order> {
+    try {
+      const response = await databases.updateDocument(
+        DATABASE_ID,
+        ORDERS_COLLECTION_ID,
+        orderId,
+        {
+          status: 'cancelled',
+          shipping_status: 'cancelled'
+        }
+      );
+      return response as Order;
+    } catch (error) {
+      console.error('Error canceling order:', error);
+      throw error;
+    }
+  }
 }
