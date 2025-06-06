@@ -1,12 +1,15 @@
 import { Product } from '@/types/product';
 
 export function generateProductSchema(product: Product) {
+  // Get the default variant if available
+  const defaultVariant = product.variants?.[0];
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.image,
+    image: defaultVariant?.image || '',
     sku: product.$id,
     brand: {
       '@type': 'Brand',
@@ -14,18 +17,11 @@ export function generateProductSchema(product: Product) {
     },
     offers: {
       '@type': 'Offer',
-      price: product.sale_price || product.price,
+      price: defaultVariant?.sale_price || defaultVariant?.price || 0,
       priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-      url: `https://aayudhbharat.com/product/${product.$id}`
+      availability: defaultVariant?.stock && defaultVariant.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: `https://aayudhbharat.com/product/${product.slug}`
     },
-    category: product.category,
-    ...(product.rating && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: product.rating,
-        reviewCount: '100' // You can replace this with actual review count
-      }
-    })
+    category: product.category
   };
 }

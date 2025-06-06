@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
-// import Sidebar from "./components/Sidebar";
 import productService from "@/appwrite/product";
 import SectionFour from "@/app/components/SectionFour";
 import SectionFive from "@/app/components/SectionFive";
@@ -12,37 +11,47 @@ import ShimmerProductsGrid from "./components/ShimmerProductsGrid";
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const getProducts = async () => {
-      setLoading(true); // Start loading
-      const data = await productService.fetchProduct();
-      // Map Document[] to Product[]
-      const productsData: Product[] = data.map((doc) => ({
-        $id: doc.$id,
-        name: doc.name,
-        description: doc.description,
-        rating: doc.rating,
-        category: doc.category,
-        price: doc.price,
-        imageUrl: doc.imageUrl,
-        sale_price:doc.sale_price,
-        weight: doc.weight ?? 0,
-        image: doc.image ?? "",
-        additionalImages: doc.additionalImages ?? [],
-        stock: doc.stock ?? 0,
-        brand: doc.brand ?? "",
-        tags: doc.tags ?? [],
-        ingredients: doc.ingredients ?? [],
-        slug: doc.slug ?? "",
-        // Add other fields as required by Product type
-      }));
-      setProducts(productsData);
-      setLoading(false); // End loading
+      setLoading(true);
+      try {
+        console.log('Fetching products...');
+        const data = await productService.fetchProduct();        console.log('Raw product data:', data);
+        // Map Document[] to Product[]
+        const productsData = data.map((doc) => ({
+          $id: doc.$id,
+          name: doc.name,
+          description: doc.description,
+          category: doc.category,
+          tags: doc.tags || '',
+          ingredients: doc.ingredients || '',
+          slug: doc.slug,
+          collections: doc.collections || [],
+          variants: (doc.variants || []).map(variant => ({
+            $id: variant.$id,
+            productId: variant.productId,
+            weight: variant.weight,
+            price: variant.price,
+            sale_price: variant.sale_price,
+            stock: variant.stock,
+            image: variant.image,
+            additionalImages: variant.additionalImages || [],
+            months: variant.months
+          }))
+        })) as Product[];
+        console.log('Mapped products:', productsData);
+        setProducts(productsData);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getProducts();
-  }, []);    return (
+  }, []);
+
+  return (
     <div className="relative">
       <div className="flex flex-col pt-0 text-center bg-beige gap-4">
         <div className="max-w-6xl mx-auto px-4">
@@ -53,7 +62,6 @@ const ProductsPage = () => {
         </div>
         
         <div className="flex items-center justify-center gap-12 pb-12 lg:flex-row flex-col">
-          {/* Main Content */}
           <div className="flex flex-col">
             <div className="flex-1">
               <div className="flex justify-center">
@@ -82,8 +90,6 @@ const ProductsPage = () => {
 
         <SectionFour />
         <SectionFive />
-        
-        {/* <VideoSection /> */}
       </div>
     </div>
   );

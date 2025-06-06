@@ -1,44 +1,30 @@
 export interface Variants {
-  id?: string | number;
-  $id:string;
-    productId:string;
-  price: number;
+  $id?: string;
+  productId: string;
   weight: number;
+  price: number;
   sale_price: number;
   stock: number;
-  months:number;
-  image?: string;
-  additionalImages?:string[];
+  image: string;
+  additionalImages: string[];
+  months: number;
 };
-export interface Collections{
-  name:string;
-  description:string;
-  products:Product[];
-  $id:string;
+
+export interface Collections {
+  name: string;
+  description: string;
+  products: Product[];
+  $id: string;
 }
 
 export interface Product {
- $id:string,
+  $id: string;
   name: string;
   description: string;
-  rating:number;
   category: string;
-  weight: number;
-  image: string;
-  additionalImages: string[];
-  stock: number;
-  price: number;
-  sale_price?: number;  
-  tags:string[];
-  ingredients:string;
-  slug:string;
-  variants?:Variants[];
-  collections?:Collections[];
-}
-
-export interface Weight {
-  id: number | string;
-  weight_Value: number;
-  original_Price: number;
-  sale_Price: number;
+  tags: string;
+  ingredients: string;
+  slug: string;
+  collections?: Collections[];
+  variants?: Variants[];
 }

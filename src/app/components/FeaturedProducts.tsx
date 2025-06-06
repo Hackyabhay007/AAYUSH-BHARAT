@@ -17,27 +17,37 @@ const FeaturedProducts = () => {
       setLoading(true);
       try {
         const data = await productService.fetchProduct();
-        // Map Document[] to Product[] and get first 3 products
-        const productsData: Product[] = data.slice(0, 3).map((doc) => ({
-          $id: doc.$id,
-          name: doc.name,
-          description: doc.description,
-          rating: doc.rating,
-          category: doc.category,
-          price: doc.price,
-          imageUrl: doc.imageUrl,
-          sale_price: doc.sale_price,
-          weight: doc.weight ?? 0,
-          image: doc.image ?? "",
-          additionalImages: doc.additionalImages ?? [],
-          stock: doc.stock ?? 0,
-          brand: doc.brand ?? "",
-          tags: doc.tags ?? [],
-          ingredients: doc.ingredients ?? "",
-          slug: doc.slug ?? "",
-          variants: doc.variants ?? [],
-        }));
-        setProducts(productsData);
+        // Get first 3 products and fetch their variants
+        const firstThreeProducts = data.slice(0, 3);        const productsWithVariants = await Promise.all(
+          firstThreeProducts.map(async (doc) => {
+            // Fetch variants for each product
+            const variants = (doc.variants || []).map(variant => ({
+              $id: variant.$id,
+              productId: variant.productId,
+              weight: variant.weight,
+              price: variant.price,
+              sale_price: variant.sale_price,
+              stock: variant.stock,
+              image: variant.image,
+              additionalImages: variant.additionalImages || [],
+              months: variant.months
+            }));
+            
+            return {
+              $id: doc.$id,
+              name: doc.name,
+              description: doc.description,
+              category: doc.category,
+              tags: doc.tags || '',
+              ingredients: doc.ingredients || '',
+              slug: doc.slug,
+              variants: variants,
+              collections: doc.collections || []
+            } as Product;
+          })
+        );
+        
+        setProducts(productsWithVariants);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
