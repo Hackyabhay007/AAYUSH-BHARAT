@@ -122,16 +122,14 @@ const ProductContent = () => {
               duration: 0.4,
               ease: "easeOut"
             }}
-          >
-            <FixedBottomCart 
+          >            <FixedBottomCart 
               productName={product.name} 
-              price={product.price} 
-              productImage={product?.image} 
               productDescription={product.description} 
               productCategory={product.category} 
-              productSalePrice={product?.sale_price}
               productIngredients={product.ingredients}
               product={product}
+              selectedVariant={product.variants?.[0] || null}
+              selectedVariantIndex={0}
             />
           </motion.div>
         )}
