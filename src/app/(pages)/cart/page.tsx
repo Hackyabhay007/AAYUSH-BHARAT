@@ -80,26 +80,28 @@ const ShoppingCartPage: React.FC = () => {
       className="bg-white rounded-xl shadow-premium hover:shadow-premium-hover p-6 transition-all duration-300 border border-gray-100 hover:border-gray-200"
       variants={itemVariants}
     >
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded overflow-hidden">
-          {item.thumbnail ? (
-            <Image
-              src={getFilePreview(item.thumbnail)}
-              alt={item.name || 'Product image'}
-              width={200}
-              height={200}
-              className="w-full h-full object-cover rounded transition-transform duration-300 hover:scale-105"
-              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                const img = e.target as HTMLImageElement;
-                img.src = '/placeholder.jpg';
-              }}
-              priority
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-200 shimmer rounded flex items-center justify-center">
-              <span className="text-gray-400">No image</span>
-            </div>
-          )}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded overflow-hidden">
+          <div className="w-full h-full bg-gray-50 rounded">
+            {item.thumbnail ? (
+              <Image
+                src={getFilePreview(item.thumbnail)}
+                alt={item.name || 'Product image'}
+                width={200}
+                height={200}
+                className="w-full h-full object-cover rounded transition-transform duration-300 hover:scale-105"
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  const img = e.target as HTMLImageElement;
+                  img.src = '/placeholder.jpg';
+                }}
+                priority={true}
+                loading="eager"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 shimmer rounded flex items-center justify-center">
+                <span className="text-gray-400">Loading...</span>
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex-1 space-y-2">
           <div>

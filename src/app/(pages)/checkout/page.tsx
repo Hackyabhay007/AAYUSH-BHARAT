@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductContent from './PageContent'
+
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import CheckoutPage from './Contentpage';

@@ -35,15 +35,26 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           <div
             key={`${product.id}-${product.selectedVariant.id}`}
             className="flex gap-4 p-4 bg-gray-50 rounded-lg"
-          >
-            <div className="h-20 w-20 bg-white rounded-lg overflow-hidden">
-              <Image
-                src={getFilePreview(product.thumbnail)}
-                alt={product.name}
-                className="w-full h-full object-cover"
-                width={500}
-                height={500}
-              />
+          >            <div className="h-20 w-20 bg-white rounded-lg overflow-hidden relative">
+              {product.thumbnail ? (
+                <Image
+                  src={getFilePreview(product.thumbnail)}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  width={200}
+                  height={200}
+                  priority={true}
+                  loading="eager"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    const img = e.target as HTMLImageElement;
+                    img.src = '/placeholder.jpg';
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-100 shimmer rounded flex items-center justify-center">
+                  <span className="text-gray-400">Loading...</span>
+                </div>
+              )}
             </div>
             <div className="flex-1">
               <p className="font-medium">{product.name}</p>

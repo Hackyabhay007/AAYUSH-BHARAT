@@ -123,7 +123,7 @@ const CheckoutPage = () => {
             const cartProducts = cart.items.map((item: any) => ({
               id: item.documentId,
               name: item.name,
-              thumbnail: item.thumbnail,
+              thumbnail: item.thumbnail ? getFilePreview(item.thumbnail) : '/placeholder.jpg',
               category: [item.category.$id],
               quantity: item.quantity,
               selectedVariant: {

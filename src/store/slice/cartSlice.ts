@@ -98,9 +98,7 @@ export const addToCart = createAsyncThunk(
         updated_at: new Date().toISOString(),
         expires_at: getExpirationTime()
       };
-    }
-
-    const selectedWeight = product.weights[weightIndex];
+    }    const selectedWeight = product.weights[weightIndex];
     const selectedVariant = product.variants?.[weightIndex];
     
     const existingItemIndex = cart.items.findIndex(
@@ -113,10 +111,16 @@ export const addToCart = createAsyncThunk(
       cart.items[existingItemIndex].quantity += quantity;
     } else {
       // Add new item with unique ID
-      const variantImage = selectedVariant?.image || 
-                          product.variants?.[0]?.image || 
-                          (product.variants && product.variants.length > 0 ? product.variants[0].image : null) ||
-                          '/placeholder.jpg';
+      let variantImage = '/placeholder.jpg';
+      
+      // Try to get the selected variant's image
+      if (selectedVariant && selectedVariant.image) {
+        variantImage = selectedVariant.image;
+      }
+      // If no image for selected variant, try the first variant's image
+      else if (product.variants && product.variants.length > 0 && product.variants[0].image) {
+        variantImage = product.variants[0].image;
+      }
       
       cart.items.push({
         id: `item_${uuidv4()}`,
