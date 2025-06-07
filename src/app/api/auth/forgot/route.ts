@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // For now, just return a success response
+    // Mock successful password reset request
     return NextResponse.json(
       {
         success: true,
@@ -20,13 +20,12 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-    
-  } catch (err) {
-    console.error("Request processing error:", err);
+  } catch (error) {
+    console.error("Password reset request error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: err instanceof Error ? err.message : "Failed to process request",
+        message: error instanceof Error ? error.message : "Failed to process request",
       },
       { status: 500 }
     );
