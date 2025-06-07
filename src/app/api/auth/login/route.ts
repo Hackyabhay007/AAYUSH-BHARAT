@@ -1,17 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import AuthService from "@/appwrite/auth"; // Make sure this path is correct
 import jwt from "jsonwebtoken";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { email, password } = body;
-    if (password.length < 8) {
-      return NextResponse.json(
-        { message: "Password should be more than 8 characters" },
-        { status: 400 }
-      );
-    }
-    //  Input validation
+
+    // Input validation
     if (!email || !password) {
       return NextResponse.json(
         { message: "Email and password are required" },
@@ -19,45 +14,83 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await AuthService.login({ email, password });
-
-
-    if (user === undefined || user === null) {
-      return NextResponse.json({ message: "User not found" }, { status: 401 });
+    if (password.length < 8) {
+      return NextResponse.json(
+        { message: "Password should be more than 8 characters" },
+        { status: 400 }
+      );
     }
 
-    //  Generate JWT
-    const token = jwt.sign(
-      {
-        userId: user.$id,
-        email: email,
-        // name: userdata.documents[0].name,
+    // Check for required environment variables
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not configured");
+      return NextResponse.json(
+        { message: "Server configuration error" },
+        { status: 500 }
+      );
+    }
 
-      },
-      process.env.JWT_SECRET || "secret",
-      { expiresIn: "720h" }
-    );
-    if (user) {
+    // Import AuthService dynamically
+    const { default: AuthService } = await import("@/appwrite/auth");
+
+    try {
+      // First get the session
+      const session = await AuthService.login({ email, password });
+
+      if (!session) {
+        return NextResponse.json(
+          { message: "Invalid credentials" },
+          { status: 401 }
+        );
+      }
+
+      // Then get the actual user data
+      const userData = await AuthService.getCurrentUser();
+
+      // Create JWT with user data
+      const token = jwt.sign(
+        {
+          userId: userData.$id,
+          email: email, // Use the email from the login request
+          name: userData.name,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "720h" }
+      );
+
       return NextResponse.json(
         {
           success: true,
           message: "Login successful",
           token,
           user: {
-            id: user.userId,
-            email: email,
+            id: userData.$id,
+            email: email, // Use the email from the login request
+            name: userData.name,
           },
         },
         { status: 200 }
       );
+    } catch (authError) {
+      console.error("Auth service error:", authError);
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            authError instanceof Error ? authError.message : "Login failed",
+        },
+        { status: 401 }
+      );
     }
-  } catch (error: unknown) {
-    console.error("Login error:", error);
+  } catch (error) {
+    console.error("Request processing error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: "Login failed",
-        error: error instanceof Error ? error.message : "Unknown error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to process request",
       },
       { status: 500 }
     );
