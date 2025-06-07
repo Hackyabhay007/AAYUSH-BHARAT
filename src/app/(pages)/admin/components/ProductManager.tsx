@@ -193,13 +193,9 @@ const ProductManager = () => {
   const handleUpdate = async () => {
     if (!editingProduct) return;
 
-    try {
-      let imageUrl = editingProduct.image;
-
-      if (imageFile) {
+    try {      if (imageFile) {
         const fileId = ID.unique();
-        const response = await productService.storage.createFile(bucketId, fileId, imageFile);
-        imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
+        await productService.storage.createFile(bucketId, fileId, imageFile);
       }
 
       // Update the product using the updatedProduct data

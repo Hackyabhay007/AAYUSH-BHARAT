@@ -34,11 +34,8 @@ const AddProductForm = () => {
     e.preventDefault();  try {
      
 
-      if (imageFile) {
-        const fileId = ID.unique();
-        const response = await productService.storage.createFile(bucketId, fileId, imageFile);
-
-        // imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
+      if (imageFile) {        const fileId = ID.unique();
+        await productService.storage.createFile(bucketId, fileId, imageFile);
       }
 
       // Create product data with the image URL

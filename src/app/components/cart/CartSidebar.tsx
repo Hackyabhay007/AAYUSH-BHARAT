@@ -25,29 +25,23 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
   const total = cart?.items.reduce((sum, item) => 
     sum + (item.weight.sale_Price * item.quantity)
   , 0) ?? 0;
-
   const handleUpdateQuantity = async (lineId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
-      setLoading(true);
       await dispatch(updateCartItem({ lineId, quantity: newQuantity }));
       toast.success('Cart updated successfully');
     } catch (error) {
+      console.error('Update cart error:', error);
       toast.error('Failed to update cart');
-    } finally {
-      setLoading(false);
     }
   };
-
   const handleRemoveItem = async (lineId: string) => {
     try {
-      setLoading(true);
       await dispatch(removeCartItem({ lineId }));
       toast.success('Item removed from cart');
     } catch (error) {
+      console.error('Remove item error:', error);
       toast.error('Failed to remove item');
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -18,9 +18,7 @@ interface HeroContent {
   mobile_image: string;
 }
 
-export default function HeroSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+export default function HeroSection() {  const ref = useRef(null);
   const [heroContents, setHeroContents] = useState<HeroContent[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -117,12 +115,13 @@ export default function HeroSection() {
               <source src={heroContent.video} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-          ) : (
-            <img
+          ) : (            <Image
               key={currentSlide}
               src={heroContent.image || '/hero.png'}
               alt={heroContent.heading || "Hero background"}
               className="absolute top-0 left-0 w-full h-full object-cover"
+              fill
+              priority
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-transparent" />

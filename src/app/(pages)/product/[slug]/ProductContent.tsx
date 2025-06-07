@@ -45,12 +45,9 @@ const ProductContent = () => {
   }, [productId]);  // Add scroll event listener to detect when to show the cart with throttling for smoother transitions
   useEffect(() => {
     // Use a threshold value to prevent flickering at the transition point
-    let isCartVisible = showCart;
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+    let isCartVisible = showCart;    let ticking = false;
     
     const handleScroll = () => {
-      lastScrollY = window.scrollY;
       
       if (!ticking) {
         window.requestAnimationFrame(() => {
