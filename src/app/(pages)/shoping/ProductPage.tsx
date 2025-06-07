@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "@/appwrite/product"; 
+import { Product } from "@/types/product";
 import ProductCard from "./components/ProductCard";
 // import Sidebar from "./components/Sidebar";
 import productService from "@/appwrite/product";
@@ -38,10 +38,9 @@ const ProductsPage = () => {
         {/* Main Content */}
         <div className="flex flex-col">
           <div className="flex-1">
-            <div className="flex justify-center">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex justify-center">              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.$id} product={product} />
                 ))}
               </div>
             </div>

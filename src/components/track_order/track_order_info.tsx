@@ -30,16 +30,23 @@ const TrackOrderInfo: React.FC<TrackOrderInfoProps> = ({ order }) => {
           </div>
         </div>
       </div>
-
       <div className="mt-6">
-        <h3 className="text-lg font-medium mb-2">Order Summary</h3>          <div className="space-y-2">
-            <p className="text-gray-600">Items: {order.order_items}</p>
-            <p className="text-gray-600">Subtotal: ₹{order.total_price}</p>
-            {typeof order.coupon_discount !== 'undefined' && order.coupon_discount > 0 && (
-              <p className="text-gray-600">Discount: -₹{order.coupon_discount}</p>
-            )}
-            <p className="font-semibold">Final Amount: ₹{order.payment_amount}</p>
+        <h3 className="text-lg font-medium mb-2">Order Summary</h3>
+        <div className="space-y-2">
+          <p className="text-gray-600">Total Items: {order.order_items.length}</p>
+          <div className="pl-4 space-y-1">
+            {order.order_items.map((item, index) => (
+              <p key={index} className="text-gray-600">
+                • {item.quantity}x {item.name} (₹{item.price} each)
+              </p>
+            ))}
           </div>
+          <p className="text-gray-600">Subtotal: ₹{order.total_price}</p>
+          {typeof order.coupon_discount !== 'undefined' && order.coupon_discount > 0 && (
+            <p className="text-gray-600">Discount: -₹{order.coupon_discount}</p>
+          )}
+          <p className="font-semibold">Final Amount: ₹{order.payment_amount}</p>
+        </div>
       </div>
     </div>
   );
