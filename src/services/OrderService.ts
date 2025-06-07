@@ -1,4 +1,3 @@
-import { Models } from 'appwrite';
 import { Order } from '../types/order';
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -71,7 +70,7 @@ export class OrderService {
 
   static async getUserOrders(userId: string): Promise<Order[]> {
     try {
-      const { databases, ID } = await this.getAppwriteClient();
+      const { databases } = await this.getAppwriteClient();
       const { Query } = await import('appwrite');
       
       const response = await databases.listDocuments(
