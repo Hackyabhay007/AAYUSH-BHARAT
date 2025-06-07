@@ -21,11 +21,12 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
     
-  } catch (error) {
+  } catch (err) {
+    console.error("Request processing error:", err);
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to process request",
+        message: err instanceof Error ? err.message : "Failed to process request",
       },
       { status: 500 }
     );
