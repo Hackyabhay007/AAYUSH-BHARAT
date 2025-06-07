@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Package, MapPin, Settings, User } from "lucide-react";
 import Orders from "./component/Order";
 import Addresses from "./component/Address";
 import SettingsComponent from "./component/Setting";
 import Profile from "./component/Profile";
 import {DatabaseService} from "@/appwrite/database";
-import Loader from "@/components/Loader";
+
 import { useAuth } from "@/contexts/AuthContext";
 // import { useDispatch } from "react-redux";
 // import { setUser } from "@/store/userSlice"; 

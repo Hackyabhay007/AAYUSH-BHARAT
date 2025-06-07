@@ -31,9 +31,7 @@ const AddProductForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
- try {
+    e.preventDefault();  try {
       let imageUrl = "";
 
       if (imageFile) {
@@ -43,7 +41,8 @@ const AddProductForm = () => {
         imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
       }
 
-     
+      // Create product data with the image URL
+    
 
       // const success = await productService.addProduct(productData);
 const success=1;

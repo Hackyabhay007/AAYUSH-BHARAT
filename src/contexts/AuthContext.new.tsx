@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string, rememberMe: boolean) => {
+  const login = async (email: string, password: string) => {
     try {
       setLoading(true);
       
@@ -148,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
         password,
         fullname: fullName,
-        phone: Number(phone)
+        phone: phone
       });
       
       if (userData) {

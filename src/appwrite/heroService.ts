@@ -1,4 +1,4 @@
-import { Client, Databases, ID } from "appwrite";
+import { Client, Databases } from "appwrite";
 import conf from "@/config/config";
 
 export class HeroService {

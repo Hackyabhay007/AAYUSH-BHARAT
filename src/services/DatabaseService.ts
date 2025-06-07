@@ -1,5 +1,4 @@
 import { databases, ID, Query } from '@/app/api/lib/appwrite';
-import config from '@/config/config';
 import { Models } from 'appwrite';
 
 export interface AddressData {

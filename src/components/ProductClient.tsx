@@ -6,7 +6,7 @@ interface ProductClientProps {
   productId: string;
 }
 
-const ProductClient: React.FC<ProductClientProps> = ({ productId }) => {
+const ProductClient: React.FC<ProductClientProps> = ({  }) => {
   return (
     <div>
       <ProductContent />

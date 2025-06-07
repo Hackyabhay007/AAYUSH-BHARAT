@@ -6,7 +6,7 @@ interface BlogPostClientProps {
   blogId: string;
 }
 
-const BlogPostClient: React.FC<BlogPostClientProps> = ({ blogId }) => {
+const BlogPostClient: React.FC<BlogPostClientProps> = ({  }) => {
   return (
     <div>
       <BlogArticle />

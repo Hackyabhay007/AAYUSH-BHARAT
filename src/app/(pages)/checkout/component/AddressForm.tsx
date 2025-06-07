@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { saveUserAddress } from "@/app/api/users/addresses/route";
+import { saveUserAddress } from "@/services/AddressService";
+import { Address } from "@/types/customer";
 
-export default function AddressForm({ onSave }: { onSave: (addr: any) => void }) {
+export default function AddressForm({ onSave }: { onSave: (addr: Address[]) => void }) {
   const [form, setForm] = useState({ name: "", street: "", city: "", pincode: "", phone: "" });
 
   const handleSubmit = async () => {

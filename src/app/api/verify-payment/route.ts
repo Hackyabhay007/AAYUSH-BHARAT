@@ -9,9 +9,7 @@ export async function POST(request: Request) {
             razorpay_order_id,
             razorpay_signature,
             orderData,
-            products,
-            amount,
-            user_id
+            
         } = await request.json();
 
         // Verify signature

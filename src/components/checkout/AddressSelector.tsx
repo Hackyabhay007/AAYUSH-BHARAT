@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { AddressDocument } from '@/services/DatabaseService';
 import AddressForm from './AddressForm';
 import ClientOnly from '@/components/ClientOnly';

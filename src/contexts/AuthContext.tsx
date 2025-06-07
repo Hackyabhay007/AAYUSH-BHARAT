@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string, rememberMe: boolean) => {
+  const login = async (email: string, password: string) => {
     try {
       setLoading(true);
       
@@ -167,14 +167,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           await logout(); // Logout current user before registering
         }
       } catch (error) {
-        // Not logged in, proceed with registration
+        console.log("failed");
+        
       }
       
       const userData = await authService.createAccount({
         email,
         password,
         fullname: fullName,
-        phone: Number(phone)
+        phone: phone
       });
       
       if (userData) {

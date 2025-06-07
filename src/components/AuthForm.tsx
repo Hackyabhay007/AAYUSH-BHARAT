@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/store";
 import { loginCustomer } from "@/store/slice/customerSlice";
-import authService from "@/appwrite/auth";
 import { useAuth } from "@/contexts/AuthContext";
 
 
@@ -46,7 +45,6 @@ export default function AuthForm({ type }: AuthFormProps) {
 
   
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, error } = useSelector((state: RootState) => state.customer);
   const isLogin = type === "login";
   const isRegister = type === "register";
   const isForgot = type === "forgot";

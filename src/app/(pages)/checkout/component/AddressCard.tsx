@@ -1,12 +1,21 @@
 import { useState } from "react";
 import AddressForm from "./AddressForm";
 
+// Define a local interface for the address used in this component
+interface SimpleAddress {
+  name: string;
+  street: string;
+  city: string;
+  pincode: string;
+  phone: string;
+}
+
 export default function AddressCard({
   address,
   onAddressSelect,
 }: {
-  address: Address; // Replace 'any' with your Address type if available
-  onAddressSelect: (addr: any) => void;
+  address: SimpleAddress; 
+  onAddressSelect: (addr: SimpleAddress) => void;
 }) {
   
   
@@ -43,8 +52,16 @@ export default function AddressCard({
 
       {showForm && (
         <AddressForm
-          onSave={(addr) => {
-            onAddressSelect(addr); // Update parent state
+        onSave={(addr) => {
+            // Convert Address to SimpleAddress format
+            const simpleAddr: SimpleAddress = {
+              name: addr.full_name,
+              street: addr.address_line1,
+              city: addr.city,
+              pincode: addr.pincode,
+              phone: addr.mobile
+            };
+            onAddressSelect(simpleAddr);
             setShowForm(false);
           }}
         />

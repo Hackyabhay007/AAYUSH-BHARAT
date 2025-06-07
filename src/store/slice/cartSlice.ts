@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { CartState, CartItem, Cart, Weight } from '@/types/cart';
+import { CartState, CartItem, Cart } from '@/types/cart';
 import { Product } from '@/types/product';
 import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';

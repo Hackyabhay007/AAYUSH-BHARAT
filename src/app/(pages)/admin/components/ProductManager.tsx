@@ -119,6 +119,7 @@ import config from "@/config/config";
 import { ID } from "appwrite";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { Variants } from "@/types/product";
 
 type Product = {
   $id: string;
@@ -131,9 +132,8 @@ type Product = {
   description: string;
   category: string;
   ingredients: string;
-  slug: string;
-  variants: any[];
-  collections: any;
+  slug: string;  variants: Variants[];
+  collections: string[];
 };
 
 const ProductManager = () => {
@@ -149,14 +149,16 @@ const ProductManager = () => {
     image: "",
     tags: "",
     rating: "",
-  });
-
-  const fetchProducts = async () => {
+  });  const fetchProducts = async () => {
     const res = await productService.fetchProduct();
-    setExistingProducts(res.map((product: any) => ({
+    const mappedProducts = res.map((product) => ({
       ...product,
-      id: product.$id
-    })));
+      id: product.$id,
+      price: product.variants?.[0]?.price || 0,
+      image: product.variants?.[0]?.image || "",
+      rating: 0 // Add default rating
+    }));
+    setExistingProducts(mappedProducts);
   };
 
   useEffect(() => {
@@ -198,9 +200,7 @@ const ProductManager = () => {
         const fileId = ID.unique();
         const response = await productService.storage.createFile(bucketId, fileId, imageFile);
         imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
-      }
-
-      const updatedProduct = {
+      }      const updatedProduct = {
         ...editingProduct,
         name: formData.name,
         price: parseFloat(formData.price),
@@ -209,6 +209,7 @@ const ProductManager = () => {
         rating: parseFloat(formData.rating),
       };
 
+      // Update the product using the updatedProduct data
       // await productService.updateProduct(formData.id, updatedProduct);
       toast.success("Product updated");
       setIsModalOpen(false);

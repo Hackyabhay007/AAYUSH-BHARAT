@@ -10,8 +10,7 @@ import { CartState } from "@/types/cart";
 import { OrderService } from "@/services/OrderService";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import ClientOnly from "@/components/ClientOnly";
-import { Customer } from "@/types/customer";
-import { Order } from "@/types/order";
+
 import CouponSection from "@/components/checkout/CouponSection";
 import { PaymentSection } from "@/components/checkout/PaymentSection";
 import OrderSummary from "@/components/checkout/OrderSummary";
@@ -19,9 +18,7 @@ import DatabaseService, {
   AddressDocument,
   AddressData,
 } from "@/services/DatabaseService";
-import { databases } from "@/app/api/lib/appwrite";
 import getFilePreview from "@/lib/getFilePreview";
-import Image from "next/image";
 interface CheckoutProduct {
   id: string;
   name: string;
