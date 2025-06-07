@@ -1,39 +1,58 @@
-import config from "@/config/config";
-import { Client, Databases, Query, Storage } from "appwrite";
-import { Product, Variants } from "@/types/product";
+import { Product } from "@/types/product";
+import type { Client, Databases, Storage } from "appwrite";
 
 class ProductService {
-    client: Client;
-    databases: Databases;
-    storage: Storage;
+    private static instance: ProductService | null = null;
+    private client!: Client;
+    private databases!: Databases;
+    private storage!: Storage;
+    private initialized: boolean = false;
 
-    constructor() {
-        const endpoint = config.appwriteUrl;
-        const projectId = config.appwriteProjectId;
+    private constructor() {}
 
-        if (!endpoint || !projectId) {
+    public static getInstance(): ProductService {
+        if (!ProductService.instance) {
+            ProductService.instance = new ProductService();
+        }
+        return ProductService.instance;
+    }
+
+    private async initialize() {
+        if (this.initialized) return;
+
+        const { Client, Databases, Storage } = await import('appwrite');
+        const { default: config } = await import('@/config/config');
+
+        if (!config.appwriteUrl || !config.appwriteProjectId) {
             throw new Error('Appwrite configuration is missing. Please check your environment variables.');
         }
 
         try {
             // Validate URL format
-            new URL(endpoint);
+            new URL(config.appwriteUrl);
             
             this.client = new Client();
             this.client
-                .setEndpoint(endpoint)
-                .setProject(projectId);
+                .setEndpoint(config.appwriteUrl)
+                .setProject(config.appwriteProjectId);
             this.databases = new Databases(this.client);
             this.storage = new Storage(this.client);
+            this.initialized = true;
         } catch {
-            console.error('Invalid Appwrite endpoint URL:', endpoint);
+            console.error('Invalid Appwrite endpoint URL:', config.appwriteUrl);
             throw new Error('Invalid Appwrite endpoint URL configuration');
         }
     }
 
     async deleteProduct(id: string) {
+        await this.initialize();
         try {
-            await this.databases.deleteDocument(config.appwriteDatabaseId, config.appwriteProductCollectionId, id);
+            const { default: config } = await import('@/config/config');
+            await this.databases.deleteDocument(
+                config.appwriteDatabaseId,
+                config.appwriteProductCollectionId,
+                id
+            );
             return true;
         } catch (error) {
             console.error("Error deleting product:", error);
@@ -42,23 +61,28 @@ class ProductService {
     }
 
     async fetchVariants() {
+        await this.initialize();
         try {
+            const { default: config } = await import('@/config/config');
+            const { Query } = await import('appwrite');
             console.log('Fetching all variants');
             const response = await this.databases.listDocuments(
                 config.appwriteDatabaseId,
                 config.appwriteVariantCollectionId,
                 [Query.limit(100)]
             );
-            console.log('Variants response:', response);
             return response.documents;
         } catch (error) {
-            console.error('Error fetching variants:', error);
-            return [];
+            console.error("Error fetching variants:", error);
+            throw error;
         }
     }
 
     async fetchProduct() {
+        await this.initialize();
         try {
+            const { default: config } = await import('@/config/config');
+            const { Query } = await import('appwrite');
             console.log('Fetching products and variants...');
             
             // First fetch all products
@@ -113,7 +137,9 @@ class ProductService {
     }
 
     async updateProduct(id: string, data: Product) {
+        await this.initialize();
         try {
+            const { default: config } = await import('@/config/config');
             const response = await this.databases.updateDocument(
                 config.appwriteDatabaseId,
                 config.appwriteProductCollectionId,
@@ -136,7 +162,9 @@ class ProductService {
     }
 
     async addProduct(product: Omit<Product, "id">) {
+        await this.initialize();
         try {
+            const { default: config } = await import('@/config/config');
             const response = await this.databases.createDocument(
                 config.appwriteDatabaseId,
                 config.appwriteProductCollectionId,
@@ -150,7 +178,10 @@ class ProductService {
     }
 
     async fetchOneProduct(slug: string) {
+        await this.initialize();
         try {
+            const { default: config } = await import('@/config/config');
+            const { Query } = await import('appwrite');
             // Fetch the product
             const productRes = await this.databases.listDocuments(
                 config.appwriteDatabaseId,
@@ -181,5 +212,4 @@ class ProductService {
     }
 }
 
-const productService = new ProductService();
-export default productService;
+export default ProductService.getInstance();
