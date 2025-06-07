@@ -106,12 +106,17 @@ const OrderSuccessPage = () => {
                 <p className="text-gray-600">Coupon: {order.coupon_code}</p>
                 <p className="text-gray-600">Discount Amount: ₹{order.coupon_discount}</p>
               </div>
-            )}
-
-            <div>
+            )}            <div>
               <h2 className="text-xl font-semibold mb-2">Order Summary</h2>
-              <p className="text-gray-600">Items: {order.order_items}</p>
-              <p className="text-gray-600">Subtotal: ₹{order.total_price}</p>
+              <p className="text-gray-600">Items: {order.order_items.length}</p>
+              <div className="mt-2">
+                {order.order_items.map((item, index) => (
+                  <div key={index} className="text-gray-600 ml-4">
+                    • {item.quantity}x {item.name} - ₹{item.price * item.quantity}
+                  </div>
+                ))}
+              </div>
+              <p className="text-gray-600 mt-4">Subtotal: ₹{order.total_price}</p>
               {order.coupon_discount && (
                 <p className="text-gray-600">Discount: -₹{order.coupon_discount}</p>
               )}

@@ -4,8 +4,11 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import getFilePreview from "@/lib/getFilePreview";
 import { Product } from "@/types/product";
+
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  console.log(getFilePreview(product.image));
+  const defaultVariant = product.variants?.[0];
+  const imageUrl = defaultVariant?.image ? getFilePreview(defaultVariant.image) : '/placeholder.jpg';
+  const price = defaultVariant?.price || 0;
   
   return (
 
@@ -13,26 +16,24 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
               <div className="overflow-hidden rounded-md">
                 <Image
                   width={500}
-                  height={500}
-                  src={getFilePreview(product.image)}
+                  height={500}                  src={imageUrl}
                   alt={product.name || 'Product Image'}
                   className="w-full h-48 object-cover rounded-md mb-4 transform transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
 
-              <div className="text-yellow-500 text-sm flex justify-center items-center space-x-1">
-                <span className="flex">  {Array.from({ length: product.rating }).map((_, i) => (
-            <Star key={i} size={16} fill="currentColor" />
-          ))}</span>
+              <div className="text-yellow-500 text-sm flex justify-center items-center space-x-1">                <span className="flex">{Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={16} fill="currentColor" />
+                ))}</span>
                 <span className="text-gray-600 text-xs">(1027)</span>
               </div>
 
               <h3 className="text-base uppercase font-light">{product.name}</h3>
 
               <div className="text-sm my-3">
-                <span className="line-through text-dark mr-2">Rs. {product.price*15}</span>
-                <span className="font-bold text-dark-green mr-2">Rs. {product.price}</span>
-                <span className="text-red-600 font-bold">| Rs. {product.price*15 - product.price}</span>
+                <span className="line-through text-dark mr-2">Rs. {price * 1.15}</span>
+                <span className="font-bold text-dark-green mr-2">Rs. {price}</span>
+                <span className="text-red-600 font-bold">| Rs. {Math.round(price * 0.15)}</span>
               </div>
 
               <button className="uppercase px-8 cursor-pointer py-2 text-base rounded border font-medium border-dark text-dark  hover:text-primary hover:bg-dark-green transition-all duration-300">
