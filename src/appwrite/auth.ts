@@ -11,9 +11,7 @@ export class AuthService {
 
     if (!endpoint || !projectId) {
       throw new Error('Appwrite configuration is missing. Please check your environment variables.');
-    }
-
-    try {
+    }    try {
       // Validate URL format
       new URL(endpoint);
       
@@ -21,7 +19,8 @@ export class AuthService {
         .setEndpoint(endpoint)
         .setProject(projectId);
       this.account = new Account(this.client);
-      this.databases = new Databases(this.client);    } catch (_error) {
+      this.databases = new Databases(this.client);
+    } catch {
       console.error('Invalid Appwrite endpoint URL:', endpoint);
       throw new Error('Invalid Appwrite endpoint URL configuration');
     }
