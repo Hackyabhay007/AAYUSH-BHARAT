@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server';
 import { OrderService } from '@/services/OrderService';
 import { sendOrderConfirmationEmail } from '@/utils/emailService';
-import { Order } from '@/types/order';
+import { Order, OrderEmailDetails, OrderItem } from '@/types/order';
 
 export async function POST(request: Request) {
-    try {
-        const { orderData } = await request.json();
+    try {        const { orderData } = await request.json();
 
-        if (!orderData || !orderData.email) {
+        if (!orderData || !orderData.email || !orderData.first_name || !orderData.last_name || 
+            !orderData.address || !orderData.city || !orderData.state || !orderData.country || 
+            !orderData.pincode || !orderData.total_price || !orderData.payment_amount) {
             return NextResponse.json(
-                { success: false, error: 'Missing required order data' },
+                { success: false, error: 'Missing required order data fields' },
                 { status: 400 }
             );
         }
@@ -31,25 +32,37 @@ export async function POST(request: Request) {
         if (!createdOrder) {
             throw new Error('Failed to create order in database');
         }        // Send order confirmation email
-        try {
-            await sendOrderConfirmationEmail({
+        try {            // Prepare email data with proper type casting
+            const orderItems = typeof orderDocument.order_items === 'string'
+                ? JSON.parse(orderDocument.order_items) as OrderItem[]
+                : Array.isArray(orderDocument.order_items)
+                    ? orderDocument.order_items
+                    : [];            const emailData: OrderEmailDetails = {
                 $id: createdOrder.$id,
-                first_name: createdOrder.first_name,
-                last_name: createdOrder.last_name,
-                email: createdOrder.email,
-                address: createdOrder.address,
-                city: createdOrder.city,
-                state: createdOrder.state,
-                country: createdOrder.country,
-                pincode: createdOrder.pincode,
-                order_items: createdOrder.order_items,
-                total_price: createdOrder.total_price,
-                payment_amount: createdOrder.payment_amount,
-                tracking_id: createdOrder.tracking_id,
-                coupon_code: createdOrder.coupon_code,
-                coupon_discount: createdOrder.coupon_discount,
-                coupon_price: createdOrder.coupon_price
-            });
+                first_name: orderDocument.first_name as string,
+                last_name: orderDocument.last_name as string,
+                email: orderDocument.email as string,
+                address: orderDocument.address as string,
+                city: orderDocument.city as string,
+                state: orderDocument.state as string,
+                country: orderDocument.country as string,
+                pincode: orderDocument.pincode || '',  // Convert undefined to empty string
+                order_items: orderItems,
+                total_price: Number(orderDocument.total_price),
+                payment_amount: Number(orderDocument.payment_amount),
+                tracking_id: orderDocument.tracking_id,
+                coupon_code: orderDocument.coupon_code || undefined,
+                coupon_discount: typeof orderDocument.coupon_discount === 'number' ? 
+                    orderDocument.coupon_discount : 
+                    typeof orderDocument.coupon_discount === 'string' ? 
+                        parseFloat(orderDocument.coupon_discount) : undefined,
+                coupon_price: typeof orderDocument.coupon_price === 'number' ?
+                    orderDocument.coupon_price :
+                    typeof orderDocument.coupon_price === 'string' ?
+                        parseFloat(orderDocument.coupon_price) : undefined
+            };
+            
+            await sendOrderConfirmationEmail(emailData);
             console.log('Order confirmation email sent successfully');
         } catch (error) {
             console.error('Error sending order confirmation email:', error);

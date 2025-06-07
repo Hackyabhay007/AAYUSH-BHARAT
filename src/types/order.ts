@@ -47,6 +47,7 @@ export interface OrderItem {
 }
 
 export interface Order extends Models.Document {
+  // Required fields
   address: string;
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   user_id: string;
@@ -60,14 +61,18 @@ export interface Order extends Models.Document {
   shipping_status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
   payment_amount: number;
   total_price: number;
-  pincode: number;
+  pincode: string | number;
   first_name: string;  last_name: string;
-  order_items: OrderItem[];
+  order_items: number; // Stores total number of items in the order
+  _order_items_data?: OrderItem[]; // Internal field to hold full order items data
   product_id: string;
-  product_ids?: string[]; // Keep for backward compatibility
-  weights: number;
+  weights: number | number[]; // Can be single number or array of weights
+
+  // Optional fields
+  product_ids?: string[]; // For backward compatibility
   coupon_code?: string;
   coupon_discount?: number;
+  coupon_price?: number;
   discount_price?: number;
   razorpay_order_id?: string;
   razorpay_payment_id?: string;
@@ -82,6 +87,9 @@ export interface Order extends Models.Document {
   refund_amount?: number;
   label_url?: string;
   manifest_url?: string;
+  
+  // Appwrite document fields (already included through Models.Document)
+  // but we need these as required fields
   idempotency_key: string;
   created_at: string;
 }
@@ -94,4 +102,23 @@ export interface OrdersState {
   currentPage: number;
   totalPages: number;
   totalOrders: number;
+}
+
+export interface OrderEmailDetails {
+  $id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string | number;
+  order_items: OrderItem[];
+  total_price: number;
+  payment_amount: number;
+  tracking_id?: string;
+  coupon_code?: string;
+  coupon_discount?: number;
+  coupon_price?: number;
 }
