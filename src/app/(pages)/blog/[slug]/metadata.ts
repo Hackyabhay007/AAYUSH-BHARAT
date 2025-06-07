@@ -31,8 +31,10 @@ async function getBlogPost(slug: string) {
   return articles.find(article => article.slug === slug);
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
+    // Await the params Promise
+    const params = await props.params;
     const post = await getBlogPost(params.slug);
 
     if (!post) {

@@ -2,8 +2,11 @@ import { Metadata } from 'next';
 import productService from '@/appwrite/product';
 import { Product } from '@/types/product';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
+    // Await the params Promise
+    const params = await props.params;
+    
     // Fetch the product data based on the slug
     const product = await productService.fetchOneProduct(params.slug) as Product;
 

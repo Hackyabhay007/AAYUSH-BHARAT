@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
-import PageContent from './PageContent'
+import BlogPostClient from '@/components/BlogPostClient'
 import JsonLd from '@/components/JsonLd'
 import { generateBlogPostSchema } from './schema'
 export { generateMetadata } from './metadata'
@@ -26,8 +26,13 @@ async function getBlogPost(slug: string) {
   return articles.find(article => article.slug === slug);
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+// Update to handle params as a Promise
+export default async function BlogPost(props: { params: Promise<{ slug: string }> }) {
+  // Await the params Promise
+  const params = await props.params;
   const scrolled = true;
+  
+  // Get the blog post data with the resolved slug
   const post = await getBlogPost(params.slug);
   const blogSchema = post ? generateBlogPostSchema(post) : null;
 
@@ -37,7 +42,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-[#363f1d] text-black shadow-md" : "bg-transparent text-black"}`}>
         <Navbar scrolled={true} />
       </div>
-      <PageContent />
+      <BlogPostClient blogId={params.slug} />
       <Footer />
     </>
   )
