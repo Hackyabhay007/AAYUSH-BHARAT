@@ -57,7 +57,11 @@ export class DatabaseService {
         return DatabaseService.instance;
     }
 
-    async listDocuments(databaseId: string, collectionId: string, queries?: any[]) {
+    async listDocuments<T extends Models.Document>(
+        databaseId: string, 
+        collectionId: string, 
+        queries?: string[]
+    ): Promise<Models.DocumentList<T>> {
         try {
             return await this.databases.listDocuments(
                 databaseId,
@@ -70,7 +74,11 @@ export class DatabaseService {
         }
     }
 
-    async createDocument(databaseId: string, collectionId: string, data: any) {
+    async createDocument<T extends Models.Document>(
+        databaseId: string, 
+        collectionId: string, 
+        data: Omit<T, keyof Models.Document>
+    ): Promise<T> {
         try {
             return await this.databases.createDocument(
                 databaseId,
