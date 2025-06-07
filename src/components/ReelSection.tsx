@@ -84,11 +84,9 @@ export default function ReelSection({
         <h2 className="lg:text-4xl text-2xl text-dark-green font-semibold">
           {title}
         </h2>
-      </div>
-
-      <Swiper
+      </div>      <Swiper
         modules={[Navigation]}
-        navigation={!isMobile}
+        navigation={videos.length > 4}
         spaceBetween={20}
         direction={"horizontal"}
         slidesPerView={isMobile ? 1 : 4}
@@ -96,7 +94,7 @@ export default function ReelSection({
       >
         {videos.map((video, index) => (
           <SwiperSlide key={video.id || index} className={isMobile ? "!h-[500px]" : ""}>
-            <div className="relative rounded overflow-hidden block h-[550px]">
+            <div className="relative rounded overflow-hidden block h-[450px]">
               <video
                 src={video.videourl}
                 className="w-full h-full object-cover"
