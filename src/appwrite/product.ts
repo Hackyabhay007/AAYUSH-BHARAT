@@ -3,16 +3,32 @@ import { Client, Databases, Query, Storage } from "appwrite";
 import { Product, Variants } from "@/types/product";
 
 class ProductService {
-    client = new Client();
+    client: Client;
     databases: Databases;
     storage: Storage;
 
     constructor() {
-        this.client
-            .setEndpoint(config.appwriteUrl)
-            .setProject(config.appwriteProjectId);
-        this.databases = new Databases(this.client);
-        this.storage = new Storage(this.client);
+        const endpoint = config.appwriteUrl;
+        const projectId = config.appwriteProjectId;
+
+        if (!endpoint || !projectId) {
+            throw new Error('Appwrite configuration is missing. Please check your environment variables.');
+        }
+
+        try {
+            // Validate URL format
+            new URL(endpoint);
+            
+            this.client = new Client();
+            this.client
+                .setEndpoint(endpoint)
+                .setProject(projectId);
+            this.databases = new Databases(this.client);
+            this.storage = new Storage(this.client);
+        } catch {
+            console.error('Invalid Appwrite endpoint URL:', endpoint);
+            throw new Error('Invalid Appwrite endpoint URL configuration');
+        }
     }
 
     async deleteProduct(id: string) {
