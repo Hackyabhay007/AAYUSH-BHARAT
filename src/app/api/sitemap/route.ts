@@ -1,11 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import productService from '@/appwrite/product';
-import { Models } from 'appwrite';
+import { Product } from '@/types/product';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
+  let xml = '';
+  
   try {
     // Fetch all products
-    const products = await productService.fetchProduct();
+    const products = await productService.fetchProduct() as Product[];
     
     const baseUrl = 'https://aayudhbharat.com';
     const currentDate = new Date().toISOString().split('T')[0];
@@ -18,12 +20,10 @@ export async function GET(request: NextRequest) {
       { url: '/contact-us', priority: '0.7', changefreq: 'monthly' },
       { url: '/blog', priority: '0.8', changefreq: 'weekly' }
     ];
-    
-    // Start building the XML
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>';
+      // Start building the XML
+    xml = '<?xml version="1.0" encoding="UTF-8"?>';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    
-    // Add static routes
+      // Add static routes
     staticRoutes.forEach(route => {
       xml += `
         <url>
@@ -32,10 +32,12 @@ export async function GET(request: NextRequest) {
           <changefreq>${route.changefreq}</changefreq>
           <priority>${route.priority}</priority>
         </url>
-      `;    });
-      // Add product routes
-    products.forEach((product: any) => {
-      const productId = product.$id || product.id;
+      `;
+    });
+
+    // Add product routes
+    products.forEach((product: Product) => {
+      const productId = product.$id;
       xml += `
         <url>
           <loc>${baseUrl}/product/${productId}</loc>

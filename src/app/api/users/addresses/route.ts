@@ -3,6 +3,7 @@ import { databases } from '@/appwrite/database';
 import { ID, Query } from 'appwrite';
 import { getTokenFromRequest, verifyToken } from '@/middleware/auth';
 import { Address } from '@/types/customer';
+import { ApiErrorResponse } from '@/types/api';
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const ADDRESS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_ADDRESS_COLLECTION_ID!;
@@ -42,18 +43,17 @@ export async function GET(request: NextRequest) {
         console.log('Sending response:', response);
         console.log('=== Ending GET /api/user/addresses ===');
 
-        return NextResponse.json(response);
-    } catch (error: any) {
+        return NextResponse.json(response);    } catch (error) {
+        const apiError = error as ApiErrorResponse;
         console.error('=== Error in GET /api/user/addresses ===');
         console.error('Error details:', {
-            message: error.message,
-            stack: error.stack,
-            code: error.code,
-            response: error.response
+            message: apiError.message,
+            stack: apiError.stack,
+            code: apiError.code,
+            response: apiError.response
         });
-        return NextResponse.json({
-            success: false,
-            error: error.message || 'Failed to fetch addresses'
+        return NextResponse.json({            success: false,
+            error: apiError.message || 'Failed to fetch addresses'
         }, { status: 500 });
     }
 }
@@ -78,12 +78,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             address: newAddress
-        });
-    } catch (error: any) {
-        console.error('Error saving address:', error);
+        });    } catch (error) {
+        const apiError = error as ApiErrorResponse;
+        console.error('Error saving address:', apiError);
         return NextResponse.json({
             success: false,
-            error: error.message || 'Failed to save address'
+            error: apiError.message || 'Failed to save address'
         }, { status: 500 });
     }
 }

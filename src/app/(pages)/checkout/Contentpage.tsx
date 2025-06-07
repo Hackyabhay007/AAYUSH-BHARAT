@@ -19,6 +19,8 @@ import DatabaseService, {
   AddressData,
 } from "@/services/DatabaseService";
 import getFilePreview from "@/lib/getFilePreview";
+import { RazorpayResponse } from "@/types/razorpay";
+import type { CartItem } from "@/types/cart";
 
 interface CheckoutProduct {
   id: string;
@@ -105,7 +107,7 @@ const CheckoutPage = () => {
               return;
             }
 
-            const cartProducts = cart.items.map((item: any) => ({
+            const cartProducts = cart.items.map((item: CartItem) => ({
               id: item.documentId,
               name: item.name,
               thumbnail: item.thumbnail ? getFilePreview(item.thumbnail) : '/placeholder.jpg',
@@ -311,7 +313,7 @@ const CheckoutPage = () => {
           currency: result.currency,
           name: "AAYUSH BHARAT",
           description: "Purchase from Aayush Bharat",
-          order_id: result.id,          handler: async function (response: any) {
+          order_id: result.id,          handler: async function (response: RazorpayResponse) {
             try {
               setProcessingPayment(true); // Start loading
               console.log("Payment successful, verifying...", response);
@@ -473,10 +475,7 @@ const CheckoutPage = () => {
       console.error("Error saving address:", error);
       setAddressError("Failed to save address. Please try again.");
     }
-  };
-  const handleSelectAddress = (address: AddressDocument) => {
-    setSelectedAddress(address);
-  };
+  };  // handleSelectAddress is used by <AddressSelector> in renderAddressSection
 
   useEffect(() => {
     const loadScript = async () => {
@@ -703,7 +702,7 @@ const CheckoutPage = () => {
                 Processing your order...
               </p>
               <p className="text-green-200 text-sm mt-2">
-                Please don't close this window
+                Please don&apos;t close this window
               </p>
             </motion.div>
           </motion.div>

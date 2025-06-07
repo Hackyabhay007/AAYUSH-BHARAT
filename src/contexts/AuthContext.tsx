@@ -29,9 +29,11 @@ const logoutExistingSession = async () => {
     const session = await authService.account.getSession('current');
     if (session) {
       await authService.account.deleteSession(session.$id);
-    }
-  } catch (error) {
+    }  } catch (error) {
     // No active session or error getting session
+    if (error instanceof Error) {
+      console.error("Error during logout:", error.message);
+    }
     console.log("No active session to logout");
   }
 };

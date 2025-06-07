@@ -9,7 +9,11 @@ interface SEOProps {
   ogType?: string;
   ogImage?: string;
   ogImageAlt?: string;
-  structuredData?: any;
+  structuredData?: {
+    '@context': string;
+    '@type': string;
+    [key: string]: unknown;
+  };
 }
 
 export default function SEO({

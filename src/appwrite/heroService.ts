@@ -34,10 +34,13 @@ export class HeroService {
                     mobile_image: doc.mobile_image || ''
                 }));
             }
-            return [];
-        } catch (error: any) {
+            return [];        } catch (error: unknown) {
             console.error("Error fetching hero content:", error);
-            console.error("Error details:", error?.message || "Unknown error");
+            if (error instanceof Error) {
+                console.error("Error details:", error.message);
+            } else {
+                console.error("Error details: Unknown error");
+            }
             return null;
         }
     }

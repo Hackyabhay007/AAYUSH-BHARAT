@@ -4,11 +4,10 @@ import { OrderService } from "@/services/OrderService";
 import SimpleLoader from "@/components/SimpleLoader";
 import { Order } from "@/types/order";
 
-export default function Orders() {
+const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]); // Explicitly typed as Order[]
   const [loading, setLoading] = useState(true);
-  const [totalSpent, setTotalSpent] = useState(0);
-
+  
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -18,12 +17,11 @@ export default function Orders() {
         const userOrders = await OrderService.getUserOrders(userId);
         setOrders(userOrders);
 
-        // Calculate total spent
+                // Calculate total spent        
         const total = userOrders.reduce(
           (sum, order) => sum + (order.payment_amount || 0),
           0
         );
-        setTotalSpent(total);
 
         // Store total spent in localStorage for dashboard
         localStorage.setItem("totalSpent", total.toString());
@@ -107,3 +105,5 @@ export default function Orders() {
     </div>
   );
 }
+
+export default Orders;
