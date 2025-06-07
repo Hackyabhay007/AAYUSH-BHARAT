@@ -61,15 +61,21 @@ export default function AuthForm({ type }: AuthFormProps) {
       }
 
       try {
+        // Validate phone number format
+        const phoneStr = formData.phone.replace(/\D/g, '');
+        if (phoneStr.length !== 10) {
+          setValidationError("Phone number must be exactly 10 digits");
+          setIsLoading2(false);
+          return;
+        }
+        
         // Use the register method from AuthContext
         await register(
           formData.full_name, 
           formData.email, 
           formData.password, 
-          formData.phone.toString()
+          phoneStr // Pass clean phone number
         );
-        // No need to manually set localStorage, show toast, or navigate - 
-        // These are all handled in the AuthContext register method
       } catch (err: unknown) {
         console.error("Registration error:", err);
         if (err instanceof Error) {
@@ -82,29 +88,27 @@ export default function AuthForm({ type }: AuthFormProps) {
         setIsLoading2(false);
       }
     }
-    
-    else if (isLogin) {
+      else if (isLogin) {
       try {
-        // Use the login method from AuthContext
-        await login(formData.email, formData.password, rememberMe);
-        
-        // Optional: dispatch to Redux if still needed
+        // Always dispatch to Redux first
         try {
-          await dispatch(loginCustomer({
+          const result = await dispatch(loginCustomer({
             email: formData.email,
             password: formData.password,
             rememberMe: rememberMe,
           })).unwrap();
+          
+          // If Redux login succeeds, update AuthContext
+          await login(formData.email, formData.password, rememberMe);
+          
+          // Navigate is handled by AuthContext
         } catch (reduxErr) {
-          console.error("Redux state update failed:", reduxErr);
-          // Continue anyway since AuthContext login succeeded
+          console.error("Login error:", reduxErr);
+          throw new Error(reduxErr instanceof Error ? reduxErr.message : "Login failed");
         }
-        
-        // No need to manually set localStorage, show toast, or navigate - 
-        // These are all handled in the AuthContext login method
       } catch (error) {
         console.error("Login error:", error);
-        setValidationError("Login failed. Please try again.");
+        setValidationError(error instanceof Error ? error.message : "Login failed. Please try again.");
         setIsLoading2(false);
       }
     }
@@ -178,7 +182,8 @@ export default function AuthForm({ type }: AuthFormProps) {
             {isRegister && "Sign Up to AAYUSH BHARAT"}
             {isForgot && "Reset Your Password"}
             {isReset && "Set New Password"}
-          </h2>          {isLogin && (
+          </h2>
+          {isLogin && (
             <p className="text-center text-base mb-4">
               Don&apos;t have an account?{" "}
               <Link href="/register" className="text-green-900">
@@ -209,18 +214,32 @@ export default function AuthForm({ type }: AuthFormProps) {
                   className="p-3 my-2 border rounded"
                   required
                 />
-
                 <label>Phone Number</label>
-                <input
-                  type="number"
-                  placeholder="Enter your phone number"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  className="p-3 my-2 border rounded"
-                  required
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-[1.1rem] text-gray-500">+91</span>
+                  <input
+                    type="tel"
+                    placeholder="10 digit mobile number"
+                    value={formData.phone}
+                    onChange={(e) => {
+                      // Only allow numbers
+                      const value = e.target.value.replace(/\D/g, '');
+                      // Limit to 10 digits
+                      if (value.length <= 10) {
+                        setFormData({ ...formData, phone: value });
+                      }
+                    }}
+                    className="p-3 pl-12 my-2 border rounded w-full"
+                    pattern="\d{10}"
+                    maxLength={10}
+                    required
+                  />
+                </div>
+                {formData.phone && formData.phone.length !== 10 && (
+                  <p className="text-xs text-red-500 -mt-1 mb-2">
+                    Please enter a valid 10-digit mobile number
+                  </p>
+                )}
               </>
             )}
 

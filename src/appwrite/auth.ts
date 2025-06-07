@@ -24,9 +24,7 @@ export class AuthService {
       console.error('Invalid Appwrite endpoint URL:', endpoint);
       throw new Error('Invalid Appwrite endpoint URL configuration');
     }
-  }
-
-  async createAccount({
+  }  async createAccount({
     email,
     password,
     fullname,
@@ -38,33 +36,48 @@ export class AuthService {
     phone: string;
   }) {
     try {
+      // Remove any non-numeric characters and convert to integer
+      const phoneInt = parseInt(phone.replace(/\D/g, ''));
+      
+      // Create user account
       const useraccount = await this.account.create(
         ID.unique(),
         email,
         password,
         fullname
       );
+
       if (useraccount) {
+        try {
+          // Format phone for auth service (+91 format)
+          const phoneE164 = '+91' + phone.replace(/\D/g, '');
+          // Update phone using password for verification
+          await this.account.updatePhone(phoneE164, password);
+        } catch (error) {
+          console.error('Error updating phone in auth:', error);
+          // Continue anyway since the main account is created
+        }
+
+        // Create user document with phone as integer
         const res = await this.databases.createDocument(
           config.appwriteDatabaseId,
           config.appwriteUserCollectionId,
           ID.unique(),
           {
             userid: useraccount.$id,
-            email: useraccount.email,
             fullname: fullname,
-            phone: phone.toString(),
+            email: email,
+            phone: phoneInt // Store as integer in database
           }
         );
-        console.log("after doc", res);
 
-        return this.login({ email, password });
-      } else {
+        // Login the user immediately after registration to set proper scopes
+        await this.login({ email, password });
+
         return useraccount;
       }
     } catch (error) {
-      console.log("Error in creating appwrite user:", error);
-
+      console.error('Account creation error:', error);
       throw error;
     }
   }

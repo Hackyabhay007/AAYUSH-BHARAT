@@ -4,36 +4,67 @@ import Orders from "./component/Order";
 import Addresses from "./component/Address";
 import SettingsComponent from "./component/Setting";
 import Profile from "./component/Profile";
-import {DatabaseService} from "@/appwrite/database";
-
+import DatabaseService from "@/services/DatabaseService";
 import { useAuth } from "@/contexts/AuthContext";
-// import { useDispatch } from "react-redux";
-// import { setUser } from "@/store/userSlice"; 
-// import { setUser } from "@/store/slice/customerSlice";
+
 type UserProfile = {
   name: string;
   email: string;
   $createdAt: string;
-  phone:string;
-  $id:string;
+  phone: string;
+  $id: string;
 };
 
 export default function ProfileDashboard({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
-  // const dispatch = useDispatch();
-  const { logout } = useAuth();
+  const { logout, user: authUser, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
   const [tabLoading, setTabLoading] = useState(false);
+  const [user, setUserState] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
   
   const handleLogout = async () => {
     try {
       await logout();
     } catch (error) {
       console.error("Logout error:", error);
-      // Fallback to basic logout if the proper logout fails
-      localStorage.removeItem("user");
       window.location.href = "/login";
     }
   };
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (!isAuthenticated || !authUser?.$id) {
+          throw new Error("User not authenticated");
+        }
+        
+        const userID = authUser.$id;
+        const userData = await DatabaseService.getUserData(userID);
+        
+        if (userData) {
+          setUserState({
+            name: userData.fullname || "",
+            email: userData.email || "",
+            phone: userData.phone || "",
+            $createdAt: userData.$createdAt || "",
+            $id: userData.$id || "",
+          });
+        } else {
+          setUserState(null);
+        }
+      } catch (error) {
+        console.error("Error loading user profile:", error);
+        setUserState(null);
+      } finally {
+        setLoading(false);
+        onLoadingChange(false);
+      }
+    };
+    
+    setLoading(true);
+    fetchUser();
+  }, [isAuthenticated, authUser, onLoadingChange]);
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "orders":
@@ -56,43 +87,6 @@ export default function ProfileDashboard({ onLoadingChange }: { onLoadingChange:
         return null;
     }
   };
-
-  const [user, setUserState] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userID = localStorage.getItem("userid");
-        if (!userID) {
-          throw new Error("User ID not found in localStorage");
-        }
-        const userData = await DatabaseService.getUserData(userID);
-
-        if (userData && userData.documents && userData.documents[0]) {
-          const doc = userData.documents[0];
-          setUserState({
-            name: doc.fullname || "",
-            email: doc.email || "",
-            phone: doc.phone || "",
-            $createdAt: doc.$createdAt || "",
-            $id:doc.$id || '',
-          });
-        } else {
-          setUserState(null);
-        }
-        setLoading(false);
-        onLoadingChange(false);
-      } catch (error) {
-        console.error("Error loading user profile:", error);
-        setUserState(null);
-      } finally {
-        setLoading(false);
-        onLoadingChange(false);
-      }
-    };    setLoading(true);
-    fetchUser();
-  }, [onLoadingChange]);
 
   const handleTabClick = async (tabKey: string) => {
     setTabLoading(true);

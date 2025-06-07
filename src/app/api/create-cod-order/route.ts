@@ -1,69 +1,32 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { OrderService } from '@/services/OrderService';
-import { Order } from '@/types/order';
 import { sendOrderConfirmationEmail } from '@/utils/emailService';
-
-interface PaymentVerificationRequest {
-    razorpay_payment_id: string;
-    razorpay_order_id: string;
-    razorpay_signature: string;
-    orderData: Partial<Order>;
-}
+import { Order } from '@/types/order';
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json() as PaymentVerificationRequest;
-        const {
-            razorpay_payment_id,
-            razorpay_order_id,
-            razorpay_signature,
-            orderData,
-        } = body;
+        const { orderData } = await request.json();
 
-        if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !orderData) {
+        if (!orderData || !orderData.email) {
             return NextResponse.json(
-                { success: false, error: 'Missing required payment verification data' },
+                { success: false, error: 'Missing required order data' },
                 { status: 400 }
             );
         }
 
-        // Verify signature
-        const text = `${razorpay_order_id}|${razorpay_payment_id}`;
-        const secret = process.env.RAZORPAY_KEY_SECRET;
-        
-        if (!secret) {
-            console.error('RAZORPAY_KEY_SECRET is not defined');
-            return NextResponse.json(
-                { success: false, error: 'Payment verification configuration error' },
-                { status: 500 }
-            );
-        }
-
-        const generated_signature = crypto
-            .createHmac('sha256', secret)
-            .update(text)
-            .digest('hex');
-
-        if (generated_signature !== razorpay_signature) {
-            return NextResponse.json(
-                { success: false, error: 'Invalid payment signature' },
-                { status: 400 }
-            );
-        }
-
-        // Create order in database
-        const orderDetails: Partial<Order> = {
+        // Create order document
+        const orderDocument: Partial<Order> = {
             ...orderData,
-            payment_type: 'ONLINE',
-            payment_status: 'completed',
+            payment_type: 'COD',
+            payment_status: 'pending',
             status: 'processing',
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
+            shipping_status: 'pending',
+            idempotency_key: `cod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            created_at: new Date().toISOString()
         };
 
-        const createdOrder = await OrderService.createOrder(orderDetails);
+        // Create order in database
+        const createdOrder = await OrderService.createOrder(orderDocument);
 
         if (!createdOrder) {
             throw new Error('Failed to create order in database');
@@ -94,16 +57,17 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             success: true,
+            message: 'COD order created successfully',
             orderId: createdOrder.$id,
             orderDetails: createdOrder
         });
 
     } catch (error) {
-        console.error('Payment verification error:', error);
+        console.error('Order creation error:', error);
         return NextResponse.json(
             { 
                 success: false, 
-                error: error instanceof Error ? error.message : 'Payment verification failed'
+                error: error instanceof Error ? error.message : 'Failed to create order'
             },
             { status: 500 }
         );

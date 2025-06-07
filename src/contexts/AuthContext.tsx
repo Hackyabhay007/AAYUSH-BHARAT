@@ -4,12 +4,21 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import { useRouter } from 'next/navigation';
 import authService from '@/appwrite/auth';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 interface User {
   $id: string;
+  id: string;
   name: string;
   email: string;
+  full_name: string;
+  created_at: string;
+  role: boolean;
+  email_verified: boolean;
   phone?: string;
+  userId?: string;
+  emailVerification?: boolean;
+  $createdAt?: string;
 }
 
 interface AuthContextType {
@@ -29,7 +38,8 @@ const logoutExistingSession = async () => {
     const session = await authService.account.getSession('current');
     if (session) {
       await authService.account.deleteSession(session.$id);
-    }  } catch (err) {
+    }
+  } catch (err) {
     // No active session or error getting session
     if (err instanceof Error) {
       console.error("Error during logout:", err.message);
@@ -43,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
   // Check if user is already logged in
   useEffect(() => {
     const checkAuth = async () => {
@@ -50,19 +61,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem('user');
         if (token) {
           try {
-            // Get current user data
             const userData = await authService.getCurrentUser();
             if (userData) {
-              setUser({
+              const user: User = {
                 $id: userData.$id,
+                id: userData.$id,
                 name: userData.name,
-                email: userData.email
-              });
+                email: userData.email,
+                full_name: userData.name,
+                created_at: userData.$createdAt || new Date().toISOString(),
+                role: false,
+                email_verified: userData.emailVerification || false
+              };
+              setUser(user);
               setIsAuthenticated(true);
             }
           } catch (error) {
             console.error("Auth check error:", error);
-            // Clear invalid tokens
             localStorage.removeItem('user');
             localStorage.removeItem('userid');
             setIsAuthenticated(false);
@@ -76,28 +91,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, rememberMe: boolean = false): Promise<void> => {
     try {
       setLoading(true);
       
       // For development testing - mock user login
       if (email === "test@gmail.com" && password === "testpassword") {
-        // Add a small delay to simulate real login
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        const mockUser = {
+        const mockUser: User = {
           $id: "test-user-id",
+          id: "test-user-id",
           name: "Test User",
-          email: "test@gmail.com"
+          email: "test@gmail.com",
+          full_name: "Test User",
+          created_at: new Date().toISOString(),
+          role: false,
+          email_verified: true
         };
         
-        // Clear any existing data first
         localStorage.removeItem('user');
         localStorage.removeItem('userid');
         
-        // Set new data
-        localStorage.setItem('user', mockUser.$id);
+        localStorage.setItem('user', JSON.stringify(mockUser));
         localStorage.setItem('userid', mockUser.$id);
+        Cookies.set('auth_token', 'test-token', {
+          expires: rememberMe ? 30 : 1,
+          sameSite: 'strict'
+        });
+        
         setUser(mockUser);
         setIsAuthenticated(true);
         toast.success('Logged in successfully!');
@@ -105,41 +127,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      // Add a small delay to prevent rate limiting
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Check if there's an existing session and log it out
       await logoutExistingSession();
-      
-      // Add another small delay after logout
       await new Promise(resolve => setTimeout(resolve, 500));
       
       const session = await authService.login({ email, password });
       
       if (session) {
-        // Store auth token
         localStorage.setItem('user', session.userId);
         localStorage.setItem('userid', session.userId);
         
-        // Get user data
         const userData = await authService.getCurrentUser();
-        setUser({
-          $id: userData.$id,
-          name: userData.name,
-          email: userData.email
-        });
-        
-        setIsAuthenticated(true);
-        toast.success('Logged in successfully!');
-        
-        // Use replace to prevent back navigation issues
-        router.replace('/profile');
+        if (userData) {
+          const user: User = {
+            $id: userData.$id,
+            id: userData.$id,
+            name: userData.name,
+            email: userData.email,
+            full_name: userData.name,
+            created_at: userData.$createdAt || new Date().toISOString(),
+            role: false,
+            email_verified: userData.emailVerification || false
+          };
+          setUser(user);
+          setIsAuthenticated(true);
+          toast.success('Logged in successfully!');
+          router.replace('/profile');
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
       let errorMessage = 'Login failed. Please check your credentials.';
       
-      // More specific error messages
       if (error instanceof Error) {
         if (error.message.includes("Rate limit")) {
           errorMessage = 'Too many attempts. Please try again in a moment.';
@@ -152,22 +171,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
-  const register = async (fullName: string, email: string, password: string, phone: string) => {
+  const register = async (fullName: string, email: string, password: string, phone: string): Promise<void> => {
     try {
       setLoading(true);
-      
-      // Check if password is at least 8 characters
-      if (password.length < 8) {
+        if (password.length < 8) {
         toast.error('Password must be at least 8 characters long');
         throw new Error('Password must be at least 8 characters long');
       }
       
-      // Check if already logged in and logout first
+      // Validate phone number
+      const phoneStr = phone.replace(/\D/g, '');
+      if (phoneStr.length !== 10) {
+        toast.error('Phone number must be exactly 10 digits');
+        throw new Error('Phone number must be exactly 10 digits');
+      }
+      
+      // Convert phone to integer
+      const phoneNumber = parseInt(phoneStr);
+      
       try {
         const currentUser = await authService.getCurrentUser();
         if (currentUser) {
-          await logout(); // Logout current user before registering
-        }      } catch (error) {
+          await logout();
+        }
+      } catch (error) {
         if (error instanceof Error) {
           console.error("Error checking current user:", error.message);
         }
@@ -179,18 +206,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         fullname: fullName,
         phone: phone
       });
-      
-      if (userData) {
-        localStorage.setItem('user', userData.userId);
-        localStorage.setItem('userid', userData.userId);
+        if (userData) {
+        localStorage.setItem('user', userData.$id);
+        localStorage.setItem('userid', userData.$id);
         
-        setUser({
+        const user: User = {
           $id: userData.$id,
+          id: userData.$id,
           name: fullName,
           email,
+          full_name: fullName,
+          created_at: new Date().toISOString(),
+          role: false,
+          email_verified: false,
           phone
-        });
+        };
         
+        setUser(user);
         setIsAuthenticated(true);
         toast.success('Registration successful!');
         router.push('/profile');
@@ -202,24 +234,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };  const logout = async () => {
+  };
+
+  const logout = async () => {
     try {
-      // First clear local storage and state to prevent re-auth attempts
       localStorage.removeItem('user');
       localStorage.removeItem('userid');
+      Cookies.remove('auth_token');
       setUser(null);
       setIsAuthenticated(false);
 
-      // If using the mock user, just redirect
       const userId = localStorage.getItem('user');
       if (userId === 'test-user-id') {
         router.replace('/login');
         return;
       }
       
-      // Otherwise, try to delete the actual session
       try {
-        // Add a small delay to prevent rate limiting
         await new Promise(resolve => setTimeout(resolve, 500));
         
         const session = await authService.account.getSession('current');
@@ -228,13 +259,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch (error) {
         console.error("Error deleting session:", error);
-        // Don't show error to user since we've already logged them out locally
       } finally {
         router.replace('/login');
       }
     } catch (error) {
       console.error("Logout error:", error);
-      // Still redirect even if there's an error
       router.replace('/login');
     }
   };

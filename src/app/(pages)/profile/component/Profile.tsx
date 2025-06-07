@@ -1,19 +1,20 @@
 "use client";
 import authService from '@/appwrite/auth';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { OrderService } from '@/services/OrderService';
+import DatabaseService from '@/services/DatabaseService';
 
-type ProfileProps = {
+interface ProfileProps {
   name: string;
   phone: string;
   email: string;
   createdAt: string;
-  $id:string;
-};
+  $id: string;
+}
 
 const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [form, setForm] = useState({ name, phone, email,$id,password:'' });
+  const [form, setForm] = useState({ name, phone, email, $id, password: '' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -24,6 +25,18 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
     progress: 0
   });
 
+  // Update form when props change
+  useEffect(() => {
+    setForm(prevForm => ({
+      ...prevForm,
+      name,
+      phone,
+      email,
+      $id
+    }));
+  }, [name, phone, email, $id]);
+
+  // Fetch order stats
   useEffect(() => {
     const fetchOrderStats = async () => {
       try {
@@ -38,7 +51,7 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
           totalSpent,
           totalOrders: orders.length,
           memberStatus: totalSpent >= 5000 ? "Silver" : "Regular",
-          progress: progress
+          progress
         });
       } catch (error) {
         console.error("Error fetching order stats:", error);
@@ -56,18 +69,39 @@ const Profile: React.FC<ProfileProps> = ({ name, phone, email, createdAt, $id })
     setSaving(true);
     setError(null);
     setSuccess(null);
+
     try {
-      // Call your AuthService.updateUser function
-      // Example: await AuthService.updateUser({ name: form.name, phone: form.phone, email: form.email });
+      if (!form.password) {
+        throw new Error("Current password is required to update profile");
+      }
+
       await authService.updateUser({
         name: form.name,
         phone: form.phone,
         email: form.email,
         userId: form.$id,
         password: form.password,
-      }); // Adjust as per your actual function signature
+      });
+
+      // Update local storage with new data
+      const userID = localStorage.getItem("userid");
+      if (userID) {        const userData = await DatabaseService.getUserData(userID);
+        if (userData) {
+          // Update local user data
+          localStorage.setItem("customer_data", JSON.stringify({            user: {
+              ...userData,
+              name: form.name,
+              email: form.email,
+              phone: form.phone
+            }
+          }));
+        }
+      }
+
       setSuccess("Profile updated successfully!");
       setIsEditing(false);
+      // Reset password field
+      setForm(prev => ({ ...prev, password: '' }));
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Failed to update profile.");
