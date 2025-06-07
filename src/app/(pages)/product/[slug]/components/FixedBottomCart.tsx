@@ -7,6 +7,31 @@ import toast from 'react-hot-toast';
 import getFilePreview from '@/lib/getFilePreview';
 import { Product, Variants } from '@/types/product';
 
+interface Weight {
+  id: string;
+  documentId: string;
+  weight_Value: number;
+  original_Price: number;
+  sale_Price: number;
+}
+
+// Extend Product type but omit the string index signature
+type BaseProduct = Omit<Product, keyof { [key: string]: string |  Variants[] | undefined }>;
+
+// Create a new type that combines base product with weights
+interface ProductWithWeights extends BaseProduct {
+  weights: Weight[];
+  $id: string;
+  name: string;
+  description: string;
+  category: string;
+  tags: string;
+  ingredients: string;
+  slug: string;
+  
+  variants?: Variants[];
+}
+
 interface FixedBottomCartProps {
   productId?: string;
   productName: string;
@@ -27,47 +52,43 @@ const FixedBottomCart = ({
 }: FixedBottomCartProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [quantity, setQuantity] = React.useState(1);
-  const handleAddToCart = async () => {    try {      // Convert variants to weights format, ensuring no undefined values
+  const handleAddToCart = async () => {
+    try {
+      if (!selectedVariant) {
+        throw new Error('Please select a product variant');
+      }
+
       const weights = (product.variants || []).map(variant => ({
-        id: variant.$id || 0, // Allow id to be number or string
+        id: variant.$id || '0',
         documentId: variant.$id || '0',
-        weight_Value: variant.weight,
-        original_Price: variant.price,
-        sale_Price: variant.sale_price,
+        weight_Value: variant.weight || 0,
+        original_Price: variant.price || 0,
+        sale_Price: variant.sale_price || 0,
       }));
 
-      // If no weights, provide a default weight from the selected variant
       if (weights.length === 0 && selectedVariant) {
         weights.push({
-          id: selectedVariant.$id || 0, // Allow id to be number or string
+          id: selectedVariant.$id || '0',
           documentId: selectedVariant.$id || '0',
-          weight_Value: selectedVariant.weight,
-          original_Price: selectedVariant.price,
-          sale_Price: selectedVariant.sale_price,
+          weight_Value: selectedVariant.weight || 0,
+          original_Price: selectedVariant.price || 0,
+          sale_Price: selectedVariant.sale_price || 0,
         });
-      }      // Create product with weights
-      // Cast product to include the weights property
-      const productWithWeights = {
+      }      const productWithWeights = {
         ...product,
         weights,
-      } as Product & { 
-        weights: Array<{ 
-          id: string | number, 
-          documentId: string,
-          weight_Value: number,
-          original_Price: number,
-          sale_Price: number
-        }> 
-      };
+      } as Product & { weights: typeof weights };
 
       await dispatch(addToCart({
         product: productWithWeights,
         weightIndex: selectedVariantIndex,
         quantity
       }));
-      toast.success('Added to cart');    } catch (error) {
+      toast.success('Added to cart');
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Failed to add to cart';
       console.error('Add to cart error:', error);
-      toast.error('Failed to add to cart');
+      toast.error(error);
     }
   };return (
   <div className="bg-green-100 shadow-lg border-t border-greenn-500 px-4 py-2 flex lg:flex-row flex-col items-center justify-center gap-4 lg:gap-10">

@@ -305,7 +305,9 @@ const CheckoutPage = () => {
         }
 
         const result = await response.json();
-        console.log("Razorpay order created:", result);        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        console.log("Razorpay order created:", result);
+
+        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
         if (!razorpayKey) {
           throw new Error('Razorpay key is not configured');
         }

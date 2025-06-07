@@ -29,10 +29,10 @@ const logoutExistingSession = async () => {
     const session = await authService.account.getSession('current');
     if (session) {
       await authService.account.deleteSession(session.$id);
-    }  } catch (error) {
+    }  } catch (err) {
     // No active session or error getting session
-    if (error instanceof Error) {
-      console.error("Error during logout:", error.message);
+    if (err instanceof Error) {
+      console.error("Error during logout:", err.message);
     }
     console.log("No active session to logout");
   }
@@ -167,10 +167,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const currentUser = await authService.getCurrentUser();
         if (currentUser) {
           await logout(); // Logout current user before registering
+        }      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error checking current user:", error.message);
         }
-      } catch (error) {
-        console.log("failed");
-        
       }
       
       const userData = await authService.createAccount({

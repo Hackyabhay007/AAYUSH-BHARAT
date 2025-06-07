@@ -11,7 +11,7 @@ export interface RazorpayCreateOrderResponse {
 }
 
 interface RazorpayInstance {
-  on: (event: string, callback: Function) => void;
+  on: (event: string, callback: (response?: RazorpayResponse) => void) => void;
   open: () => void;
   close: () => void;
 }
