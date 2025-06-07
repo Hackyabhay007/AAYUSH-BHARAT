@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Button from "./ui/Button";
-import { useInView } from "framer-motion";
 import heroService from "@/appwrite/heroService";
+import Image from "next/image";
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 interface HeroContent {

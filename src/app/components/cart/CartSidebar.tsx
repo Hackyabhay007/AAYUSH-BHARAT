@@ -19,7 +19,6 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cart } = useSelector((state: RootState) => state.cart);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
   // Memoize total calculation
   const total = cart?.items.reduce((sum, item) => 

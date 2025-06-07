@@ -65,8 +65,8 @@ const FixedBottomCart = ({
         weightIndex: selectedVariantIndex,
         quantity
       }));
-      toast.success('Added to cart');
-    } catch (error) {
+      toast.success('Added to cart');    } catch (error) {
+      console.error('Add to cart error:', error);
       toast.error('Failed to add to cart');
     }
   };return (

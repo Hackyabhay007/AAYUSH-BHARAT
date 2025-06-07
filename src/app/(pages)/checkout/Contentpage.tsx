@@ -305,15 +305,18 @@ const CheckoutPage = () => {
         }
 
         const result = await response.json();
-        console.log("Razorpay order created:", result);
+        console.log("Razorpay order created:", result);        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+        if (!razorpayKey) {
+          throw new Error('Razorpay key is not configured');
+        }
 
         const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: result.amount,
-          currency: result.currency,
+          key: razorpayKey,
+          amount: result.amount as number,
+          currency: result.currency as string,
           name: "AAYUSH BHARAT",
           description: "Purchase from Aayush Bharat",
-          order_id: result.id,          handler: async function (response: RazorpayResponse) {
+          order_id: result.id as string,handler: async function (response: RazorpayResponse) {
             try {
               setProcessingPayment(true); // Start loading
               console.log("Payment successful, verifying...", response);
@@ -397,7 +400,7 @@ const CheckoutPage = () => {
           },
         };
 
-        const rzp = new (window as any).Razorpay(options);
+        const rzp = new window.Razorpay(options);
         rzp.open();
       }
     } catch (error) {
