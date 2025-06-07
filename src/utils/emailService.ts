@@ -30,6 +30,15 @@ interface EmailResponse {
     messageId?: string;
 }
 
+// Log email configuration (safely)
+console.log('Email Configuration:', {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    user: process.env.EMAIL_USER,
+    from: process.env.EMAIL_FROM,
+    hasPass: !!process.env.EMAIL_PASS,
+});
+
 // Create email transporter
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -115,6 +124,26 @@ export const generateOrderConfirmationEmail = (orderDetails: OrderEmailDetails) 
 
 export const sendOrderConfirmationEmail = async (orderDetails: OrderEmailDetails): Promise<EmailResponse> => {
     try {
+        console.log('Starting email send process with details:', {
+            to: orderDetails.email,
+            orderId: orderDetails.$id,
+            customerName: `${orderDetails.first_name} ${orderDetails.last_name}`
+        });
+
+        // Verify required fields
+        if (!orderDetails.email || !orderDetails.$id || !orderDetails.first_name) {
+            throw new Error('Missing required email fields');
+        }
+
+        // Log email configuration
+        console.log('Email configuration:', {
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            user: process.env.EMAIL_USER,
+            from: process.env.EMAIL_FROM,
+            replyTo: process.env.REPLY_TO
+        });
+
         const mailOptions = {
             from: process.env.EMAIL_FROM || 'AYUDH BHARAT <care@aayudhbharat.com>',
             to: orderDetails.email,
@@ -123,24 +152,86 @@ export const sendOrderConfirmationEmail = async (orderDetails: OrderEmailDetails
             replyTo: process.env.REPLY_TO || 'care@aayudhbharat.com'
         };
 
+        console.log('Sending email with options:', {
+            to: mailOptions.to,
+            subject: mailOptions.subject,
+            from: mailOptions.from
+        });
+
         const info = await transporter.sendMail(mailOptions);
+        console.log('Raw email send result:', info);
+
         if ('messageId' in info) {
-            console.log('Order confirmation email sent:', info.messageId);
+            console.log('Order confirmation email sent successfully:', info.messageId);
             return { success: true, messageId: info.messageId };
         }
+
+        console.log('Email sent but no messageId returned');
         return { success: true };
     } catch (error) {
         console.error('Failed to send order confirmation email:', error);
+        // Include more details in the error for debugging
+        if (error instanceof Error) {
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+        }
         throw error;
     }
 };
 
 export const verifyEmailConfig = async () => {
     try {
-        await transporter.verify();
+        console.log('Verifying email configuration...');
+        
+        // Check if required environment variables are set and have values
+        const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'EMAIL_USER', 'EMAIL_PASS'];
+        const missingOrEmptyVars = requiredEnvVars.filter(varName => {
+            const value = process.env[varName];
+            return !value || value.trim() === '';
+        });
+        
+        if (missingOrEmptyVars.length > 0) {
+            console.error('Missing or empty environment variables:', missingOrEmptyVars);
+            console.log('Current environment values (safely):', {
+                SMTP_HOST: process.env.SMTP_HOST || 'not set',
+                SMTP_PORT: process.env.SMTP_PORT || 'not set',
+                EMAIL_USER: process.env.EMAIL_USER || 'not set',
+                EMAIL_PASS: process.env.EMAIL_PASS ? 'set' : 'not set',
+                EMAIL_FROM: process.env.EMAIL_FROM || 'not set',
+            });
+            return { 
+                success: false, 
+                error: `Missing or empty environment variables: ${missingOrEmptyVars.join(', ')}` 
+            };
+        }
+
+        // Log configuration being tested
+        console.log('Testing email configuration:', {
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            user: process.env.EMAIL_USER,
+            auth: process.env.EMAIL_USER ? 'configured' : 'missing'
+        });
+
+        // Verify SMTP connection
+        const verified = await transporter.verify();
+        console.log('Email configuration verification result:', verified);
+        
         return { success: true };
     } catch (error) {
         console.error('Email configuration verification failed:', error);
-        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+        let errorMessage = 'Unknown error';
+        if (error instanceof Error) {
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            errorMessage = error.message;
+        }
+        return { success: false, error: errorMessage };
     }
 };

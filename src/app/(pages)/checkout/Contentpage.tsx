@@ -273,15 +273,72 @@ const CheckoutPage = () => {
       if (!orderData.user_id) {
         throw new Error("User ID is required. Please try refreshing the page.");
       }      if (paymentMethod === "COD") {
-        try {          setProcessingPayment(true); // Show loader
+        try {
+          console.log("Starting COD order creation...");
+          setProcessingPayment(true); // Show loader
+          
           // Create order for COD
-          const createdOrder = await OrderService.createOrder({
-            ...orderData,
-            payment_type: "COD",
-            status: "pending",
-            payment_status: "pending",
-            shipping_status: "pending"
+          const response = await fetch("/api/create-cod-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderData }),
           });
+
+          if (!response.ok) {
+            throw new Error("Failed to create COD order");
+          }
+
+          const result = await response.json();
+          console.log("COD order created:", result);          // Send order confirmation email
+          try {
+            console.log("Sending order confirmation email...");
+            console.log("Email data:", {
+              email: orderData.email,
+              orderId: result.orderId,
+              userName: `${orderData.first_name} ${orderData.last_name}`,
+              amount: finalAmount
+            });
+            const emailResponse = await fetch("/api/send-order-email", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: orderData.email,
+                orderDetails: {
+                  orderId: result.orderId,
+                  amount: totalAmount,
+                  finalAmount: finalAmount,
+                  address: {
+                    first_name: orderData.first_name,
+                    last_name: orderData.last_name,
+                    address: orderData.address,
+                    city: orderData.city,
+                    state: orderData.state,
+                    country: orderData.country,
+                    pincode: orderData.pincode
+                  },
+                  couponCode: appliedCoupon?.code,
+                  couponDiscount: appliedCoupon?.discount,
+                  couponPrice: discountAmount,
+                  trackingId: result.orderDetails?.tracking_id
+                },
+                products: checkoutData.products.map(p => ({
+                  name: p.name,
+                  quantity: p.quantity,
+                  selectedVariant: p.selectedVariant
+                }))
+              }),
+            });
+
+            const emailResult = await emailResponse.json();
+            console.log("Email sending result:", emailResult);
+
+            if (!emailResult.success) {
+              console.error("Failed to send order confirmation email:", emailResult.error);
+            }
+          } catch (emailError) {
+            console.error("Error sending confirmation email:", emailError);
+            // Continue with order success even if email fails
+          }
           
           // Clear cart if order was created successfully
           if (mode === "cart") {
@@ -289,13 +346,15 @@ const CheckoutPage = () => {
           }
           
           // Show success popup
-          setOrderId(createdOrder.$id);
+          setOrderId(result.orderId);
           setProcessingPayment(false);
           setShowConfirmation(true);
           return;
         } catch (error) {
           console.error("Error creating COD order:", error);
           throw new Error("Failed to create order. Please try again.");
+        } finally {
+          setProcessingPayment(false);
         }
       }
 
