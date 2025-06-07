@@ -54,8 +54,10 @@ export class OrderService {
         pincode: typeof orderData.pincode === 'string' ? 
           parseInt(orderData.pincode) : Number(orderData.pincode || 0),
 
-        // Store total number of items
-        order_items: originalOrderItems.reduce((sum, item) => sum + Number(item.quantity), 0),
+        // Store total number of items (calculated from _order_items_data if available)
+        order_items: originalOrderItems.length > 0 ? 
+          originalOrderItems.reduce((sum, item) => sum + Number(item.quantity), 0) :
+          Number(orderData.order_items || 0),
         
         // Ensure product_id is a string
         product_id: Array.isArray(orderData.product_ids) ? 

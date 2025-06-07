@@ -244,8 +244,11 @@ const CheckoutPage = () => {
         shipping_status: "pending",
         first_name: selectedAddress.full_name.split(" ")[0],
         last_name: selectedAddress.full_name.split(" ").slice(1).join(" "),
-        pincode: parseInt(selectedAddress.pincode),        total_price: totalAmount,        payment_amount: finalAmount,
-        order_items: checkoutData.products.map(p => ({
+        pincode: parseInt(selectedAddress.pincode),
+        total_price: totalAmount,
+        payment_amount: finalAmount,
+        // Pass order items data separately for internal use
+        _order_items_data: checkoutData.products.map(p => ({
           product_id: p.id,
           name: p.name,
           price: p.selectedVariant.sale_price,
@@ -256,8 +259,10 @@ const CheckoutPage = () => {
             price: p.selectedVariant.sale_price
           }
         })),
-        product_id: checkoutData.products.map((p) => p.id).join(','), // Convert product IDs to comma-separated string
-        weights: checkoutData.products.reduce((total, p) => total + (Number(p.selectedVariant.title) * p.quantity), 0), // Calculate total weight of all products
+        // Total number of items for the order_items field
+        order_items: checkoutData.products.reduce((sum, p) => sum + p.quantity, 0),
+        product_id: checkoutData.products.map((p) => p.id).join(','),
+        weights: checkoutData.products.reduce((total, p) => total + (Number(p.selectedVariant.title) * p.quantity), 0),
         idempotency_key: orderItemsKey,
         coupon_code: appliedCoupon?.code,
         coupon_discount: appliedCoupon?.discount,
