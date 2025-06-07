@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { Customer } from '@/types/customer';
 import { RootState } from '@/store/store';
-// import { databases } from '@/app/api/lib/appwrite';
+import { ApiError } from '@/types/error';
+import { Order } from '@/types/order';
 
 export interface CustomerState {
   currentCustomer: Customer | null;
@@ -78,9 +79,18 @@ const initialState: CustomerState = {
   orderError: null,
 };
 
+interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+interface OrdersResponse {
+  orders: Order[];
+}
+
 export const fetchCustomerOrders = createAsyncThunk(
-  'customer/fetchOrders',
-  async (token: string) => {
+  'customer/fetchOrders',  async (token: string) => {
     try {
       const response = await fetch('/api/orders', {
         headers: {
@@ -93,17 +103,18 @@ export const fetchCustomerOrders = createAsyncThunk(
         throw new Error('Failed to fetch orders');
       }
 
-      const data = await response.json();
+      const data = await response.json() as OrdersResponse;
       return data.orders;
-    } catch (error: any) {
-      throw new Error(error.message || 'Failed to fetch orders');
+    } catch (error) {
+      const apiError = error as ApiError;
+      throw new Error(apiError.message || 'Failed to fetch orders');
     }
   }
 );  
 
 export const updateUserAddresses = createAsyncThunk(
   'customer/updateUserAddresses',
-  async ({ userId, addresses }: { userId: string; addresses: string[] }, { getState }) => {
+  async ({ addresses }: { addresses: string[] }, { getState }) => {
     try {
       const state = getState() as RootState;
       const token = state.customer.token;
@@ -157,9 +168,9 @@ export const fetchUserAddresses = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.addresses;
-    } catch (error: any) {
-      throw new Error(error.message || 'Failed to fetch addresses');
+      return data.addresses;    } catch (error) {
+      const apiError = error as ApiError;
+      throw new Error(apiError.message || 'Failed to fetch addresses');
     }
   }
 );
@@ -282,8 +293,7 @@ export const loginCustomer = createAsyncThunk(
       return {
         user: data.user,
         token: data.token
-      };
-    } catch (error: any) {
+      };    } catch (error) {
       console.error('Login error:', error);
       throw error;
     }
@@ -368,10 +378,11 @@ export const checkAuthStatus = createAsyncThunk(
       }
 
       const data = await response.json();
-      const result = { user: data.user, token: stored.token };
+      const result = { user: data.user as Customer, token: stored.token };
       saveToStorage(result);
       return result;
     } catch (error) {
+      console.error('Auth check error:', error);
       clearStorage();
       removeAuthToken();
       return rejectWithValue('Authentication failed');

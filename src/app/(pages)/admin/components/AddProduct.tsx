@@ -32,13 +32,13 @@ const AddProductForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();  try {
-      let imageUrl = "";
+     
 
       if (imageFile) {
         const fileId = ID.unique();
         const response = await productService.storage.createFile(bucketId, fileId, imageFile);
 
-        imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
+        // imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
       }
 
       // Create product data with the image URL

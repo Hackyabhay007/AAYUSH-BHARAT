@@ -19,12 +19,19 @@ export interface ShippingOption {
   price_type: 'flat' | 'calculated';
 }
 
+export interface PaymentProvider {
+  id: string;
+  name: string;
+  status: 'active' | 'inactive';
+  type: string;
+}
+
 export interface OrderState {
   loading: boolean;
   error: string | null;
-  order: any | null;
+  order: Order | null;
   shippingOptions: ShippingOption[];
-  paymentProviders: any[];
+  paymentProviders: PaymentProvider[];
 }
 
 export interface OrderItem {
