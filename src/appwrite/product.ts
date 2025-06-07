@@ -1,4 +1,4 @@
-import { Product } from "@/types/product";
+import { Product, Variants } from "@/types/product";
 import type { Client, Databases, Storage } from "appwrite";
 
 class ProductService {
