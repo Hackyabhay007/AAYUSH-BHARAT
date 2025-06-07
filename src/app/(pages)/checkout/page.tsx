@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { Suspense } from 'react';
 
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import CheckoutPage from './Contentpage';
+import SimpleLoader from '@/components/SimpleLoader';
 
 function page() {
 
@@ -13,7 +14,9 @@ function page() {
 
     <Navbar scrolled={true} />
     </div>
-     <CheckoutPage/> 
+    <Suspense fallback={<SimpleLoader />}>
+        <CheckoutPage /> 
+      </Suspense>
       <Footer/>
       </div>
   )
