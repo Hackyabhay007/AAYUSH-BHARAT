@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Ticket } from 'lucide-react';
+import { CouponData } from '@/types/coupon';
 
 interface CouponSectionProps {
-    onApplyCoupon: (couponData: any) => void;
+    onApplyCoupon: (couponData: CouponData) => void;
     totalAmount: number;
     onRemoveCoupon: () => void;
-    appliedCoupon: any | null;
+    appliedCoupon: CouponData | null;
 }
 
 const CouponSection = ({ onApplyCoupon, totalAmount, onRemoveCoupon, appliedCoupon }: CouponSectionProps) => {
@@ -54,8 +55,8 @@ const CouponSection = ({ onApplyCoupon, totalAmount, onRemoveCoupon, appliedCoup
 
             setCouponCode('');
 
-        } catch (error: any) {
-            setError(error.message);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An error occurred';            setError(errorMessage);
         } finally {
             setLoading(false);
             setTimeout(() => setApplyAnimation(false), 1000);

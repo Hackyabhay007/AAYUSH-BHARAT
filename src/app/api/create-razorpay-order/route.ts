@@ -3,7 +3,7 @@ import Razorpay from 'razorpay';
 
 export async function POST(request: Request) {
     try {
-    const {  currency, orderData } = await request.json();
+        const {  currency, orderData } = await request.json();
 
         // Always use the payment_amount which is the final amount after discount
         const finalAmount = orderData.payment_amount;

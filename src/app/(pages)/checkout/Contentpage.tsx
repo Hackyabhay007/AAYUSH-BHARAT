@@ -1,24 +1,25 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store/store";
-import { clearCart } from "../../../store/slice/cartSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import { clearCart } from "@/store/slice/cartSlice";
 import { CartState } from "@/types/cart";
 import { OrderService } from "@/services/OrderService";
 import AddressSelector from "@/components/checkout/AddressSelector";
 import ClientOnly from "@/components/ClientOnly";
-
 import CouponSection from "@/components/checkout/CouponSection";
 import { PaymentSection } from "@/components/checkout/PaymentSection";
 import OrderSummary from "@/components/checkout/OrderSummary";
+import { CouponData } from "@/types/coupon";
 import DatabaseService, {
   AddressDocument,
   AddressData,
 } from "@/services/DatabaseService";
 import getFilePreview from "@/lib/getFilePreview";
+
 interface CheckoutProduct {
   id: string;
   name: string;
@@ -71,19 +72,9 @@ const CheckoutPage = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponData | null>(null);
   const [processingPayment, setProcessingPayment] = useState(false); // Add this line
-  const [user, setUser] = useState<User | null>(null);
-  const sectionVariants = {
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
-
-  const contactRef = useRef(null);
-  const deliveryRef = useRef(null);
-  const paymentRef = useRef(null);
+  const [user, setUser] = useState<User | null>(null);  const paymentRef = useRef(null);
   const summaryRef = useRef(null);
 
  ; // fetchUserAddresses has been moved to useAddresses hook
@@ -503,7 +494,7 @@ const CheckoutPage = () => {
 
   const handleOpenAddressModal = () => setShowAddressModal(true);
   const handleCloseAddressModal = () => setShowAddressModal(false);
-  const handleApplyCoupon = (couponData: any) => {
+  const handleApplyCoupon = (couponData: CouponData) => {
     setAppliedCoupon(couponData);
   };
   const fetchAddresses = async () => {

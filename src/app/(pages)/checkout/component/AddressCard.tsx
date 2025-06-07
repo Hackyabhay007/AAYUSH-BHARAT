@@ -1,6 +1,5 @@
 import { useState } from "react";
 import AddressForm from "./AddressForm";
-import { Address } from "@/types/customer";
 
 // Define a SimpleAddress interface that matches the component's needs
 interface SimpleAddress {

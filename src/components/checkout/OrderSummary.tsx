@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import getFilePreview from "@/lib/getFilePreview";
+import { CouponData } from "@/types/coupon";
 
 interface CheckoutProduct {
   id: string;
@@ -18,7 +19,7 @@ interface CheckoutProduct {
 
 interface OrderSummaryProps {
   products: CheckoutProduct[];
-  appliedCoupon: any;
+  appliedCoupon: CouponData | null;
   calculateTotals: () => { original: number; sale: number };
 }
 

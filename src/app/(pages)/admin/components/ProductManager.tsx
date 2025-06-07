@@ -200,14 +200,7 @@ const ProductManager = () => {
         const fileId = ID.unique();
         const response = await productService.storage.createFile(bucketId, fileId, imageFile);
         imageUrl = productService.storage.getFilePreview(bucketId, response.$id);
-      }      const updatedProduct = {
-        ...editingProduct,
-        name: formData.name,
-        price: parseFloat(formData.price),
-        image: imageUrl,
-        tags: formData.tags,
-        rating: parseFloat(formData.rating),
-      };
+      }
 
       // Update the product using the updatedProduct data
       // await productService.updateProduct(formData.id, updatedProduct);
