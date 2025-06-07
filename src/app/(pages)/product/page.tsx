@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
-import ProductsPage from './ProductPage';
 
 function page() {
   const scrolled=true;
@@ -12,7 +11,7 @@ function page() {
 
     <Navbar scrolled={true} />
     </div>
-      <ProductsPage/>
+     
       
       <Footer/>
       

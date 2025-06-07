@@ -119,17 +119,21 @@ import config from "@/config/config";
 import { ID } from "appwrite";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 type Product = {
+  $id: string;
   id: string;
   name: string;
   price: number;
   image: string;
   tags: string;
   rating: number;
+  description: string;
+  category: string;
+  ingredients: string;
+  slug: string;
+  variants: any[];
+  collections: any;
 };
 
 const ProductManager = () => {
@@ -149,7 +153,10 @@ const ProductManager = () => {
 
   const fetchProducts = async () => {
     const res = await productService.fetchProduct();
-    setExistingProducts(res);
+    setExistingProducts(res.map((product: any) => ({
+      ...product,
+      id: product.$id
+    })));
   };
 
   useEffect(() => {
@@ -247,80 +254,84 @@ const ProductManager = () => {
               />
             )}
             <div className="flex gap-2">
-              <Button
-                variant="default"
+              <button
                 onClick={() => openEditModal(product)}
-                className="bg-blue-500 hover:bg-blue-600"
+                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 Edit
-              </Button>
-              <Button
-                variant="destructive"
+              </button>
+              <button
                 onClick={() => handleDelete(product.id)}
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
               >
                 Delete
-              </Button>
+              </button>
             </div>
           </li>
         ))}
       </ul>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            <Input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Product Name"
-            />
-            <Input
-              name="price"
-              type="number"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Price"
-            />
-            <Input
-              name="tags"
-              value={formData.tags}
-              onChange={handleChange}
-              placeholder="Tags"
-            />
-            <Input
-              name="rating"
-              type="number"
-              value={formData.rating}
-              onChange={handleChange}
-              placeholder="Rating"
-            />
-            <Input
-              type="file"
-              name="image"
-              onChange={handleChange}
-            />
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
+            <div className="space-y-3">
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Product Name"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Price"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="text"
+                name="tags"
+                value={formData.tags}
+                onChange={handleChange}
+                placeholder="Tags"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="number"
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                placeholder="Rating"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="file"
+                name="image"
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdate}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Save
+              </button>
+            </div>
           </div>
-          <DialogFooter>
-            <Button
-              variant="secondary"
-              onClick={() => setIsModalOpen(false)}
-              type="button"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="default"
-              onClick={handleUpdate}
-              type="button"
-            >
-              Save
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </div>
+      )}
     </div>
   );
 };
