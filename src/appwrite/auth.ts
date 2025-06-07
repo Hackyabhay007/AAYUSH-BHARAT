@@ -21,8 +21,7 @@ export class AuthService {
         .setEndpoint(endpoint)
         .setProject(projectId);
       this.account = new Account(this.client);
-      this.databases = new Databases(this.client);
-    } catch (error) {
+      this.databases = new Databases(this.client);    } catch (_error) {
       console.error('Invalid Appwrite endpoint URL:', endpoint);
       throw new Error('Invalid Appwrite endpoint URL configuration');
     }
