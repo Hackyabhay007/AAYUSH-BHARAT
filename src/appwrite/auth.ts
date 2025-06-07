@@ -6,11 +6,26 @@ export class AuthService {
   account;
   databases;
   constructor() {
-    this.client
-      .setEndpoint(config.appwriteUrl)
-      .setProject(config.appwriteProjectId);
-    this.account = new Account(this.client);
-    this.databases = new Databases(this.client);
+    const endpoint = config.appwriteUrl;
+    const projectId = config.appwriteProjectId;
+
+    if (!endpoint || !projectId) {
+      throw new Error('Appwrite configuration is missing. Please check your environment variables.');
+    }
+
+    try {
+      // Validate URL format
+      new URL(endpoint);
+      
+      this.client
+        .setEndpoint(endpoint)
+        .setProject(projectId);
+      this.account = new Account(this.client);
+      this.databases = new Databases(this.client);
+    } catch (error) {
+      console.error('Invalid Appwrite endpoint URL:', endpoint);
+      throw new Error('Invalid Appwrite endpoint URL configuration');
+    }
   }
 
   async createAccount({
