@@ -109,36 +109,30 @@ export default function AuthForm({ type }: AuthFormProps) {
       }
     }
     
-    
-    else if (isForgot) {
+      else if (isForgot) {
       try {
         const response = await fetch("/api/auth/forgot", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/json",
           },
           body: JSON.stringify({ email: formData.email }),
         });
 
         const data = await response.json();
-
-        if (!response.ok)
-          throw new Error(data.message || "Error in Sending Reset Link");
-        if (data.success) {
-          toast.success("Reset Link send successfully");
+        
+        if (response.ok) {
+          toast.success(data.message);
           router.push("/login");
-        }
-      } catch (err: unknown) {
-        console.error("Error in Sending Reset Link:", err);
-        if (err instanceof Error) {
-          setValidationError(err.message || "Error in Sending Reset Link");
         } else {
-          setValidationError("Error in Sending Reset Link");
+          setValidationError(data.message || "Failed to process request");
         }
+      } catch (err) {
+        console.error("Error:", err);
+        setValidationError("An error occurred. Please try again later.");
         setIsLoading2(false);
       }
-    } 
+    }
     
     else if (isReset) {
       if (formData.password !== formData.confirmPassword) {
