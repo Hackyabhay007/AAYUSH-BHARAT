@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import toast from 'react-hot-toast';
-import { Product, Variants } from "@/types/product";
+import { Product, Variants  } from "@/types/product";
 import { CheckCircle } from 'lucide-react';
 import getFilePreview from "@/lib/getFilePreview";
 import { useState, useEffect } from 'react';
@@ -51,13 +51,19 @@ const ProductCard: React.FC<{ product: Product; onShowNowLoading?: (loading: boo
         weight_Value: selectedVariant.weight,
         original_Price: selectedVariant.price,
         sale_Price: selectedVariant.sale_price
-      };
-
-      await dispatch(addToCart({
+      };      await dispatch(addToCart({
         product: {
-          ...product,
+          $id: product.$id,
+          name: product.name,
+          description: product.description,
+          category: product.category,
+          tags: product.tags,
+          ingredients: product.ingredients,
+          slug: product.slug,
+          collections: product.collections,
+          variants: product.variants,
           weights: [weight]
-        },
+        } as unknown as Product & { weights: typeof weight[] },
         weightIndex: 0,
         quantity: 1
       })).unwrap();
