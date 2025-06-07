@@ -7,30 +7,30 @@ import toast from 'react-hot-toast';
 import getFilePreview from '@/lib/getFilePreview';
 import { Product, Variants } from '@/types/product';
 
-interface Weight {
-  id: string;
-  documentId: string;
-  weight_Value: number;
-  original_Price: number;
-  sale_Price: number;
-}
+// interface Weight {
+//   id: string;
+//   documentId: string;
+//   weight_Value: number;
+//   original_Price: number;
+//   sale_Price: number;
+// }
 
-// Extend Product type but omit the string index signature
-type BaseProduct = Omit<Product, keyof { [key: string]: string |  Variants[] | undefined }>;
+// // Extend Product type but omit the string index signature
+// type BaseProduct = Omit<Product, keyof { [key: string]: string |  Variants[] | undefined }>;
 
 // Create a new type that combines base product with weights
-interface ProductWithWeights extends BaseProduct {
-  weights: Weight[];
-  $id: string;
-  name: string;
-  description: string;
-  category: string;
-  tags: string;
-  ingredients: string;
-  slug: string;
+// interface ProductWithWeights extends BaseProduct {
+//   weights: Weight[];
+//   $id: string;
+//   name: string;
+//   description: string;
+//   category: string;
+//   tags: string;
+//   ingredients: string;
+//   slug: string;
   
-  variants?: Variants[];
-}
+//   variants?: Variants[];
+// }
 
 interface FixedBottomCartProps {
   productId?: string;

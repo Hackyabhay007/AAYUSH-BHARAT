@@ -5,8 +5,12 @@ import { RootState } from '@/store/store';
 import { ApiError } from '@/types/error';
 import { Order } from '@/types/order';
 
+export interface CustomerWithOrders extends Customer {
+  orders?: Order[];
+}
+
 export interface CustomerState {
-  currentCustomer: Customer | null;
+  currentCustomer: CustomerWithOrders | null;
   loading: boolean;
   error: string | null;
   token: string | null;
@@ -239,10 +243,8 @@ export const customerSlice = createSlice({
         state.orderError = null;
       })
       .addCase(fetchCustomerOrders.fulfilled, (state, action) => {
-        state.orderLoading = false;
-        // Store orders in a new property
-        if (state.currentCustomer) {
-            (state.currentCustomer as any).orders = action.payload;
+        state.orderLoading = false;        if (state.currentCustomer) {
+          state.currentCustomer.orders = action.payload;
         }
       })
       .addCase(fetchCustomerOrders.rejected, (state, action) => {
