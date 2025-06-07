@@ -7,14 +7,14 @@ import { AppDispatch } from "../../../../../store/store";
 import { addToCart } from "../../../../../store/slice/cartSlice";
 import { Product, Variants } from "@/types/product";
 
-interface Weight {
-  id: number;
-  documentId: string;
-  weight_Value: number;
-  original_Price: number;
-  sale_Price: number;
-  inventory: any[];
-}
+// interface Weight {
+//   id: number;
+//   documentId: string;
+//   weight_Value: number;
+//   original_Price: number;
+//   sale_Price: number;
+//   inventory: any[];
+// }
 
 interface ProductDetailProps {
   product: Product;
@@ -46,10 +46,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
   const [stockError, setStockError] = useState<string | null>(null);
   const [descExpanded, setDescExpanded] = useState(false);
-  const [selected, setSelected] = useState(0);
+  const [selected] = useState(0);
   const [accordionOpen, setAccordionOpen] = useState<string | null>(null);
   
   const tag = Array.isArray(tags) ? tags : (tags || '').split(',');

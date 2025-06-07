@@ -3,9 +3,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { RootState } from "@/store";
 import { loginCustomer } from "@/store/slice/customerSlice";
 import { useAuth } from "@/contexts/AuthContext";
 

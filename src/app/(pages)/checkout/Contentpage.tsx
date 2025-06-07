@@ -65,7 +65,7 @@ const CheckoutPage = () => {
   const [addressesLoading, setAddressesLoading] = useState(true);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
-  const [userPhone, setUserPhone] = useState<string>("");
+  const [userPhone] = useState<string>("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -86,10 +86,7 @@ const CheckoutPage = () => {
   const paymentRef = useRef(null);
   const summaryRef = useRef(null);
 
-  const contactInView = useInView(contactRef, { once: true });
-  const deliveryInView = useInView(deliveryRef, { once: true });
-  const paymentInView = useInView(paymentRef, { once: true });
-  const summaryInView = useInView(summaryRef, { once: true }); // fetchUserAddresses has been moved to useAddresses hook
+ ; // fetchUserAddresses has been moved to useAddresses hook
 
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -33,12 +33,12 @@ export async function GET(request: NextRequest) {
           <priority>${route.priority}</priority>
         </url>
       `;    });
-    
-    // Add product routes
-    products.forEach((product: Models.Document) => {
+      // Add product routes
+    products.forEach((product: any) => {
+      const productId = product.$id || product.id;
       xml += `
         <url>
-          <loc>${baseUrl}/product/${product.$id}</loc>
+          <loc>${baseUrl}/product/${productId}</loc>
           <lastmod>${currentDate}</lastmod>
           <changefreq>weekly</changefreq>
           <priority>0.7</priority>

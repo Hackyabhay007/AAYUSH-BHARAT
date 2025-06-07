@@ -20,9 +20,7 @@ interface FixedBottomCartProps {
 
 const FixedBottomCart = ({ 
   productName, 
-  productDescription,
-  productCategory,
-  productIngredients,
+
   product,
   selectedVariant,
   selectedVariantIndex = 0

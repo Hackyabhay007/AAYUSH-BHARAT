@@ -56,7 +56,6 @@ const ProductContent = () => {
         window.requestAnimationFrame(() => {
           if (heroSectionRef.current && videoSectionRef.current) {
             const heroRect = heroSectionRef.current.getBoundingClientRect();
-            const videoRect = videoSectionRef.current.getBoundingClientRect();
             
             // Use better threshold calculation
             const shouldShowCart = heroRect.bottom < window.innerHeight * 0.2;
