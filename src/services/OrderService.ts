@@ -1,12 +1,25 @@
-import { databases, ID, Query } from '../app/api/lib/appwrite';
+import { Models } from 'appwrite';
 import { Order } from '../types/order';
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const ORDERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_ORDERS_COLLECTION_ID!;
 
 export class OrderService {
+  private static async getAppwriteClient() {
+    const { Client, Databases, ID } = await import('appwrite');
+    const { default: config } = await import('@/config/config');
+
+    const client = new Client()
+      .setEndpoint(config.appwriteUrl)
+      .setProject(config.appwriteProjectId);
+
+    return { client, databases: new Databases(client), ID };
+  }
+
   static async createOrder(orderData: Partial<Order>) {
     try {
+      const { databases, ID } = await this.getAppwriteClient();
+
       // Process the order data and ensure weights is a valid integer
       const processedOrderData = {
         ...orderData,
@@ -40,8 +53,10 @@ export class OrderService {
       throw error;
     }
   }
+
   static async getOrder(orderId: string): Promise<Order> {
     try {
+      const { databases } = await this.getAppwriteClient();
       const response = await databases.getDocument(
         DATABASE_ID,
         ORDERS_COLLECTION_ID,
@@ -53,8 +68,12 @@ export class OrderService {
       throw error;
     }
   }
+
   static async getUserOrders(userId: string): Promise<Order[]> {
     try {
+      const { databases, ID } = await this.getAppwriteClient();
+      const { Query } = await import('appwrite');
+      
       const response = await databases.listDocuments(
         DATABASE_ID,
         ORDERS_COLLECTION_ID,
@@ -69,8 +88,10 @@ export class OrderService {
       throw error;
     }
   }
+
   static async cancelOrder(orderId: string): Promise<Order> {
     try {
+      const { databases } = await this.getAppwriteClient();
       const response = await databases.updateDocument(
         DATABASE_ID,
         ORDERS_COLLECTION_ID,
