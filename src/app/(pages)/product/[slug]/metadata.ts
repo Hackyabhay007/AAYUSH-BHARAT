@@ -32,23 +32,25 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
       ],
       openGraph: {
         title: `${product.name} | AAYUDH Bharat`,
-        description: product.description,
-        images: [
+        description: product.description,        images: [
           {
-            url: product.image || '/logo/Artboard_1_copy_15@4x.png',
+            url: product.variants && product.variants.length > 0
+              ? (typeof product.variants[0].image === 'string' ? product.variants[0].image : '/logo/Artboard_1_copy_15@4x.png')
+              : '/logo/Artboard_1_copy_15@4x.png',
             width: 800,
             height: 600,
             alt: product.name
           }
-        ],        type: 'website',
+        ],type: 'website',
         siteName: 'AAYUDH Bharat',
         locale: 'en_US',
       },
-      twitter: {
-        card: 'summary_large_image',
+      twitter: {        card: 'summary_large_image',
         title: `${product.name} | AAYUDH Bharat`,
         description: product.description,
-        images: [product.image || '/logo/Artboard_1_copy_15@4x.png']
+        images: product.variants && product.variants.length > 0 && typeof product.variants[0].image === 'string'
+          ? [product.variants[0].image]
+          : ['/logo/Artboard_1_copy_15@4x.png']
       }
     };
   } catch (error) {

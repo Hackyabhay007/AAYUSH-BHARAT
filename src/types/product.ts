@@ -18,6 +18,7 @@ export interface Collections {
 }
 
 export interface Product {
+  [x: string]: string | Collections[] | Variants[] | undefined;
   $id: string;
   name: string;
   description: string;

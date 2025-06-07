@@ -118,9 +118,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       }
 
       const hasStock = await checkStock(selectedVariant.$id, quantity);
-      if (!hasStock) return;
-
-      const weights: Weight[] = variants.map((v) => ({
+      if (!hasStock) return;      const weights = variants.map((v) => ({
         id: 0,
         documentId: v.$id || '',
         weight_Value: v.weight,
@@ -128,14 +126,38 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         sale_Price: v.sale_price,
         inventory: [],
       }));
-
-      const weightIndex = selectedVariant ? variants.findIndex((v) => v.$id === selectedVariant.$id) : 0;
+      
+      const weightIndex = selectedVariant ? variants.findIndex((v) => v.$id === selectedVariant.$id) : 0;      // Create a new object with proper typing that matches what cartSlice expects
+      const productWithWeights = {
+        $id: product.$id,
+        name: product.name,
+        description: product.description,
+        category: product.category,
+        tags: product.tags,
+        ingredients: product.ingredients,
+        slug: product.slug,
+        // Include any other required properties from the product
+        // Explicitly provide the weights with the correct type
+        weights: weights.map(w => ({
+          id: w.id as string | number,
+          documentId: w.documentId,
+          weight_Value: w.weight_Value,
+          original_Price: w.original_Price,
+          sale_Price: w.sale_Price
+        }))
+      };
 
       await dispatch(
         addToCart({
-          product: {
-            ...product,
-            weights,
+          // First convert to unknown, then to the required type
+          product: productWithWeights as unknown as Product & { 
+            weights: Array<{ 
+              id: string | number; 
+              documentId: string;
+              weight_Value: number;
+              original_Price: number;
+              sale_Price: number;
+            }> 
           },
           weightIndex,
           quantity,

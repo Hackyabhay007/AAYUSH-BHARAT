@@ -29,10 +29,9 @@ const FixedBottomCart = ({
 }: FixedBottomCartProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [quantity, setQuantity] = React.useState(1);
-  const handleAddToCart = async () => {
-    try {      // Convert variants to weights format, ensuring no undefined values
+  const handleAddToCart = async () => {    try {      // Convert variants to weights format, ensuring no undefined values
       const weights = (product.variants || []).map(variant => ({
-        id: variant.$id || '0',
+        id: variant.$id || 0, // Allow id to be number or string
         documentId: variant.$id || '0',
         weight_Value: variant.weight,
         original_Price: variant.price,
@@ -42,18 +41,25 @@ const FixedBottomCart = ({
       // If no weights, provide a default weight from the selected variant
       if (weights.length === 0 && selectedVariant) {
         weights.push({
-          id: selectedVariant.$id || '0',
+          id: selectedVariant.$id || 0, // Allow id to be number or string
           documentId: selectedVariant.$id || '0',
           weight_Value: selectedVariant.weight,
           original_Price: selectedVariant.price,
           sale_Price: selectedVariant.sale_price,
         });
-      }
-
-      // Create product with weights
+      }      // Create product with weights
+      // Cast product to include the weights property
       const productWithWeights = {
         ...product,
         weights,
+      } as Product & { 
+        weights: Array<{ 
+          id: string | number, 
+          documentId: string,
+          weight_Value: number,
+          original_Price: number,
+          sale_Price: number
+        }> 
       };
 
       await dispatch(addToCart({

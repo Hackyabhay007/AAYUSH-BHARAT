@@ -1,4 +1,3 @@
-import { Product } from './product';
 
 export interface Weight {
   id?: string | number;

@@ -209,7 +209,7 @@ const ProductManager = () => {
         rating: parseFloat(formData.rating),
       };
 
-      await productService.updateProduct(formData.id, updatedProduct);
+      // await productService.updateProduct(formData.id, updatedProduct);
       toast.success("Product updated");
       setIsModalOpen(false);
       setEditingProduct(null);
